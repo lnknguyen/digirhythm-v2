@@ -1,0 +1,25 @@
+groupby:
+    - user
+    - date
+    - group
+features:
+    - activity_night
+    - activity_morning
+    - activity_afternoon
+    - activity_evening
+    - activity_allday
+    - call_total_duration_night
+    - call_total_duration_morning
+    - call_total_duration_afternoon
+    - call_total_duration_evening
+    - call_total_duration_allday
+    - screen_night
+    - screen_morning
+    - screen_afternoon
+    - screen_evening
+    - screen_allday
+    - sleep_onset
+    - sleep_offset
+    - sleep_duration
+
+    
