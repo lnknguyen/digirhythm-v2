@@ -1,0 +1,12 @@
+channels:
+  - conda-forge
+  - anaconda
+  - nodefaults
+dependencies:
+  - r-tidyverse =2.0
+  - r-sjPlot 
+  - r-stargazer
+  - r-remotes
+  - r-Matrix >= 1.6-2
+  - r-lme4=1.1-30
+  

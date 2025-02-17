@@ -18,19 +18,19 @@ RENAME_COLS = {
     "call:total_duration:evening": "call_total_duration_evening",
     "call:total_duration:allday": "call_total_duration_allday",
     # Screen
-    "screen:screen_on_durationtotal:night": "screen_night",
-    "screen:screen_on_durationtotal:morning": "screen_morning",
-    "screen:screen_on_durationtotal:afternoon": "screen_afternoon",
-    "screen:screen_on_durationtotal:evening": "screen_evening",
-    "screen:screen_on_durationtotal:allday": "screen_allday",
+    "screen:screen_use_durationtotal:night": "screen_night",
+    "screen:screen_use_durationtotal:morning": "screen_morning",
+    "screen:screen_use_durationtotal:afternoon": "screen_afternoon",
+    "screen:screen_use_durationtotal:evening": "screen_evening",
+    "screen:screen_use_durationtotal:allday": "screen_allday",
     # Sleep
     ("sleep_start_hhmm"): "sleep_onset",
     ("sleep_end_hhmm"): "sleep_offset",
-    ("midsleep_hhmm"): "midsleep",
+    #("midsleep_hhmm"): "midsleep",
 }
 
 
-def _rename_columns(df, mapping):
+def rename_columns(df):
     """
     Rename DataFrame columns using a many-to-one mapping.
 
@@ -42,19 +42,18 @@ def _rename_columns(df, mapping):
     Returns:
         pd.DataFrame: DataFrame with renamed columns.
     """
-    new_columns = []
-    for col in df.columns:
-        # Check if the column matches any key in the mapping
-        replaced = False
-        for key_tuple, new_name in mapping.items():
-            if col in key_tuple:
-                new_columns.append(new_name)
-                replaced = True
-                break
-        if not replaced:
-            new_columns.append(col)  # Keep original name if no match
-    df.columns = new_columns
-    return df
+    
+    # Create a new dictionary with expanded keys
+    expanded_RENAME_COLS = {}
+    
+    for key, value in RENAME_COLS.items():
+        if isinstance(key, tuple):  # Check if the key is a tuple
+            for subkey in key:
+                expanded_RENAME_COLS[subkey] = value
+        else:
+            expanded_RENAME_COLS[key] = value
+
+    return df.rename(columns=expanded_RENAME_COLS, inplace=False)
 
 
 def adapter(input_fns):
@@ -66,13 +65,6 @@ def adapter(input_fns):
     for fn in input_fns:
 
         df = pd.read_csv(fn)
-        print(df.columns)
-        # Get the first part of the file name (sensor)
-        sensor = os.path.basename(fn).split("_")[0]
-
-        # Convert columns name
-        df = _rename_columns(df, mapping=RENAME_COLS)
-
         # Add group column if not exist
         if "group" not in df.columns:
             df["group"] = "None"
@@ -90,20 +82,26 @@ def concatenate_features(dfs):
         dfs (list): List of DataFrames.
     """
 
-    # Merge by 'user', 'date'
     merged_df = dfs[0]
-
+    
     for df in dfs[1:]:
+        
         merged_df = pd.merge(merged_df, df, on=["user", "date", "group"], how="outer")
+
 
     return merged_df
 
-
 def main(input_fns, output_fn):
 
+    
     dfs = adapter(input_fns)
     df = concatenate_features(dfs)
 
+    # Convert columns name
+    df = rename_columns(df)
+
+    #Test
+    cols_to_keep = RENAME_COLS.values()
     df.to_csv(output_fn)
 
 

@@ -1,6 +1,9 @@
-STUDIES = ['momo']
+STUDIES = ['momo', 'tesserae']
+SENSORS = ['sleep', 'screen', 'steps', 'calls']
 
 configfile: 'config/latent.yaml'
+
+include : 'rules/preprocess.smk'
 
 rule all:
     input:
@@ -11,11 +14,16 @@ rule latent:
         'data/processed/{study}/all_features_clean.csv'
     output:
         'data/output/{study}/latent.csv'
+    conda:
+        "envs/python_env.yaml"
     params:
         groupby = config['groupby'],
         features = config['features']
+    resources:
+        cpus_per_task=8,
+        mem_mb=10000
     script:
-        'src/latent/make_latent.py'
+        'scripts/latent/make_latent.py'
 
 # Clean up features by removing Nan and empty data
 rule clean_features:
@@ -23,22 +31,25 @@ rule clean_features:
         'data/processed/{study}/all_features.csv'
     output:
         'data/processed/{study}/all_features_clean.csv'
+    conda:
+        "envs/python_env.yaml"
     params:
         groupby = config['groupby'],
         features = config['features']
     script:
-        "src/make_data/clean.py"
-
+        "scripts/make_data/clean.py"
 
 # Load in the files, rename the columns so that they match the schema
 # then concat all the files
 rule rename_and_concatenate:
     input:
-        'data/interim/{study}/sleep_4epochs.csv',
-        'data/interim/{study}/screen_4epochs.csv',
-        'data/interim/{study}/steps_4epochs.csv',
-        'data/interim/{study}/call_4epochs.csv'
+        expand('data/interim/{study}/{sensor}_4epochs.csv', sensor=SENSORS, study=STUDIES)
+        #expand('../data/interim/tesserae/{sensor}_4epochs.csv', sensor=SENSORS)
     output:
         'data/processed/{study}/all_features.csv'
+    conda:
+        "envs/python_env.yaml"
     script:
-        "src/make_data/combine.py"
+        "scripts/make_data/combine.py"
+
+    
