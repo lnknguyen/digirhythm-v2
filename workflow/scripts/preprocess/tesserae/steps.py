@@ -17,9 +17,9 @@ class StepGarminProcessor(BaseProcessor):
     def clean(self, df) -> pd.DataFrame():
 
         # Replace negative values in column 'steps' with 0
-        df.loc[df['steps'] < 0, 'steps'] = 0
+        df.loc[df["steps"] < 0, "steps"] = 0
         return df
-        
+
     def rename(self, df) -> pd.DataFrame():
 
         df.rename(

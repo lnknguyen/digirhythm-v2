@@ -15,9 +15,14 @@ class SleepGarminProcessor(BaseProcessor):
     def rename(self, df) -> pd.DataFrame():
 
         df.rename(
-            columns={"ParticipantID": "user", "local_time": "datetime", "adjusted_sleep_duration" : "sleep_duration"}, inplace=True
+            columns={
+                "ParticipantID": "user",
+                "local_time": "datetime",
+                "adjusted_sleep_duration": "sleep_duration",
+            },
+            inplace=True,
         )
-        
+
         return df
 
     def extract_features(self) -> pd.DataFrame:

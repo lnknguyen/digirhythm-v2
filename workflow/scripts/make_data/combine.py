@@ -3,7 +3,6 @@ import os
 import logging
 from functools import reduce
 
-
 RENAME_COLS = {
     # Activity
     ("step:steps:night", "magnitude_std:night"): "activity_night",
@@ -18,15 +17,30 @@ RENAME_COLS = {
     "call:total_duration:evening": "call_total_duration_evening",
     "call:total_duration:allday": "call_total_duration_allday",
     # Screen
-    "screen:screen_use_durationtotal:night": "screen_night",
-    "screen:screen_use_durationtotal:morning": "screen_morning",
-    "screen:screen_use_durationtotal:afternoon": "screen_afternoon",
-    "screen:screen_use_durationtotal:evening": "screen_evening",
-    "screen:screen_use_durationtotal:allday": "screen_allday",
+    (
+        "screen:screen_use_durationtotal:night",
+        "f_screen:phone_screen_rapids_sumdurationunlock:night",
+    ): "screen_night",
+    (
+        "screen:screen_use_durationtotal:morning",
+        "f_screen:phone_screen_rapids_sumdurationunlock:morning",
+    ): "screen_morning",
+    (
+        "screen:screen_use_durationtotal:afternoon",
+        "f_screen:phone_screen_rapids_sumdurationunlock:afternoon",
+    ): "screen_afternoon",
+    (
+        "screen:screen_use_durationtotal:evening",
+        "f_screen:phone_screen_rapids_sumdurationunlock:evening",
+    ): "screen_evening",
+    (
+        "screen:screen_use_durationtotal:allday",
+        "f_screen:phone_screen_rapids_sumdurationunlock:allday",
+    ): "screen_allday",
     # Sleep
     ("sleep_start_hhmm"): "sleep_onset",
     ("sleep_end_hhmm"): "sleep_offset",
-    #("midsleep_hhmm"): "midsleep",
+    # ("midsleep_hhmm"): "midsleep",
 }
 
 
@@ -42,10 +56,10 @@ def rename_columns(df):
     Returns:
         pd.DataFrame: DataFrame with renamed columns.
     """
-    
+
     # Create a new dictionary with expanded keys
     expanded_RENAME_COLS = {}
-    
+
     for key, value in RENAME_COLS.items():
         if isinstance(key, tuple):  # Check if the key is a tuple
             for subkey in key:
@@ -64,17 +78,18 @@ def adapter(input_fns):
     dfs = []
     for fn in input_fns:
 
-        df = pd.read_csv(fn)
-        # Add group column if not exist
-        if "group" not in df.columns:
-            df["group"] = "None"
+        df = pd.read_csv(fn, index_col=0)
+
+        # Get rid of index column, if exists
+        if "index" in df.columns:
+            df = df.drop(columns=["index"])
 
         dfs.append(df)
 
     return dfs
 
 
-def concatenate_features(dfs):
+def concatenate_features(dfs, groupby):
     """
     Concatenate multiple feature files into a single DataFrame and save it.
 
@@ -83,28 +98,28 @@ def concatenate_features(dfs):
     """
 
     merged_df = dfs[0]
-    
-    for df in dfs[1:]:
-        
-        merged_df = pd.merge(merged_df, df, on=["user", "date", "group"], how="outer")
 
+    for df in dfs[1:]:
+
+        merged_df = pd.merge(merged_df, df, on=groupby, how="outer")
 
     return merged_df
 
-def main(input_fns, output_fn):
 
-    
+def main(input_fns, output_fn, params, wildcards):
+
+    groupby = params["groupby"][wildcards.study]
+
     dfs = adapter(input_fns)
-    df = concatenate_features(dfs)
+    df = concatenate_features(dfs, groupby)
 
     # Convert columns name
     df = rename_columns(df)
 
-    #Test
-    cols_to_keep = RENAME_COLS.values()
+    # Save
     df.to_csv(output_fn)
 
 
 if __name__ == "__main__":
 
-    main(snakemake.input, snakemake.output[0])
+    main(snakemake.input, snakemake.output[0], snakemake.params, snakemake.wildcards)

@@ -2,20 +2,25 @@ import pandas as pd
 import logging
 from functools import reduce
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+)
+
 
 def _filter(df, features):
-    
+
     logging.info(f"Initial data shape before filtering: {df.shape}")
 
     # Report amount of NaN observations for each feature
     nan_counts = df[features].isna().sum()
     for feature, count in nan_counts.items():
         logging.info(f"Feature '{feature}' has {count} NaN observations")
-        
+
     # Remove Nan features
     filtered_df = df.dropna(subset=features)
-    logging.info(f"Data shape after removing NaNs based on features: {filtered_df.shape}")
+    logging.info(
+        f"Data shape after removing NaNs based on features: {filtered_df.shape}"
+    )
 
     # Remove days with zero activity (or step)
     filtered_df = filtered_df[filtered_df["activity_allday"] != 0]
@@ -27,12 +32,15 @@ def _filter(df, features):
 
     # Remove days negative sleep duration
     filtered_df = filtered_df[filtered_df["sleep_duration"] > 0]
-    logging.info(f"Data shape after removing negative sleep duration: {filtered_df.shape}")
-    
+    logging.info(
+        f"Data shape after removing negative sleep duration: {filtered_df.shape}"
+    )
+
     return filtered_df
 
+
 def _fill(df, features):
-    
+
     call_features = [feature for feature in features if "call" in feature]
     logging.info(f"Features identified for filling missing call data: {call_features}")
 
@@ -43,7 +51,9 @@ def _fill(df, features):
 
     return df
 
+
 def main(input_fns, output_fn):
+
     features = snakemake.params.features
     data = pd.read_csv(input_fns[0])
 
@@ -59,10 +69,21 @@ def main(input_fns, output_fn):
     # Filter
     df = _filter(df, features)
 
+    # keep only groupby + features
+
+    # Export column names to txt
+    colnames = df.columns.tolist()
+
+    # Save to txt file
+    with open("column_names.txt", "w") as file:
+        for col in colnames:
+            file.write(col + "\n")
+
     # Log final data shape before saving
     logging.info(f"Final data shape before saving to CSV: {df.shape}")
 
     df.to_csv(output_fn)
+
 
 if __name__ == "__main__":
     main(snakemake.input, snakemake.output[0])

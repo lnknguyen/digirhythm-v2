@@ -1,55 +1,11 @@
-STUDIES = ['momo', 'tesserae']
-SENSORS = ['sleep', 'screen', 'steps', 'calls']
+#report: "report/workflow.rst"
 
-configfile: 'config/latent.yaml'
+configfile: 'config/config.yaml'
 
+include : 'rules/common.smk'
 include : 'rules/preprocess.smk'
+include : 'rules/embeddings.smk'
 
 rule all:
     input:
-        expand('data/output/{study}/latent.csv', study=STUDIES)
-
-rule latent:
-    input: 
-        'data/processed/{study}/all_features_clean.csv'
-    output:
-        'data/output/{study}/latent.csv'
-    conda:
-        "envs/python_env.yaml"
-    params:
-        groupby = config['groupby'],
-        features = config['features']
-    resources:
-        cpus_per_task=8,
-        mem_mb=10000
-    script:
-        'scripts/latent/make_latent.py'
-
-# Clean up features by removing Nan and empty data
-rule clean_features:
-    input:
-        'data/processed/{study}/all_features.csv'
-    output:
-        'data/processed/{study}/all_features_clean.csv'
-    conda:
-        "envs/python_env.yaml"
-    params:
-        groupby = config['groupby'],
-        features = config['features']
-    script:
-        "scripts/make_data/clean.py"
-
-# Load in the files, rename the columns so that they match the schema
-# then concat all the files
-rule rename_and_concatenate:
-    input:
-        expand('data/interim/{study}/{sensor}_4epochs.csv', sensor=SENSORS, study=STUDIES)
-        #expand('../data/interim/tesserae/{sensor}_4epochs.csv', sensor=SENSORS)
-    output:
-        'data/processed/{study}/all_features.csv'
-    conda:
-        "envs/python_env.yaml"
-    script:
-        "scripts/make_data/combine.py"
-
-    
+        all_outputs()

@@ -1,0 +1,10 @@
+channels:
+  - conda-forge
+dependencies:
+  - numpy
+  - pandas
+  - seaborn
+  - matplotlib
+  - scikit-learn
+  - umap-learn
+  - hdbscan

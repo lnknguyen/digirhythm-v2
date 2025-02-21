@@ -5,88 +5,118 @@ Using shell: /usr/bin/bash
 Provided cores: 2
 Rules claiming more threads will be scaled down.
 Job stats:
-job               count
---------------  -------
-all                   1
-clean_features        1
-latent                1
-total                 3
+job              count
+-------------  -------
+all                  1
+kmean_cluster        3
+total                4
 
 Select jobs to execute...
-Execute 1 jobs...
+Execute 2 jobs...
 
-[Mon Feb 17 16:36:26 2025]
-localrule clean_features:
-    input: data/processed/tesserae/all_features.csv
-    output: data/processed/tesserae/all_features_clean.csv
-    jobid: 2
+[Fri Feb 21 01:03:11 2025]
+localrule kmean_cluster:
+    input: data/processed/momo/all_features_clean.csv
+    output: data/output/momo/kmeans_cluster.csv
+    jobid: 12
     reason: Code has changed since last execution
+    wildcards: study=momo
+    resources: tmpdir=/tmp
+
+[Fri Feb 21 01:03:11 2025]
+localrule kmean_cluster:
+    input: data/processed/tesserae/all_features_clean.csv
+    output: data/output/tesserae/kmeans_cluster.csv
+    jobid: 11
+    reason: Missing output files: data/output/tesserae/kmeans_cluster.csv
     wildcards: study=tesserae
     resources: tmpdir=/tmp
 
-Activating conda environment: .snakemake/conda/e283964fde1f0525377b0f130dc3d5fd_
-Activating conda environment: .snakemake/conda/e283964fde1f0525377b0f130dc3d5fd_
-2025-02-17 16:36:40,440 - INFO - All required features are present in the data.
-2025-02-17 16:36:40,440 - INFO - Features identified for filling missing call data: ['call_total_duration_night', 'call_total_duration_morning', 'call_total_duration_afternoon', 'call_total_duration_evening', 'call_total_duration_allday']
-2025-02-17 16:36:40,443 - INFO - Filled missing data with 0 for feature: call_total_duration_night
-2025-02-17 16:36:40,445 - INFO - Filled missing data with 0 for feature: call_total_duration_morning
-2025-02-17 16:36:40,447 - INFO - Filled missing data with 0 for feature: call_total_duration_afternoon
-2025-02-17 16:36:40,448 - INFO - Filled missing data with 0 for feature: call_total_duration_evening
-2025-02-17 16:36:40,450 - INFO - Filled missing data with 0 for feature: call_total_duration_allday
-2025-02-17 16:36:40,450 - INFO - Initial data shape before filtering: (253260, 140)
-2025-02-17 16:36:40,484 - INFO - Feature 'activity_night' has 84948 NaN observations
-2025-02-17 16:36:40,484 - INFO - Feature 'activity_morning' has 84948 NaN observations
-2025-02-17 16:36:40,484 - INFO - Feature 'activity_afternoon' has 84948 NaN observations
-2025-02-17 16:36:40,484 - INFO - Feature 'activity_evening' has 84948 NaN observations
-2025-02-17 16:36:40,484 - INFO - Feature 'activity_allday' has 84948 NaN observations
-2025-02-17 16:36:40,484 - INFO - Feature 'call_total_duration_night' has 0 NaN observations
-2025-02-17 16:36:40,484 - INFO - Feature 'call_total_duration_morning' has 0 NaN observations
-2025-02-17 16:36:40,484 - INFO - Feature 'call_total_duration_afternoon' has 0 NaN observations
-2025-02-17 16:36:40,484 - INFO - Feature 'call_total_duration_evening' has 0 NaN observations
-2025-02-17 16:36:40,484 - INFO - Feature 'call_total_duration_allday' has 0 NaN observations
-2025-02-17 16:36:40,484 - INFO - Feature 'screen_night' has 30604 NaN observations
-2025-02-17 16:36:40,484 - INFO - Feature 'screen_morning' has 30604 NaN observations
-2025-02-17 16:36:40,484 - INFO - Feature 'screen_afternoon' has 30604 NaN observations
-2025-02-17 16:36:40,484 - INFO - Feature 'screen_evening' has 30604 NaN observations
-2025-02-17 16:36:40,484 - INFO - Feature 'screen_allday' has 30604 NaN observations
-2025-02-17 16:36:40,485 - INFO - Feature 'sleep_onset' has 44953 NaN observations
-2025-02-17 16:36:40,485 - INFO - Feature 'sleep_offset' has 44953 NaN observations
-2025-02-17 16:36:40,485 - INFO - Feature 'sleep_duration' has 44953 NaN observations
-2025-02-17 16:36:40,607 - INFO - Data shape after removing NaNs based on features: (155044, 140)
-2025-02-17 16:36:40,658 - INFO - Data shape after removing zero activity: (107380, 140)
-2025-02-17 16:36:40,703 - INFO - Data shape after removing zero screen use: (106673, 140)
-2025-02-17 16:36:40,748 - INFO - Data shape after removing negative sleep duration: (106606, 140)
-2025-02-17 16:36:40,748 - INFO - Final data shape before saving to CSV: (106606, 140)
-[Mon Feb 17 16:36:52 2025]
-Finished job 2.
-1 of 3 steps (33%) done
+Activating conda environment: .snakemake/conda/1487a308532d405478836fe525175bd3_
+Activating conda environment: .snakemake/conda/1487a308532d405478836fe525175bd3_
+Activating conda environment: .snakemake/conda/1487a308532d405478836fe525175bd3_
+Activating conda environment: .snakemake/conda/1487a308532d405478836fe525175bd3_
+[Fri Feb 21 01:04:15 2025]
+Finished job 12.
+1 of 4 steps (25%) done
 Select jobs to execute...
 Execute 1 jobs...
 
-[Mon Feb 17 16:36:52 2025]
-localrule latent:
-    input: data/processed/tesserae/all_features_clean.csv
-    output: data/output/tesserae/latent.csv
-    jobid: 1
-    reason: Missing output files: data/output/tesserae/latent.csv; Input files updated by another job: data/processed/tesserae/all_features_clean.csv
-    wildcards: study=tesserae
-    resources: tmpdir=/tmp, cpus_per_task=8, mem_mb=10000, mem_mib=9537
+[Fri Feb 21 01:04:15 2025]
+localrule kmean_cluster:
+    input: data/processed/globem/all_features_clean.csv
+    output: data/output/globem/kmeans_cluster.csv
+    jobid: 13
+    reason: Missing output files: data/output/globem/kmeans_cluster.csv
+    wildcards: study=globem
+    resources: tmpdir=/tmp
 
-Activating conda environment: .snakemake/conda/e283964fde1f0525377b0f130dc3d5fd_
-Activating conda environment: .snakemake/conda/e283964fde1f0525377b0f130dc3d5fd_
+Activating conda environment: .snakemake/conda/1487a308532d405478836fe525175bd3_
+Activating conda environment: .snakemake/conda/1487a308532d405478836fe525175bd3_
+Traceback (most recent call last):
+  File "/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpz93uhg4p.kmeans.py", line 65, in <module>
+    main(snakemake.input, snakemake.output,  snakemake.params)
+    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpz93uhg4p.kmeans.py", line 56, in main
+    data['Cluster'] = best_labels
+    ~~~~^^^^^^^^^^^
+  File "/scratch/work/luongn1/digirhythm-v2/.snakemake/conda/1487a308532d405478836fe525175bd3_/lib/python3.13/site-packages/pandas/core/frame.py", line 4311, in __setitem__
+    self._set_item(key, value)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/scratch/work/luongn1/digirhythm-v2/.snakemake/conda/1487a308532d405478836fe525175bd3_/lib/python3.13/site-packages/pandas/core/frame.py", line 4524, in _set_item
+    value, refs = self._sanitize_column(value)
+                  ~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "/scratch/work/luongn1/digirhythm-v2/.snakemake/conda/1487a308532d405478836fe525175bd3_/lib/python3.13/site-packages/pandas/core/frame.py", line 5266, in _sanitize_column
+    com.require_length_match(value, self.index)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/scratch/work/luongn1/digirhythm-v2/.snakemake/conda/1487a308532d405478836fe525175bd3_/lib/python3.13/site-packages/pandas/core/common.py", line 573, in require_length_match
+    raise ValueError(
+    ...<4 lines>...
+    )
+ValueError: Length of values (25380) does not match length of index (25386)
 RuleException:
-CalledProcessError in file /scratch/work/luongn1/digirhythm-v2/workflow/Snakefile, line 26:
-Command 'source /appl/scibuilder-mamba/aalto-rhel9/prod/software/mamba/2024-01/39cf5e1/bin/activate '/scratch/work/luongn1/digirhythm-v2/.snakemake/conda/e283964fde1f0525377b0f130dc3d5fd_'; set -euo pipefail;  python /scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmp0700ol_q.make_latent.py' died with <Signals.SIGKILL: 9>.
-[Mon Feb 17 16:38:19 2025]
-Error in rule latent:
-    jobid: 1
+CalledProcessError in file /scratch/work/luongn1/digirhythm-v2/workflow/rules/embeddings.smk, line 23:
+Command 'source /appl/scibuilder-mamba/aalto-rhel9/prod/software/mamba/2024-01/39cf5e1/bin/activate '/scratch/work/luongn1/digirhythm-v2/.snakemake/conda/1487a308532d405478836fe525175bd3_'; set -euo pipefail;  python /scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpz93uhg4p.kmeans.py' returned non-zero exit status 1.
+[Fri Feb 21 01:06:03 2025]
+Error in rule kmean_cluster:
+    jobid: 13
+    input: data/processed/globem/all_features_clean.csv
+    output: data/output/globem/kmeans_cluster.csv
+    conda-env: /scratch/work/luongn1/digirhythm-v2/.snakemake/conda/1487a308532d405478836fe525175bd3_
+
+Traceback (most recent call last):
+  File "/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpifjciihu.kmeans.py", line 65, in <module>
+    main(snakemake.input, snakemake.output,  snakemake.params)
+    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpifjciihu.kmeans.py", line 56, in main
+    data['Cluster'] = best_labels
+    ~~~~^^^^^^^^^^^
+  File "/scratch/work/luongn1/digirhythm-v2/.snakemake/conda/1487a308532d405478836fe525175bd3_/lib/python3.13/site-packages/pandas/core/frame.py", line 4311, in __setitem__
+    self._set_item(key, value)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/scratch/work/luongn1/digirhythm-v2/.snakemake/conda/1487a308532d405478836fe525175bd3_/lib/python3.13/site-packages/pandas/core/frame.py", line 4524, in _set_item
+    value, refs = self._sanitize_column(value)
+                  ~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "/scratch/work/luongn1/digirhythm-v2/.snakemake/conda/1487a308532d405478836fe525175bd3_/lib/python3.13/site-packages/pandas/core/frame.py", line 5266, in _sanitize_column
+    com.require_length_match(value, self.index)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/scratch/work/luongn1/digirhythm-v2/.snakemake/conda/1487a308532d405478836fe525175bd3_/lib/python3.13/site-packages/pandas/core/common.py", line 573, in require_length_match
+    raise ValueError(
+    ...<4 lines>...
+    )
+ValueError: Length of values (106598) does not match length of index (106606)
+RuleException:
+CalledProcessError in file /scratch/work/luongn1/digirhythm-v2/workflow/rules/embeddings.smk, line 23:
+Command 'source /appl/scibuilder-mamba/aalto-rhel9/prod/software/mamba/2024-01/39cf5e1/bin/activate '/scratch/work/luongn1/digirhythm-v2/.snakemake/conda/1487a308532d405478836fe525175bd3_'; set -euo pipefail;  python /scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpifjciihu.kmeans.py' returned non-zero exit status 1.
+[Fri Feb 21 01:36:19 2025]
+Error in rule kmean_cluster:
+    jobid: 11
     input: data/processed/tesserae/all_features_clean.csv
-    output: data/output/tesserae/latent.csv
-    conda-env: /scratch/work/luongn1/digirhythm-v2/.snakemake/conda/e283964fde1f0525377b0f130dc3d5fd_
+    output: data/output/tesserae/kmeans_cluster.csv
+    conda-env: /scratch/work/luongn1/digirhythm-v2/.snakemake/conda/1487a308532d405478836fe525175bd3_
 
 Shutting down, this might take some time.
 Exiting because a job execution failed. Look above for error message
-Complete log: .snakemake/log/2025-02-17T163621.758018.snakemake.log
+Complete log: .snakemake/log/2025-02-21T010307.614567.snakemake.log
 WorkflowError:
 At least one job did not complete successfully.
-slurmstepd: error: Detected 1 oom_kill event in StepId=5704739.batch. Some of the step tasks have been OOM Killed.

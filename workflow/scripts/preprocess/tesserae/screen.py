@@ -15,13 +15,12 @@ class ScreenProcessor(BaseProcessor):
         self.sensor_name = "screen"
         self.frequency = "4epochs"
 
-    def aware_adapter(self)-> pd.DataFrame:
+    def aware_adapter(self) -> pd.DataFrame:
 
-        self.data['timestamp_index'] = self.data['datetime']
-        self.data.set_index('timestamp_index', inplace=True)
+        self.data["timestamp_index"] = self.data["datetime"]
+        self.data.set_index("timestamp_index", inplace=True)
         self.data.index.name = None
 
-        
     def extract_features(self) -> pd.DataFrame:
         prefixes = [
             "screen:screen_use_durationtotal",
@@ -79,7 +78,7 @@ class ScreenProcessor(BaseProcessor):
         df["user"] = df["level_0"]
         df["device"] = df["level_1"]
         df["datetime"] = df["level_2"]
-        
+
         df["hour"] = pd.to_datetime(df["datetime"]).dt.strftime("%H")
         df["date"] = pd.to_datetime(df["datetime"]).dt.strftime("%Y-%m-%d")
 
@@ -105,7 +104,7 @@ def main():
     processor = ScreenProcessor(input_fn=input_fn)
 
     processor.aware_adapter()
-    
+
     res = processor.extract_features().reset_index()
     res.to_csv(output_fn, index=False)
 
