@@ -7,6 +7,7 @@ hdbscan_params =  (
     .set_index("study", drop=False)
     .sort_index()
 )
+
 def all_outputs():
     
     outputs = expand('data/output/{study}/cluster_embeddings.png', study=STUDIES)

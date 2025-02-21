@@ -1,12 +1,11 @@
 
-
 rule cluster_plot_embeddings:
     input:
         'data/output/{study}/embeddings.csv'
     output:
         report('data/output/{study}/cluster_embeddings.png')
     params:
-        min_sample_size = config['hdbscan_parameters'][{study}]
+        min_sample_size = config['hdbscan_parameters'][wildcards.study]
     conda:
         "../envs/latent_env.yaml"
     script:
