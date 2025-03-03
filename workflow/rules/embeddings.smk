@@ -1,39 +1,50 @@
+###########################################
+#               CLUSTERING        #
+###########################################
 
-rule cluster_plot_embeddings:
-    input:
-        'data/output/{study}/embeddings.csv'
-    output:
-        report('data/output/{study}/cluster_embeddings.png')
-    params:
-        min_sample_size = config['hdbscan_parameters'][wildcards.study]
-    conda:
-        "../envs/latent_env.yaml"
-    script:
-        '../scripts/latent/cluster_embeddings.py'
-
-rule kmean_cluster:
+rule cluster:
     input: 
         'data/processed/{study}/all_features_clean.csv'
     output:
-        'data/output/{study}/kmeans_cluster.csv'
+        clusters = 'out/{study}/{algo}_cluster.csv',
+        centroids = 'out/{study}/{algo}_cluster_centroids.csv',
     params:
-        features = config['features']
+        features = config['features'],
+        cluster_settings = lambda w: config["cluster_settings"]["{}".format(w.study)]
     conda:
         "../envs/latent_env.yaml"
     script:
-        '../scripts/latent/kmeans.py'
+        '../scripts/clusters/run.py'
+
+
+###########################################
+#      UMAP & CLUSTERING & PLOT   #
+###########################################
 
 rule build_embeddings:
     input: 
         'data/processed/{study}/all_features_clean.csv'
     output:
         'data/output/{study}/embeddings.csv'
-    conda:
-        "../envs/latent_env.yaml"
     params:
         groupby = config['groupby'],
         features = config['features']
     resources:
         mem_mb=10000
+    conda:
+        "../envs/latent_env.yaml"
     script:
-        '../scripts/latent/make_embeddings.py'
+        '../scripts/embeddings/make_embeddings.py'
+
+rule plot_embeddings:
+    input:
+        embeddings = 'data/output/{study}/embeddings.csv',
+        labels = 'out/{study}/{algo}_cluster.csv',
+    output:
+        report('data/output/{study}/{algo}_cluster_embeddings.png')
+    params:
+        features = config['features'],
+    conda:
+        "../envs/latent_env.yaml"
+    script:
+        '../scripts/embeddings/plot_embeddings.py'

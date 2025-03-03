@@ -5,118 +5,130 @@ Using shell: /usr/bin/bash
 Provided cores: 2
 Rules claiming more threads will be scaled down.
 Job stats:
-job              count
--------------  -------
-all                  1
-kmean_cluster        3
-total                4
+job                 count
+----------------  -------
+all                     1
+build_embeddings        1
+cluster                 2
+plot_embeddings         2
+total                   6
 
 Select jobs to execute...
 Execute 2 jobs...
 
-[Fri Feb 21 01:03:11 2025]
-localrule kmean_cluster:
-    input: data/processed/momo/all_features_clean.csv
-    output: data/output/momo/kmeans_cluster.csv
-    jobid: 12
-    reason: Code has changed since last execution
-    wildcards: study=momo
-    resources: tmpdir=/tmp
-
-[Fri Feb 21 01:03:11 2025]
-localrule kmean_cluster:
+[Tue Feb 25 01:57:49 2025]
+localrule cluster:
     input: data/processed/tesserae/all_features_clean.csv
-    output: data/output/tesserae/kmeans_cluster.csv
-    jobid: 11
-    reason: Missing output files: data/output/tesserae/kmeans_cluster.csv
-    wildcards: study=tesserae
+    output: out/tesserae/kmeans_cluster.csv, out/tesserae/kmeans_cluster_centroids.csv
+    jobid: 5
+    reason: Missing output files: out/tesserae/kmeans_cluster.csv, out/tesserae/kmeans_cluster_centroids.csv
+    wildcards: study=tesserae, algo=kmeans
     resources: tmpdir=/tmp
 
-Activating conda environment: .snakemake/conda/1487a308532d405478836fe525175bd3_
-Activating conda environment: .snakemake/conda/1487a308532d405478836fe525175bd3_
-Activating conda environment: .snakemake/conda/1487a308532d405478836fe525175bd3_
-Activating conda environment: .snakemake/conda/1487a308532d405478836fe525175bd3_
-[Fri Feb 21 01:04:15 2025]
-Finished job 12.
-1 of 4 steps (25%) done
+[Tue Feb 25 01:57:49 2025]
+localrule cluster:
+    input: data/processed/tesserae/all_features_clean.csv
+    output: out/tesserae/gmm_cluster.csv, out/tesserae/gmm_cluster_centroids.csv
+    jobid: 7
+    reason: Missing output files: out/tesserae/gmm_cluster_centroids.csv, out/tesserae/gmm_cluster.csv
+    wildcards: study=tesserae, algo=gmm
+    resources: tmpdir=/tmp
+
+Activating conda environment: .snakemake/conda/6d267da6e2faa2167f55b5151bf5dbca_
+Activating conda environment: .snakemake/conda/6d267da6e2faa2167f55b5151bf5dbca_
+Activating conda environment: .snakemake/conda/6d267da6e2faa2167f55b5151bf5dbca_
+Activating conda environment: .snakemake/conda/6d267da6e2faa2167f55b5151bf5dbca_
+2025-02-25 01:58:33,276 - INFO - 🔍 Starting GridSearchCV for Gaussian Mixture Model (GMM)...
+2025-02-25 02:04:13,986 - INFO - k=2, Silhouette Score=0.1588
+2025-02-25 02:09:55,310 - INFO - k=3, Silhouette Score=0.1254
+2025-02-25 02:14:28,546 - INFO - k=4, Silhouette Score=0.1161
+2025-02-25 02:19:25,534 - INFO - k=5, Silhouette Score=0.1052
+2025-02-25 02:19:30,333 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2025-02-25 02:19:30,381 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2025-02-25 02:19:30,688 - INFO - ✅ Best GMM found with params: {'covariance_type': 'full', 'n_components': 14, 'random_state': 2508}
+2025-02-25 02:19:30,688 - INFO - 🏆 Best BIC Score: -1376395.9015
+2025-02-25 02:22:13,441 - INFO - k=6, Silhouette Score=0.0771
+[Tue Feb 25 02:23:07 2025]
+Finished job 7.
+1 of 6 steps (17%) done
 Select jobs to execute...
 Execute 1 jobs...
 
-[Fri Feb 21 01:04:15 2025]
-localrule kmean_cluster:
-    input: data/processed/globem/all_features_clean.csv
-    output: data/output/globem/kmeans_cluster.csv
-    jobid: 13
-    reason: Missing output files: data/output/globem/kmeans_cluster.csv
-    wildcards: study=globem
+[Tue Feb 25 02:23:07 2025]
+localrule build_embeddings:
+    input: data/processed/tesserae/all_features_clean.csv
+    output: data/output/tesserae/embeddings.csv
+    jobid: 2
+    reason: Software environment definition has changed since last execution
+    wildcards: study=tesserae
+    resources: tmpdir=/tmp, mem_mb=10000, mem_mib=9537
+
+Activating conda environment: .snakemake/conda/6d267da6e2faa2167f55b5151bf5dbca_
+Activating conda environment: .snakemake/conda/6d267da6e2faa2167f55b5151bf5dbca_
+/scratch/work/luongn1/digirhythm-v2/.snakemake/conda/6d267da6e2faa2167f55b5151bf5dbca_/lib/python3.13/site-packages/sklearn/utils/deprecation.py:151: FutureWarning: 'force_all_finite' was renamed to 'ensure_all_finite' in 1.6 and will be removed in 1.8.
+  warnings.warn(
+/scratch/work/luongn1/digirhythm-v2/.snakemake/conda/6d267da6e2faa2167f55b5151bf5dbca_/lib/python3.13/site-packages/umap/umap_.py:1952: UserWarning: n_jobs value 1 overridden to 1 by setting random_state. Use no seed for parallelism.
+  warn(
+2025-02-25 02:24:54,442 - INFO - k=7, Silhouette Score=0.0797
+[Tue Feb 25 02:27:11 2025]
+Finished job 2.
+2 of 6 steps (33%) done
+Select jobs to execute...
+Execute 1 jobs...
+
+[Tue Feb 25 02:27:11 2025]
+localrule plot_embeddings:
+    input: data/output/tesserae/embeddings.csv, out/tesserae/gmm_cluster.csv
+    output: data/output/tesserae/gmm_cluster_embeddings.png
+    jobid: 6
+    reason: Missing output files: data/output/tesserae/gmm_cluster_embeddings.png; Input files updated by another job: data/output/tesserae/embeddings.csv, out/tesserae/gmm_cluster.csv
+    wildcards: study=tesserae, algo=gmm
     resources: tmpdir=/tmp
 
-Activating conda environment: .snakemake/conda/1487a308532d405478836fe525175bd3_
-Activating conda environment: .snakemake/conda/1487a308532d405478836fe525175bd3_
-Traceback (most recent call last):
-  File "/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpz93uhg4p.kmeans.py", line 65, in <module>
-    main(snakemake.input, snakemake.output,  snakemake.params)
-    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpz93uhg4p.kmeans.py", line 56, in main
-    data['Cluster'] = best_labels
-    ~~~~^^^^^^^^^^^
-  File "/scratch/work/luongn1/digirhythm-v2/.snakemake/conda/1487a308532d405478836fe525175bd3_/lib/python3.13/site-packages/pandas/core/frame.py", line 4311, in __setitem__
-    self._set_item(key, value)
-    ~~~~~~~~~~~~~~^^^^^^^^^^^^
-  File "/scratch/work/luongn1/digirhythm-v2/.snakemake/conda/1487a308532d405478836fe525175bd3_/lib/python3.13/site-packages/pandas/core/frame.py", line 4524, in _set_item
-    value, refs = self._sanitize_column(value)
-                  ~~~~~~~~~~~~~~~~~~~~~^^^^^^^
-  File "/scratch/work/luongn1/digirhythm-v2/.snakemake/conda/1487a308532d405478836fe525175bd3_/lib/python3.13/site-packages/pandas/core/frame.py", line 5266, in _sanitize_column
-    com.require_length_match(value, self.index)
-    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
-  File "/scratch/work/luongn1/digirhythm-v2/.snakemake/conda/1487a308532d405478836fe525175bd3_/lib/python3.13/site-packages/pandas/core/common.py", line 573, in require_length_match
-    raise ValueError(
-    ...<4 lines>...
-    )
-ValueError: Length of values (25380) does not match length of index (25386)
-RuleException:
-CalledProcessError in file /scratch/work/luongn1/digirhythm-v2/workflow/rules/embeddings.smk, line 23:
-Command 'source /appl/scibuilder-mamba/aalto-rhel9/prod/software/mamba/2024-01/39cf5e1/bin/activate '/scratch/work/luongn1/digirhythm-v2/.snakemake/conda/1487a308532d405478836fe525175bd3_'; set -euo pipefail;  python /scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpz93uhg4p.kmeans.py' returned non-zero exit status 1.
-[Fri Feb 21 01:06:03 2025]
-Error in rule kmean_cluster:
-    jobid: 13
-    input: data/processed/globem/all_features_clean.csv
-    output: data/output/globem/kmeans_cluster.csv
-    conda-env: /scratch/work/luongn1/digirhythm-v2/.snakemake/conda/1487a308532d405478836fe525175bd3_
+Activating conda environment: .snakemake/conda/6d267da6e2faa2167f55b5151bf5dbca_
+Activating conda environment: .snakemake/conda/6d267da6e2faa2167f55b5151bf5dbca_
+[Tue Feb 25 02:27:20 2025]
+Finished job 6.
+3 of 6 steps (50%) done
+2025-02-25 02:27:30,760 - INFO - k=8, Silhouette Score=0.0826
+2025-02-25 02:30:02,811 - INFO - k=9, Silhouette Score=0.0900
+2025-02-25 02:32:34,551 - INFO - k=10, Silhouette Score=0.0811
+2025-02-25 02:35:06,440 - INFO - k=11, Silhouette Score=0.0878
+2025-02-25 02:37:38,357 - INFO - k=12, Silhouette Score=0.0864
+2025-02-25 02:40:09,867 - INFO - k=13, Silhouette Score=0.0810
+2025-02-25 02:42:41,424 - INFO - k=14, Silhouette Score=0.0775
+2025-02-25 02:42:41,425 - INFO - ✅ Optimal number of clusters: 2 with Silhouette Score: 0.1588
+[Tue Feb 25 02:45:22 2025]
+Finished job 5.
+4 of 6 steps (67%) done
+Select jobs to execute...
+Execute 1 jobs...
 
-Traceback (most recent call last):
-  File "/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpifjciihu.kmeans.py", line 65, in <module>
-    main(snakemake.input, snakemake.output,  snakemake.params)
-    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpifjciihu.kmeans.py", line 56, in main
-    data['Cluster'] = best_labels
-    ~~~~^^^^^^^^^^^
-  File "/scratch/work/luongn1/digirhythm-v2/.snakemake/conda/1487a308532d405478836fe525175bd3_/lib/python3.13/site-packages/pandas/core/frame.py", line 4311, in __setitem__
-    self._set_item(key, value)
-    ~~~~~~~~~~~~~~^^^^^^^^^^^^
-  File "/scratch/work/luongn1/digirhythm-v2/.snakemake/conda/1487a308532d405478836fe525175bd3_/lib/python3.13/site-packages/pandas/core/frame.py", line 4524, in _set_item
-    value, refs = self._sanitize_column(value)
-                  ~~~~~~~~~~~~~~~~~~~~~^^^^^^^
-  File "/scratch/work/luongn1/digirhythm-v2/.snakemake/conda/1487a308532d405478836fe525175bd3_/lib/python3.13/site-packages/pandas/core/frame.py", line 5266, in _sanitize_column
-    com.require_length_match(value, self.index)
-    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
-  File "/scratch/work/luongn1/digirhythm-v2/.snakemake/conda/1487a308532d405478836fe525175bd3_/lib/python3.13/site-packages/pandas/core/common.py", line 573, in require_length_match
-    raise ValueError(
-    ...<4 lines>...
-    )
-ValueError: Length of values (106598) does not match length of index (106606)
-RuleException:
-CalledProcessError in file /scratch/work/luongn1/digirhythm-v2/workflow/rules/embeddings.smk, line 23:
-Command 'source /appl/scibuilder-mamba/aalto-rhel9/prod/software/mamba/2024-01/39cf5e1/bin/activate '/scratch/work/luongn1/digirhythm-v2/.snakemake/conda/1487a308532d405478836fe525175bd3_'; set -euo pipefail;  python /scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpifjciihu.kmeans.py' returned non-zero exit status 1.
-[Fri Feb 21 01:36:19 2025]
-Error in rule kmean_cluster:
-    jobid: 11
-    input: data/processed/tesserae/all_features_clean.csv
-    output: data/output/tesserae/kmeans_cluster.csv
-    conda-env: /scratch/work/luongn1/digirhythm-v2/.snakemake/conda/1487a308532d405478836fe525175bd3_
+[Tue Feb 25 02:45:22 2025]
+localrule plot_embeddings:
+    input: data/output/tesserae/embeddings.csv, out/tesserae/kmeans_cluster.csv
+    output: data/output/tesserae/kmeans_cluster_embeddings.png
+    jobid: 1
+    reason: Missing output files: data/output/tesserae/kmeans_cluster_embeddings.png; Input files updated by another job: data/output/tesserae/embeddings.csv, out/tesserae/kmeans_cluster.csv
+    wildcards: study=tesserae, algo=kmeans
+    resources: tmpdir=/tmp
 
-Shutting down, this might take some time.
-Exiting because a job execution failed. Look above for error message
-Complete log: .snakemake/log/2025-02-21T010307.614567.snakemake.log
-WorkflowError:
-At least one job did not complete successfully.
+Activating conda environment: .snakemake/conda/6d267da6e2faa2167f55b5151bf5dbca_
+Activating conda environment: .snakemake/conda/6d267da6e2faa2167f55b5151bf5dbca_
+[Tue Feb 25 02:45:30 2025]
+Finished job 1.
+5 of 6 steps (83%) done
+Select jobs to execute...
+Execute 1 jobs...
+
+[Tue Feb 25 02:45:30 2025]
+localrule all:
+    input: data/output/tesserae/kmeans_cluster_embeddings.png, data/output/tesserae/gmm_cluster_embeddings.png, data/output/momo/kmeans_cluster_embeddings.png, data/output/momo/gmm_cluster_embeddings.png, data/output/globem/kmeans_cluster_embeddings.png, data/output/globem/gmm_cluster_embeddings.png, out/tesserae/kmeans_cluster.csv, out/tesserae/gmm_cluster.csv, out/momo/kmeans_cluster.csv, out/momo/gmm_cluster.csv, out/globem/kmeans_cluster.csv, out/globem/gmm_cluster.csv, out/tesserae/kmeans_cluster_centroids.csv, out/tesserae/gmm_cluster_centroids.csv, out/momo/kmeans_cluster_centroids.csv, out/momo/gmm_cluster_centroids.csv, out/globem/kmeans_cluster_centroids.csv, out/globem/gmm_cluster_centroids.csv, report.png
+    jobid: 0
+    reason: Input files updated by another job: out/tesserae/gmm_cluster_centroids.csv, out/tesserae/kmeans_cluster_centroids.csv, data/output/tesserae/gmm_cluster_embeddings.png, data/output/tesserae/kmeans_cluster_embeddings.png, out/tesserae/kmeans_cluster.csv, out/tesserae/gmm_cluster.csv
+    resources: tmpdir=/tmp
+
+[Tue Feb 25 02:45:30 2025]
+Finished job 0.
+6 of 6 steps (100%) done
+Complete log: .snakemake/log/2025-02-25T015744.807201.snakemake.log

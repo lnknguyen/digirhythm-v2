@@ -53,7 +53,7 @@ rule extract_globem:
     script:
         '../scripts/preprocess/globem/{wildcards.sensor}.py'
 
-# Tessare rule
+# Tesserae rule
 rule extract_tesserae:
     input:
         '/scratch/cs/tesserae/postprocessed_data/{sensor}.parquet'

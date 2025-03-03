@@ -1,5 +1,3 @@
-hdbscan_parameters: config/hdbscan_parameters.tsv
-
 groupby:
     tesserae:
         - user
@@ -12,7 +10,7 @@ groupby:
         - user
         - date
         - wave
-        
+
 features:
     - activity_night
     - activity_morning
@@ -33,3 +31,24 @@ features:
     - sleep_offset
     - sleep_duration
 
+### CLUSTERING ###
+cluster_settings:
+
+    tesserae:
+
+        algorithm: gmm 
+        split: True  # Apply clustering on data splits instead of the full dataset
+        strategy: random # Split strategy, only available if split is turned on
+        group_col: None
+    momo:
+
+        algorithm: gmm 
+        split: True  
+        strategy: random 
+        group_col: None
+    globem:
+
+        algorithm: gmm 
+        split: True  
+        strategy: group 
+        group_col: wave
