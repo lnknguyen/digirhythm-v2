@@ -42,7 +42,7 @@ rule rename_and_concatenate:
 # GLobem rule
 WAVES = ['INS-W_1', 'INS-W_2', 'INS-W_3', 'INS-W_4']
 
-'''
+
 rule extract_globem:
     input:
         expand('/m/cs/work/luongn1/globem/{wave}/FeatureData/{{sensor}}.csv', wave = WAVES)
@@ -63,5 +63,3 @@ rule extract_tesserae:
         '../envs/python_env.yaml'
     script:
         '../scripts/preprocess/tesserae/{wildcards.sensor}.py'
-
-'''

@@ -31,8 +31,9 @@ class BaseClustering(ABC):
         self.random_state = random_state
         self.model = None
 
-        self.score_plot = None
-        
+        # Score from model selection
+        self.score = None
+
         # Cluster settings
         self.strategy = cluster_settings["strategy"]
         self.split = cluster_settings["split"]
@@ -173,7 +174,7 @@ class BaseClustering(ABC):
     @abstractmethod
     def model_selection(self):
         """
-        Select the best model
+        Return the best model and a score dataframe
         """
         pass
 
@@ -214,60 +215,59 @@ class BaseClustering(ABC):
         Returns:
         -------
         tuple
-            (cluster_labels, centroid_characteristics)
+            (cluster labels, centroids, model selection score)
         """
 
         # Retain users with more than 14 days of data
         self.df = self.filter_by_duration(self.df, threshold=14)  # 14 days
 
         # TEST
-        #self.df = self.df.head(1000)
-        
-        labels_list, centroids_list, score_plots = [], [], []
+        # self.df = self.df.head(1000)
+
+        labels_list, centroids_list, model_selection_scores = [], [], []
 
         if self.split:
             # Split dataset into subsets if self.split is True
-            dfs = self.split_dataset(self.df, strategy=self.strategy, group_col=self.group_col)
+            dfs = self.split_dataset(
+                self.df, strategy=self.strategy, group_col=self.group_col
+            )
         else:
             # Treat the whole dataset as a single subset
-            dfs =  [("full_data", self.df)]
+            dfs = [("full_data", self.df)]
 
         # Process each subset (either split parts or full dataset)
         for item in dfs:
 
-            tag = item[0] 
+            tag = item[0]
             df = item[1]
-            
+
             norm_df = self.z_score_normalize_per_user(df)
             X = norm_df[self.features]
 
             ### Perform clustering ###
 
             # Select best model
-            self.model, self.score_plot = self.model_selection(X)
+            self.model, self.score = self.model_selection(X)
 
             # Get cluster labels
             labels = self.fit_predict(self.model, X)
 
-            # Evaluate by Silhouette score
-            score = self.evaluate_clusters(X, labels)
-
-            # Assign labels and split 
-            X['Cluster'] = labels
-            X['split'] = tag
+            # Assign labels and split
+            X["Cluster"] = labels
+            X["split"] = tag
             centroids = self.centroid_characteristics(X)
 
             # Update dataframe
             labels_list.append(X)
 
-            centroids['split'] = tag
+            centroids["split"] = tag
             centroids_list.append(centroids)
 
             # This is not recommended, mostly for my convenience
-            # But directly save the plot here 
-            self.score_plot.savefig(f'{tag}_score.png')
-            
+            # But directly save the plot here
+            self.score_plot.savefig(f"{tag}_score.png")
+
         labels_list = pd.concat(labels_list)
         centroids_list = pd.concat(centroids_list)
-        
+
         return labels_list, centroids_list

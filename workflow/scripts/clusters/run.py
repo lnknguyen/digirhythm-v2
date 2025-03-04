@@ -9,6 +9,7 @@ logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
 )
 
+
 def main(input_fns, output_fns, params):
 
     # Load data
@@ -36,6 +37,7 @@ def main(input_fns, output_fns, params):
 
     labels.to_csv(output_fns.clusters)
     centroids.to_csv(output_fns.centroids)
+
 
 if __name__ == "__main__":
     main(snakemake.input, snakemake.output, snakemake.params)

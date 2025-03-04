@@ -5,130 +5,1095 @@ Using shell: /usr/bin/bash
 Provided cores: 2
 Rules claiming more threads will be scaled down.
 Job stats:
-job                 count
-----------------  -------
-all                     1
-build_embeddings        1
-cluster                 2
-plot_embeddings         2
-total                   6
+job                       count
+----------------------  -------
+all                           1
+build_embeddings              3
+clean_features                3
+cluster                       3
+extract_globem                3
+extract_tesserae              3
+plot_embeddings               3
+rename_and_concatenate        2
+visualize_cluster             3
+write_report                  1
+total                        25
 
 Select jobs to execute...
 Execute 2 jobs...
 
-[Tue Feb 25 01:57:49 2025]
-localrule cluster:
-    input: data/processed/tesserae/all_features_clean.csv
-    output: out/tesserae/kmeans_cluster.csv, out/tesserae/kmeans_cluster_centroids.csv
+[Tue Mar  4 15:34:59 2025]
+localrule extract_tesserae:
+    input: /scratch/cs/tesserae/postprocessed_data/screen.parquet
+    output: data/interim/tesserae/screen_4epochs.csv
     jobid: 5
-    reason: Missing output files: out/tesserae/kmeans_cluster.csv, out/tesserae/kmeans_cluster_centroids.csv
-    wildcards: study=tesserae, algo=kmeans
+    reason: Missing output files: data/interim/tesserae/screen_4epochs.csv
+    wildcards: sensor=screen
     resources: tmpdir=/tmp
 
-[Tue Feb 25 01:57:49 2025]
-localrule cluster:
-    input: data/processed/tesserae/all_features_clean.csv
-    output: out/tesserae/gmm_cluster.csv, out/tesserae/gmm_cluster_centroids.csv
-    jobid: 7
-    reason: Missing output files: out/tesserae/gmm_cluster_centroids.csv, out/tesserae/gmm_cluster.csv
-    wildcards: study=tesserae, algo=gmm
+[Tue Mar  4 15:34:59 2025]
+localrule extract_globem:
+    input: /m/cs/work/luongn1/globem/INS-W_1/FeatureData/sleep.csv, /m/cs/work/luongn1/globem/INS-W_2/FeatureData/sleep.csv, /m/cs/work/luongn1/globem/INS-W_3/FeatureData/sleep.csv, /m/cs/work/luongn1/globem/INS-W_4/FeatureData/sleep.csv
+    output: data/interim/globem/sleep_4epochs.csv
+    jobid: 21
+    reason: Software environment definition has changed since last execution
+    wildcards: sensor=sleep
     resources: tmpdir=/tmp
 
-Activating conda environment: .snakemake/conda/6d267da6e2faa2167f55b5151bf5dbca_
-Activating conda environment: .snakemake/conda/6d267da6e2faa2167f55b5151bf5dbca_
-Activating conda environment: .snakemake/conda/6d267da6e2faa2167f55b5151bf5dbca_
-Activating conda environment: .snakemake/conda/6d267da6e2faa2167f55b5151bf5dbca_
-2025-02-25 01:58:33,276 - INFO - 🔍 Starting GridSearchCV for Gaussian Mixture Model (GMM)...
-2025-02-25 02:04:13,986 - INFO - k=2, Silhouette Score=0.1588
-2025-02-25 02:09:55,310 - INFO - k=3, Silhouette Score=0.1254
-2025-02-25 02:14:28,546 - INFO - k=4, Silhouette Score=0.1161
-2025-02-25 02:19:25,534 - INFO - k=5, Silhouette Score=0.1052
-2025-02-25 02:19:30,333 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
-2025-02-25 02:19:30,381 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
-2025-02-25 02:19:30,688 - INFO - ✅ Best GMM found with params: {'covariance_type': 'full', 'n_components': 14, 'random_state': 2508}
-2025-02-25 02:19:30,688 - INFO - 🏆 Best BIC Score: -1376395.9015
-2025-02-25 02:22:13,441 - INFO - k=6, Silhouette Score=0.0771
-[Tue Feb 25 02:23:07 2025]
-Finished job 7.
-1 of 6 steps (17%) done
+Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
+Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
+Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
+Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
+/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/preprocess/globem/base.py:82: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  df[f"{col}:within_norm"] = df.groupby(self.groupby_cols)[col].transform(
+/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/preprocess/globem/base.py:82: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  df[f"{col}:within_norm"] = df.groupby(self.groupby_cols)[col].transform(
+[Tue Mar  4 15:35:22 2025]
+Finished job 21.
+1 of 25 steps (4%) done
 Select jobs to execute...
 Execute 1 jobs...
 
-[Tue Feb 25 02:23:07 2025]
+[Tue Mar  4 15:35:22 2025]
+localrule extract_globem:
+    input: /m/cs/work/luongn1/globem/INS-W_1/FeatureData/steps.csv, /m/cs/work/luongn1/globem/INS-W_2/FeatureData/steps.csv, /m/cs/work/luongn1/globem/INS-W_3/FeatureData/steps.csv, /m/cs/work/luongn1/globem/INS-W_4/FeatureData/steps.csv
+    output: data/interim/globem/steps_4epochs.csv
+    jobid: 20
+    reason: Software environment definition has changed since last execution
+    wildcards: sensor=steps
+    resources: tmpdir=/tmp
+
+Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
+Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
+[Tue Mar  4 15:35:31 2025]
+Finished job 20.
+2 of 25 steps (8%) done
+Select jobs to execute...
+Execute 1 jobs...
+
+[Tue Mar  4 15:35:31 2025]
+localrule extract_globem:
+    input: /m/cs/work/luongn1/globem/INS-W_1/FeatureData/call.csv, /m/cs/work/luongn1/globem/INS-W_2/FeatureData/call.csv, /m/cs/work/luongn1/globem/INS-W_3/FeatureData/call.csv, /m/cs/work/luongn1/globem/INS-W_4/FeatureData/call.csv
+    output: data/interim/globem/call_4epochs.csv
+    jobid: 19
+    reason: Software environment definition has changed since last execution
+    wildcards: sensor=call
+    resources: tmpdir=/tmp
+
+Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
+Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
+/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/preprocess/globem/base.py:49: DtypeWarning: Columns (556,557,565) have mixed types. Specify dtype option on import or set low_memory=False.
+  df = pd.read_csv(fn, index_col=0)
+/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/preprocess/globem/base.py:49: DtypeWarning: Columns (478,577) have mixed types. Specify dtype option on import or set low_memory=False.
+  df = pd.read_csv(fn, index_col=0)
+/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/preprocess/globem/base.py:49: DtypeWarning: Columns (556,557,577) have mixed types. Specify dtype option on import or set low_memory=False.
+  df = pd.read_csv(fn, index_col=0)
+/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/preprocess/globem/base.py:49: DtypeWarning: Columns (565) have mixed types. Specify dtype option on import or set low_memory=False.
+  df = pd.read_csv(fn, index_col=0)
+[Tue Mar  4 15:35:41 2025]
+Finished job 19.
+3 of 25 steps (12%) done
+Select jobs to execute...
+Execute 1 jobs...
+
+[Tue Mar  4 15:35:41 2025]
+localrule clean_features:
+    input: data/processed/momo/all_features.csv
+    output: data/processed/momo/all_features_clean.csv
+    jobid: 12
+    reason: Software environment definition has changed since last execution
+    wildcards: study=momo
+    resources: tmpdir=/tmp
+
+Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
+Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
+2025-03-04 15:35:43,679 - INFO - All required features are present in the data.
+2025-03-04 15:35:43,679 - INFO - Features identified for filling missing call data: ['call_total_duration_night', 'call_total_duration_morning', 'call_total_duration_afternoon', 'call_total_duration_evening', 'call_total_duration_allday']
+2025-03-04 15:35:43,680 - INFO - Filled missing data with 0 for feature: call_total_duration_night
+2025-03-04 15:35:43,681 - INFO - Filled missing data with 0 for feature: call_total_duration_morning
+2025-03-04 15:35:43,681 - INFO - Filled missing data with 0 for feature: call_total_duration_afternoon
+2025-03-04 15:35:43,682 - INFO - Filled missing data with 0 for feature: call_total_duration_evening
+2025-03-04 15:35:43,682 - INFO - Filled missing data with 0 for feature: call_total_duration_allday
+2025-03-04 15:35:43,682 - INFO - Initial data shape before filtering: (21169, 290)
+2025-03-04 15:35:43,685 - INFO - Feature 'activity_night' has 3703 NaN observations
+2025-03-04 15:35:43,685 - INFO - Feature 'activity_morning' has 3138 NaN observations
+2025-03-04 15:35:43,685 - INFO - Feature 'activity_afternoon' has 3038 NaN observations
+2025-03-04 15:35:43,685 - INFO - Feature 'activity_evening' has 3156 NaN observations
+2025-03-04 15:35:43,685 - INFO - Feature 'activity_allday' has 2716 NaN observations
+2025-03-04 15:35:43,685 - INFO - Feature 'call_total_duration_night' has 0 NaN observations
+2025-03-04 15:35:43,685 - INFO - Feature 'call_total_duration_morning' has 0 NaN observations
+2025-03-04 15:35:43,686 - INFO - Feature 'call_total_duration_afternoon' has 0 NaN observations
+2025-03-04 15:35:43,686 - INFO - Feature 'call_total_duration_evening' has 0 NaN observations
+2025-03-04 15:35:43,686 - INFO - Feature 'call_total_duration_allday' has 0 NaN observations
+2025-03-04 15:35:43,686 - INFO - Feature 'screen_night' has 279 NaN observations
+2025-03-04 15:35:43,686 - INFO - Feature 'screen_morning' has 279 NaN observations
+2025-03-04 15:35:43,686 - INFO - Feature 'screen_afternoon' has 279 NaN observations
+2025-03-04 15:35:43,686 - INFO - Feature 'screen_evening' has 279 NaN observations
+2025-03-04 15:35:43,686 - INFO - Feature 'screen_allday' has 279 NaN observations
+2025-03-04 15:35:43,686 - INFO - Feature 'sleep_onset' has 4454 NaN observations
+2025-03-04 15:35:43,686 - INFO - Feature 'sleep_offset' has 4454 NaN observations
+2025-03-04 15:35:43,686 - INFO - Feature 'sleep_duration' has 4454 NaN observations
+2025-03-04 15:35:43,701 - INFO - Data shape after removing NaNs based on features: (15794, 290)
+2025-03-04 15:35:43,742 - INFO - Data shape after removing zero activity: (15794, 290)
+2025-03-04 15:35:43,758 - INFO - Data shape after removing zero screen use: (15716, 290)
+2025-03-04 15:35:43,773 - INFO - Data shape after removing negative sleep duration: (15716, 290)
+2025-03-04 15:35:43,774 - INFO - Final data shape before saving to CSV: (15716, 290)
+[Tue Mar  4 15:35:48 2025]
+Finished job 12.
+4 of 25 steps (16%) done
+Select jobs to execute...
+Execute 1 jobs...
+
+[Tue Mar  4 15:35:48 2025]
+localrule cluster:
+    input: data/processed/momo/all_features_clean.csv
+    output: out/momo/gmm_cluster.csv, out/momo/gmm_cluster_centroids.csv
+    jobid: 13
+    reason: Input files updated by another job: data/processed/momo/all_features_clean.csv
+    wildcards: study=momo, algo=gmm
+    resources: tmpdir=/tmp
+
+Activating conda environment: .snakemake/conda/ab5233add898528c77eec06aa91604d6_
+Activating conda environment: .snakemake/conda/ab5233add898528c77eec06aa91604d6_
+2025-03-04 15:35:55,586 - INFO - 🔍 Starting GridSearchCV for Gaussian Mixture Model (GMM)...
+/scratch/work/luongn1/digirhythm-v2/.snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_/lib/python3.9/site-packages/niimpy/preprocessing/screen.py:62: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  df.drop(["missing"], axis=1, inplace=True)
+/scratch/work/luongn1/digirhythm-v2/.snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_/lib/python3.9/site-packages/niimpy/preprocessing/screen.py:95: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  df.sort_index(inplace=True)
+/scratch/work/luongn1/digirhythm-v2/.snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_/lib/python3.9/site-packages/niimpy/preprocessing/screen.py:96: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  df.sort_values(by=id_columns, inplace=True)
+/scratch/work/luongn1/digirhythm-v2/.snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_/lib/python3.9/site-packages/niimpy/preprocessing/screen.py:99: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  df['next'] = col_as_str + next_as_str
+/home/luongn1/.local/lib/python3.9/site-packages/seaborn/axisgrid.py:854: FutureWarning: 
+
+The `ci` parameter is deprecated. Use `errorbar=None` for the same effect.
+
+  func(*plot_args, **plot_kwargs)
+2025-03-04 15:37:41,035 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+/home/luongn1/.local/lib/python3.9/site-packages/seaborn/axisgrid.py:854: FutureWarning: 
+
+Setting a gradient palette using color= is deprecated and will be removed in v0.14.0. Set `palette='dark:#4c72b0'` for the same effect.
+
+  func(*plot_args, **plot_kwargs)
+/home/luongn1/.local/lib/python3.9/site-packages/seaborn/axisgrid.py:854: FutureWarning: 
+
+The `errwidth` parameter is deprecated. And will be removed in v0.15.0. Pass `err_kws={'linewidth': 1}` instead.
+
+  func(*plot_args, **plot_kwargs)
+2025-03-04 15:37:41,043 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+/home/luongn1/.local/lib/python3.9/site-packages/seaborn/axisgrid.py:854: FutureWarning: 
+
+The `ci` parameter is deprecated. Use `errorbar=None` for the same effect.
+
+  func(*plot_args, **plot_kwargs)
+2025-03-04 15:37:41,155 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+/home/luongn1/.local/lib/python3.9/site-packages/seaborn/axisgrid.py:854: FutureWarning: 
+
+Setting a gradient palette using color= is deprecated and will be removed in v0.14.0. Set `palette='dark:#4c72b0'` for the same effect.
+
+  func(*plot_args, **plot_kwargs)
+/home/luongn1/.local/lib/python3.9/site-packages/seaborn/axisgrid.py:854: FutureWarning: 
+
+The `errwidth` parameter is deprecated. And will be removed in v0.15.0. Pass `err_kws={'linewidth': 1}` instead.
+
+  func(*plot_args, **plot_kwargs)
+2025-03-04 15:37:41,162 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+/home/luongn1/.local/lib/python3.9/site-packages/seaborn/axisgrid.py:854: FutureWarning: 
+
+The `ci` parameter is deprecated. Use `errorbar=None` for the same effect.
+
+  func(*plot_args, **plot_kwargs)
+2025-03-04 15:37:41,265 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+/home/luongn1/.local/lib/python3.9/site-packages/seaborn/axisgrid.py:854: FutureWarning: 
+
+Setting a gradient palette using color= is deprecated and will be removed in v0.14.0. Set `palette='dark:#4c72b0'` for the same effect.
+
+  func(*plot_args, **plot_kwargs)
+/home/luongn1/.local/lib/python3.9/site-packages/seaborn/axisgrid.py:854: FutureWarning: 
+
+The `errwidth` parameter is deprecated. And will be removed in v0.15.0. Pass `err_kws={'linewidth': 1}` instead.
+
+  func(*plot_args, **plot_kwargs)
+2025-03-04 15:37:41,273 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+/home/luongn1/.local/lib/python3.9/site-packages/sklearn/mixture/_base.py:268: ConvergenceWarning: Initialization 1 did not converge. Try different init parameters, or increase max_iter, tol or check for degenerate data.
+  warnings.warn(
+/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/clusters/base.py:256: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  X['Cluster'] = labels
+/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/clusters/base.py:257: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  X['split'] = tag
+2025-03-04 15:37:48,170 - INFO - 🔍 Starting GridSearchCV for Gaussian Mixture Model (GMM)...
+/home/luongn1/.local/lib/python3.9/site-packages/sklearn/mixture/_base.py:268: ConvergenceWarning: Initialization 1 did not converge. Try different init parameters, or increase max_iter, tol or check for degenerate data.
+  warnings.warn(
+/home/luongn1/.local/lib/python3.9/site-packages/sklearn/mixture/_base.py:268: ConvergenceWarning: Initialization 1 did not converge. Try different init parameters, or increase max_iter, tol or check for degenerate data.
+  warnings.warn(
+/home/luongn1/.local/lib/python3.9/site-packages/seaborn/axisgrid.py:854: FutureWarning: 
+
+The `ci` parameter is deprecated. Use `errorbar=None` for the same effect.
+
+  func(*plot_args, **plot_kwargs)
+2025-03-04 15:39:32,875 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+/home/luongn1/.local/lib/python3.9/site-packages/seaborn/axisgrid.py:854: FutureWarning: 
+
+Setting a gradient palette using color= is deprecated and will be removed in v0.14.0. Set `palette='dark:#4c72b0'` for the same effect.
+
+  func(*plot_args, **plot_kwargs)
+/home/luongn1/.local/lib/python3.9/site-packages/seaborn/axisgrid.py:854: FutureWarning: 
+
+The `errwidth` parameter is deprecated. And will be removed in v0.15.0. Pass `err_kws={'linewidth': 1}` instead.
+
+  func(*plot_args, **plot_kwargs)
+2025-03-04 15:39:32,881 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+/home/luongn1/.local/lib/python3.9/site-packages/seaborn/axisgrid.py:854: FutureWarning: 
+
+The `ci` parameter is deprecated. Use `errorbar=None` for the same effect.
+
+  func(*plot_args, **plot_kwargs)
+2025-03-04 15:39:32,976 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+/home/luongn1/.local/lib/python3.9/site-packages/seaborn/axisgrid.py:854: FutureWarning: 
+
+Setting a gradient palette using color= is deprecated and will be removed in v0.14.0. Set `palette='dark:#4c72b0'` for the same effect.
+
+  func(*plot_args, **plot_kwargs)
+/home/luongn1/.local/lib/python3.9/site-packages/seaborn/axisgrid.py:854: FutureWarning: 
+
+The `errwidth` parameter is deprecated. And will be removed in v0.15.0. Pass `err_kws={'linewidth': 1}` instead.
+
+  func(*plot_args, **plot_kwargs)
+2025-03-04 15:39:32,983 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+/home/luongn1/.local/lib/python3.9/site-packages/seaborn/axisgrid.py:854: FutureWarning: 
+
+The `ci` parameter is deprecated. Use `errorbar=None` for the same effect.
+
+  func(*plot_args, **plot_kwargs)
+2025-03-04 15:39:33,078 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+/home/luongn1/.local/lib/python3.9/site-packages/seaborn/axisgrid.py:854: FutureWarning: 
+
+Setting a gradient palette using color= is deprecated and will be removed in v0.14.0. Set `palette='dark:#4c72b0'` for the same effect.
+
+  func(*plot_args, **plot_kwargs)
+/home/luongn1/.local/lib/python3.9/site-packages/seaborn/axisgrid.py:854: FutureWarning: 
+
+The `errwidth` parameter is deprecated. And will be removed in v0.15.0. Pass `err_kws={'linewidth': 1}` instead.
+
+  func(*plot_args, **plot_kwargs)
+2025-03-04 15:39:33,085 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/clusters/base.py:256: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  X['Cluster'] = labels
+/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/clusters/base.py:257: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  X['split'] = tag
+[Tue Mar  4 15:39:37 2025]
+Finished job 13.
+5 of 25 steps (20%) done
+Select jobs to execute...
+Execute 1 jobs...
+
+[Tue Mar  4 15:39:37 2025]
+localrule build_embeddings:
+    input: data/processed/momo/all_features_clean.csv
+    output: data/output/momo/embeddings.csv
+    jobid: 11
+    reason: Input files updated by another job: data/processed/momo/all_features_clean.csv
+    wildcards: study=momo
+    resources: tmpdir=/tmp, mem_mb=10000, mem_mib=9537
+
+Activating conda environment: .snakemake/conda/ab5233add898528c77eec06aa91604d6_
+/scratch/work/luongn1/digirhythm-v2/.snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_/lib/python3.9/site-packages/niimpy/preprocessing/screen.py:277: FutureWarning: 'H' is deprecated and will be removed in a future version, please use 'h' instead.
+  on = util.group_data(df2[df2.on==1])["duration"].resample(**resample_args).sum()
+/scratch/work/luongn1/digirhythm-v2/.snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_/lib/python3.9/site-packages/niimpy/preprocessing/screen.py:279: FutureWarning: 'H' is deprecated and will be removed in a future version, please use 'h' instead.
+  off = util.group_data(df2[df2.off==1])["duration"].resample(**resample_args).sum()
+Activating conda environment: .snakemake/conda/ab5233add898528c77eec06aa91604d6_
+/scratch/work/luongn1/digirhythm-v2/.snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_/lib/python3.9/site-packages/niimpy/preprocessing/screen.py:281: FutureWarning: 'H' is deprecated and will be removed in a future version, please use 'h' instead.
+  use = util.group_data(df2[df2.use==1])["duration"].resample(**resample_args).sum()
+/scratch/work/luongn1/digirhythm-v2/.snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_/lib/python3.9/site-packages/niimpy/preprocessing/screen.py:62: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  df.drop(["missing"], axis=1, inplace=True)
+/scratch/work/luongn1/digirhythm-v2/.snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_/lib/python3.9/site-packages/niimpy/preprocessing/screen.py:95: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  df.sort_index(inplace=True)
+/scratch/work/luongn1/digirhythm-v2/.snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_/lib/python3.9/site-packages/niimpy/preprocessing/screen.py:96: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  df.sort_values(by=id_columns, inplace=True)
+[Tue Mar  4 15:40:36 2025]
+Finished job 11.
+6 of 25 steps (24%) done
+Select jobs to execute...
+Execute 1 jobs...
+
+[Tue Mar  4 15:40:36 2025]
+localrule rename_and_concatenate:
+    input: data/interim/globem/screen_4epochs.csv, data/interim/globem/call_4epochs.csv, data/interim/globem/steps_4epochs.csv, data/interim/globem/sleep_4epochs.csv
+    output: data/processed/globem/all_features.csv
+    jobid: 17
+    reason: Input files updated by another job: data/interim/globem/call_4epochs.csv, data/interim/globem/sleep_4epochs.csv, data/interim/globem/steps_4epochs.csv
+    wildcards: study=globem
+    resources: tmpdir=/tmp
+
+Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
+Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
+/scratch/work/luongn1/digirhythm-v2/.snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_/lib/python3.9/site-packages/niimpy/preprocessing/screen.py:99: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  df['next'] = col_as_str + next_as_str
+[Tue Mar  4 15:40:41 2025]
+Finished job 17.
+7 of 25 steps (28%) done
+Select jobs to execute...
+Execute 1 jobs...
+
+[Tue Mar  4 15:40:41 2025]
+localrule clean_features:
+    input: data/processed/globem/all_features.csv
+    output: data/processed/globem/all_features_clean.csv
+    jobid: 16
+    reason: Input files updated by another job: data/processed/globem/all_features.csv
+    wildcards: study=globem
+    resources: tmpdir=/tmp
+
+Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
+Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
+2025-03-04 15:40:42,904 - INFO - All required features are present in the data.
+2025-03-04 15:40:42,904 - INFO - Features identified for filling missing call data: ['call_total_duration_night', 'call_total_duration_morning', 'call_total_duration_afternoon', 'call_total_duration_evening', 'call_total_duration_allday']
+2025-03-04 15:40:42,905 - INFO - Filled missing data with 0 for feature: call_total_duration_night
+2025-03-04 15:40:42,906 - INFO - Filled missing data with 0 for feature: call_total_duration_morning
+2025-03-04 15:40:42,907 - INFO - Filled missing data with 0 for feature: call_total_duration_afternoon
+2025-03-04 15:40:42,908 - INFO - Filled missing data with 0 for feature: call_total_duration_evening
+2025-03-04 15:40:42,909 - INFO - Filled missing data with 0 for feature: call_total_duration_allday
+2025-03-04 15:40:42,909 - INFO - Initial data shape before filtering: (69602, 50)
+2025-03-04 15:40:42,917 - INFO - Feature 'activity_night' has 26785 NaN observations
+2025-03-04 15:40:42,917 - INFO - Feature 'activity_morning' has 26789 NaN observations
+2025-03-04 15:40:42,917 - INFO - Feature 'activity_afternoon' has 26788 NaN observations
+2025-03-04 15:40:42,917 - INFO - Feature 'activity_evening' has 26787 NaN observations
+2025-03-04 15:40:42,917 - INFO - Feature 'activity_allday' has 26783 NaN observations
+2025-03-04 15:40:42,917 - INFO - Feature 'call_total_duration_night' has 0 NaN observations
+2025-03-04 15:40:42,917 - INFO - Feature 'call_total_duration_morning' has 0 NaN observations
+2025-03-04 15:40:42,917 - INFO - Feature 'call_total_duration_afternoon' has 0 NaN observations
+2025-03-04 15:40:42,917 - INFO - Feature 'call_total_duration_evening' has 0 NaN observations
+2025-03-04 15:40:42,917 - INFO - Feature 'call_total_duration_allday' has 0 NaN observations
+2025-03-04 15:40:42,917 - INFO - Feature 'screen_night' has 28121 NaN observations
+2025-03-04 15:40:42,917 - INFO - Feature 'screen_morning' has 20546 NaN observations
+2025-03-04 15:40:42,917 - INFO - Feature 'screen_afternoon' has 18165 NaN observations
+2025-03-04 15:40:42,917 - INFO - Feature 'screen_evening' has 18619 NaN observations
+2025-03-04 15:40:42,917 - INFO - Feature 'screen_allday' has 17504 NaN observations
+2025-03-04 15:40:42,918 - INFO - Feature 'sleep_onset' has 31523 NaN observations
+2025-03-04 15:40:42,918 - INFO - Feature 'sleep_offset' has 31585 NaN observations
+2025-03-04 15:40:42,918 - INFO - Feature 'sleep_duration' has 31523 NaN observations
+2025-03-04 15:40:42,930 - INFO - Data shape after removing NaNs based on features: (25386, 50)
+2025-03-04 15:40:42,943 - INFO - Data shape after removing zero activity: (25386, 50)
+2025-03-04 15:40:42,947 - INFO - Data shape after removing zero screen use: (25386, 50)
+2025-03-04 15:40:42,952 - INFO - Data shape after removing negative sleep duration: (25386, 50)
+2025-03-04 15:40:42,953 - INFO - Final data shape before saving to CSV: (25386, 50)
+[Tue Mar  4 15:40:43 2025]
+Finished job 16.
+8 of 25 steps (32%) done
+Select jobs to execute...
+Execute 1 jobs...
+
+[Tue Mar  4 15:40:43 2025]
+localrule build_embeddings:
+    input: data/processed/globem/all_features_clean.csv
+    output: data/output/globem/embeddings.csv
+    jobid: 15
+    reason: Input files updated by another job: data/processed/globem/all_features_clean.csv
+    wildcards: study=globem
+    resources: tmpdir=/tmp, mem_mb=10000, mem_mib=9537
+
+Activating conda environment: .snakemake/conda/ab5233add898528c77eec06aa91604d6_
+Activating conda environment: .snakemake/conda/ab5233add898528c77eec06aa91604d6_
+[Tue Mar  4 15:41:48 2025]
+Finished job 15.
+9 of 25 steps (36%) done
+Select jobs to execute...
+Execute 1 jobs...
+
+[Tue Mar  4 15:41:48 2025]
+localrule cluster:
+    input: data/processed/globem/all_features_clean.csv
+    output: out/globem/gmm_cluster.csv, out/globem/gmm_cluster_centroids.csv
+    jobid: 22
+    reason: Input files updated by another job: data/processed/globem/all_features_clean.csv
+    wildcards: study=globem, algo=gmm
+    resources: tmpdir=/tmp
+
+Activating conda environment: .snakemake/conda/ab5233add898528c77eec06aa91604d6_
+Activating conda environment: .snakemake/conda/ab5233add898528c77eec06aa91604d6_
+2025-03-04 15:41:52,470 - INFO - 🔍 Starting GridSearchCV for Gaussian Mixture Model (GMM)...
+/scratch/work/luongn1/digirhythm-v2/.snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_/lib/python3.9/site-packages/niimpy/preprocessing/screen.py:232: FutureWarning: 'H' is deprecated and will be removed in a future version, please use 'h' instead.
+  on = util.group_data(df2)["on"].resample(**resample_args).sum()
+/scratch/work/luongn1/digirhythm-v2/.snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_/lib/python3.9/site-packages/niimpy/preprocessing/screen.py:234: FutureWarning: 'H' is deprecated and will be removed in a future version, please use 'h' instead.
+  off = util.group_data(df2)["off"].resample(**resample_args).sum()
+/home/luongn1/.local/lib/python3.9/site-packages/seaborn/axisgrid.py:854: FutureWarning: 
+
+The `ci` parameter is deprecated. Use `errorbar=None` for the same effect.
+
+  func(*plot_args, **plot_kwargs)
+2025-03-04 15:42:36,279 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+/home/luongn1/.local/lib/python3.9/site-packages/seaborn/axisgrid.py:854: FutureWarning: 
+
+Setting a gradient palette using color= is deprecated and will be removed in v0.14.0. Set `palette='dark:#4c72b0'` for the same effect.
+
+  func(*plot_args, **plot_kwargs)
+/home/luongn1/.local/lib/python3.9/site-packages/seaborn/axisgrid.py:854: FutureWarning: 
+
+The `errwidth` parameter is deprecated. And will be removed in v0.15.0. Pass `err_kws={'linewidth': 1}` instead.
+
+  func(*plot_args, **plot_kwargs)
+2025-03-04 15:42:36,287 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+/home/luongn1/.local/lib/python3.9/site-packages/seaborn/axisgrid.py:854: FutureWarning: 
+
+The `ci` parameter is deprecated. Use `errorbar=None` for the same effect.
+
+  func(*plot_args, **plot_kwargs)
+2025-03-04 15:42:36,387 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+/home/luongn1/.local/lib/python3.9/site-packages/seaborn/axisgrid.py:854: FutureWarning: 
+
+Setting a gradient palette using color= is deprecated and will be removed in v0.14.0. Set `palette='dark:#4c72b0'` for the same effect.
+
+  func(*plot_args, **plot_kwargs)
+/home/luongn1/.local/lib/python3.9/site-packages/seaborn/axisgrid.py:854: FutureWarning: 
+
+The `errwidth` parameter is deprecated. And will be removed in v0.15.0. Pass `err_kws={'linewidth': 1}` instead.
+
+  func(*plot_args, **plot_kwargs)
+2025-03-04 15:42:36,394 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+/home/luongn1/.local/lib/python3.9/site-packages/seaborn/axisgrid.py:854: FutureWarning: 
+
+The `ci` parameter is deprecated. Use `errorbar=None` for the same effect.
+
+  func(*plot_args, **plot_kwargs)
+2025-03-04 15:42:36,492 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+/home/luongn1/.local/lib/python3.9/site-packages/seaborn/axisgrid.py:854: FutureWarning: 
+
+Setting a gradient palette using color= is deprecated and will be removed in v0.14.0. Set `palette='dark:#4c72b0'` for the same effect.
+
+  func(*plot_args, **plot_kwargs)
+/home/luongn1/.local/lib/python3.9/site-packages/seaborn/axisgrid.py:854: FutureWarning: 
+
+The `errwidth` parameter is deprecated. And will be removed in v0.15.0. Pass `err_kws={'linewidth': 1}` instead.
+
+  func(*plot_args, **plot_kwargs)
+2025-03-04 15:42:36,500 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/clusters/base.py:256: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  X['Cluster'] = labels
+/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/clusters/base.py:257: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  X['split'] = tag
+2025-03-04 15:42:40,300 - INFO - 🔍 Starting GridSearchCV for Gaussian Mixture Model (GMM)...
+/scratch/work/luongn1/digirhythm-v2/.snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_/lib/python3.9/site-packages/niimpy/preprocessing/screen.py:236: FutureWarning: 'H' is deprecated and will be removed in a future version, please use 'h' instead.
+  use = util.group_data(df2)["use"].resample(**resample_args).sum()
+[Tue Mar  4 15:43:19 2025]
+Finished job 5.
+10 of 25 steps (40%) done
+Select jobs to execute...
+Execute 1 jobs...
+
+[Tue Mar  4 15:43:19 2025]
+localrule extract_tesserae:
+    input: /scratch/cs/tesserae/postprocessed_data/call.parquet
+    output: data/interim/tesserae/call_4epochs.csv
+    jobid: 6
+    reason: Software environment definition has changed since last execution
+    wildcards: sensor=call
+    resources: tmpdir=/tmp
+
+Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
+Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
+/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/preprocess/tesserae/base.py:55: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  df["datetime"] = pd.to_datetime(df["datetime"], format="mixed")
+/scratch/work/luongn1/digirhythm-v2/.snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_/lib/python3.9/site-packages/niimpy/preprocessing/communication.py:279: FutureWarning: 'H' is deprecated and will be removed in a future version, please use 'h' instead.
+  outgoing = util.group_data(df[df[call_type_column]=="outgoing"])[communication_column_name].resample(**resample_args).count()
+/scratch/work/luongn1/digirhythm-v2/.snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_/lib/python3.9/site-packages/niimpy/preprocessing/communication.py:281: FutureWarning: 'H' is deprecated and will be removed in a future version, please use 'h' instead.
+  incoming = util.group_data(df[df[call_type_column]=="incoming"])[communication_column_name].resample(**resample_args).count()
+/scratch/work/luongn1/digirhythm-v2/.snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_/lib/python3.9/site-packages/niimpy/preprocessing/communication.py:283: FutureWarning: 'H' is deprecated and will be removed in a future version, please use 'h' instead.
+  missed = util.group_data(df[df[call_type_column]=="missed"])[communication_column_name].resample(**resample_args).count()
+/scratch/work/luongn1/digirhythm-v2/.snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_/lib/python3.9/site-packages/niimpy/preprocessing/communication.py:94: FutureWarning: 'H' is deprecated and will be removed in a future version, please use 'h' instead.
+  outgoing = util.group_data(df[df[call_type_column]=="outgoing"])[communication_column_name].resample(**resample_args).sum()
+/scratch/work/luongn1/digirhythm-v2/.snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_/lib/python3.9/site-packages/niimpy/preprocessing/communication.py:96: FutureWarning: 'H' is deprecated and will be removed in a future version, please use 'h' instead.
+  incoming = util.group_data(df[df[call_type_column]=="incoming"])[communication_column_name].resample(**resample_args).sum()
+/scratch/work/luongn1/digirhythm-v2/.snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_/lib/python3.9/site-packages/niimpy/preprocessing/communication.py:98: FutureWarning: 'H' is deprecated and will be removed in a future version, please use 'h' instead.
+  missed = util.group_data(df[df[call_type_column]=="missed"])[communication_column_name].resample(**resample_args).sum()
+[Tue Mar  4 15:43:37 2025]
+Finished job 6.
+11 of 25 steps (44%) done
+Select jobs to execute...
+Execute 1 jobs...
+
+[Tue Mar  4 15:43:37 2025]
+localrule plot_embeddings:
+    input: data/output/momo/embeddings.csv, out/momo/gmm_cluster.csv
+    output: data/output/momo/gmm_cluster_embeddings.png
+    jobid: 10
+    reason: Input files updated by another job: data/output/momo/embeddings.csv, out/momo/gmm_cluster.csv
+    wildcards: study=momo, algo=gmm
+    resources: tmpdir=/tmp
+
+Activating conda environment: .snakemake/conda/ab5233add898528c77eec06aa91604d6_
+Activating conda environment: .snakemake/conda/ab5233add898528c77eec06aa91604d6_
+[Tue Mar  4 15:43:41 2025]
+Finished job 10.
+12 of 25 steps (48%) done
+Select jobs to execute...
+Execute 1 jobs...
+
+[Tue Mar  4 15:43:41 2025]
+localrule extract_tesserae:
+    input: /scratch/cs/tesserae/postprocessed_data/steps.parquet
+    output: data/interim/tesserae/steps_4epochs.csv
+    jobid: 7
+    reason: Software environment definition has changed since last execution
+    wildcards: sensor=steps
+    resources: tmpdir=/tmp
+
+Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
+Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
+/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpc_fwdghe.steps.py:40: FutureWarning: 'H' is deprecated and will be removed in a future version, please use 'h' instead.
+  df = df.groupby("user")["steps"].resample(rule).sum().reset_index()
+[Tue Mar  4 15:43:51 2025]
+Finished job 7.
+13 of 25 steps (52%) done
+Select jobs to execute...
+Execute 1 jobs...
+
+[Tue Mar  4 15:43:51 2025]
+localrule rename_and_concatenate:
+    input: data/interim/tesserae/screen_4epochs.csv, data/interim/tesserae/call_4epochs.csv, data/interim/tesserae/steps_4epochs.csv, data/interim/tesserae/sleep_4epochs.csv
+    output: data/processed/tesserae/all_features.csv
+    jobid: 4
+    reason: Input files updated by another job: data/interim/tesserae/call_4epochs.csv, data/interim/tesserae/screen_4epochs.csv, data/interim/tesserae/steps_4epochs.csv
+    wildcards: study=tesserae
+    resources: tmpdir=/tmp
+
+Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
+Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
+/home/luongn1/.local/lib/python3.9/site-packages/seaborn/axisgrid.py:854: FutureWarning: 
+
+The `ci` parameter is deprecated. Use `errorbar=None` for the same effect.
+
+  func(*plot_args, **plot_kwargs)
+2025-03-04 15:44:06,033 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+/home/luongn1/.local/lib/python3.9/site-packages/seaborn/axisgrid.py:854: FutureWarning: 
+
+Setting a gradient palette using color= is deprecated and will be removed in v0.14.0. Set `palette='dark:#4c72b0'` for the same effect.
+
+  func(*plot_args, **plot_kwargs)
+/home/luongn1/.local/lib/python3.9/site-packages/seaborn/axisgrid.py:854: FutureWarning: 
+
+The `errwidth` parameter is deprecated. And will be removed in v0.15.0. Pass `err_kws={'linewidth': 1}` instead.
+
+  func(*plot_args, **plot_kwargs)
+2025-03-04 15:44:06,040 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+/home/luongn1/.local/lib/python3.9/site-packages/seaborn/axisgrid.py:854: FutureWarning: 
+
+The `ci` parameter is deprecated. Use `errorbar=None` for the same effect.
+
+  func(*plot_args, **plot_kwargs)
+2025-03-04 15:44:06,140 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+/home/luongn1/.local/lib/python3.9/site-packages/seaborn/axisgrid.py:854: FutureWarning: 
+
+Setting a gradient palette using color= is deprecated and will be removed in v0.14.0. Set `palette='dark:#4c72b0'` for the same effect.
+
+  func(*plot_args, **plot_kwargs)
+/home/luongn1/.local/lib/python3.9/site-packages/seaborn/axisgrid.py:854: FutureWarning: 
+
+The `errwidth` parameter is deprecated. And will be removed in v0.15.0. Pass `err_kws={'linewidth': 1}` instead.
+
+  func(*plot_args, **plot_kwargs)
+2025-03-04 15:44:06,147 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+/home/luongn1/.local/lib/python3.9/site-packages/seaborn/axisgrid.py:854: FutureWarning: 
+
+The `ci` parameter is deprecated. Use `errorbar=None` for the same effect.
+
+  func(*plot_args, **plot_kwargs)
+2025-03-04 15:44:06,247 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+/home/luongn1/.local/lib/python3.9/site-packages/seaborn/axisgrid.py:854: FutureWarning: 
+
+Setting a gradient palette using color= is deprecated and will be removed in v0.14.0. Set `palette='dark:#4c72b0'` for the same effect.
+
+  func(*plot_args, **plot_kwargs)
+/home/luongn1/.local/lib/python3.9/site-packages/seaborn/axisgrid.py:854: FutureWarning: 
+
+The `errwidth` parameter is deprecated. And will be removed in v0.15.0. Pass `err_kws={'linewidth': 1}` instead.
+
+  func(*plot_args, **plot_kwargs)
+2025-03-04 15:44:06,255 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/clusters/base.py:256: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  X['Cluster'] = labels
+/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/clusters/base.py:257: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  X['split'] = tag
+2025-03-04 15:44:11,252 - INFO - 🔍 Starting GridSearchCV for Gaussian Mixture Model (GMM)...
+[Tue Mar  4 15:44:13 2025]
+Finished job 4.
+14 of 25 steps (56%) done
+Select jobs to execute...
+Execute 1 jobs...
+
+[Tue Mar  4 15:44:13 2025]
+localrule clean_features:
+    input: data/processed/tesserae/all_features.csv
+    output: data/processed/tesserae/all_features_clean.csv
+    jobid: 3
+    reason: Input files updated by another job: data/processed/tesserae/all_features.csv
+    wildcards: study=tesserae
+    resources: tmpdir=/tmp
+
+Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
+Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
+2025-03-04 15:44:18,154 - INFO - All required features are present in the data.
+2025-03-04 15:44:18,155 - INFO - Features identified for filling missing call data: ['call_total_duration_night', 'call_total_duration_morning', 'call_total_duration_afternoon', 'call_total_duration_evening', 'call_total_duration_allday']
+2025-03-04 15:44:18,157 - INFO - Filled missing data with 0 for feature: call_total_duration_night
+2025-03-04 15:44:18,158 - INFO - Filled missing data with 0 for feature: call_total_duration_morning
+2025-03-04 15:44:18,159 - INFO - Filled missing data with 0 for feature: call_total_duration_afternoon
+2025-03-04 15:44:18,161 - INFO - Filled missing data with 0 for feature: call_total_duration_evening
+2025-03-04 15:44:18,162 - INFO - Filled missing data with 0 for feature: call_total_duration_allday
+2025-03-04 15:44:18,162 - INFO - Initial data shape before filtering: (253260, 137)
+2025-03-04 15:44:18,180 - INFO - Feature 'activity_night' has 84948 NaN observations
+2025-03-04 15:44:18,181 - INFO - Feature 'activity_morning' has 84948 NaN observations
+2025-03-04 15:44:18,181 - INFO - Feature 'activity_afternoon' has 84948 NaN observations
+2025-03-04 15:44:18,181 - INFO - Feature 'activity_evening' has 84948 NaN observations
+2025-03-04 15:44:18,181 - INFO - Feature 'activity_allday' has 84948 NaN observations
+2025-03-04 15:44:18,181 - INFO - Feature 'call_total_duration_night' has 0 NaN observations
+2025-03-04 15:44:18,181 - INFO - Feature 'call_total_duration_morning' has 0 NaN observations
+2025-03-04 15:44:18,181 - INFO - Feature 'call_total_duration_afternoon' has 0 NaN observations
+2025-03-04 15:44:18,181 - INFO - Feature 'call_total_duration_evening' has 0 NaN observations
+2025-03-04 15:44:18,181 - INFO - Feature 'call_total_duration_allday' has 0 NaN observations
+2025-03-04 15:44:18,181 - INFO - Feature 'screen_night' has 30604 NaN observations
+2025-03-04 15:44:18,181 - INFO - Feature 'screen_morning' has 30604 NaN observations
+2025-03-04 15:44:18,181 - INFO - Feature 'screen_afternoon' has 30604 NaN observations
+2025-03-04 15:44:18,181 - INFO - Feature 'screen_evening' has 30604 NaN observations
+2025-03-04 15:44:18,181 - INFO - Feature 'screen_allday' has 30604 NaN observations
+2025-03-04 15:44:18,181 - INFO - Feature 'sleep_onset' has 44953 NaN observations
+2025-03-04 15:44:18,181 - INFO - Feature 'sleep_offset' has 44953 NaN observations
+2025-03-04 15:44:18,181 - INFO - Feature 'sleep_duration' has 44953 NaN observations
+2025-03-04 15:44:18,268 - INFO - Data shape after removing NaNs based on features: (155044, 137)
+2025-03-04 15:44:18,322 - INFO - Data shape after removing zero activity: (107380, 137)
+2025-03-04 15:44:18,371 - INFO - Data shape after removing zero screen use: (106673, 137)
+2025-03-04 15:44:18,420 - INFO - Data shape after removing negative sleep duration: (106606, 137)
+2025-03-04 15:44:18,421 - INFO - Final data shape before saving to CSV: (106606, 137)
+[Tue Mar  4 15:44:26 2025]
+Finished job 3.
+15 of 25 steps (60%) done
+Select jobs to execute...
+Execute 1 jobs...
+
+[Tue Mar  4 15:44:26 2025]
+localrule write_report:
+    input: data/processed/tesserae/all_features_clean.csv, data/processed/globem/all_features_clean.csv
+    output: report.png
+    jobid: 26
+    reason: Input files updated by another job: data/processed/globem/all_features_clean.csv, data/processed/tesserae/all_features_clean.csv
+    resources: tmpdir=/tmp
+
+Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
+Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
+[Tue Mar  4 15:44:30 2025]
+Finished job 26.
+16 of 25 steps (64%) done
+Select jobs to execute...
+Execute 1 jobs...
+
+[Tue Mar  4 15:44:30 2025]
+localrule cluster:
+    input: data/processed/tesserae/all_features_clean.csv
+    output: out/tesserae/gmm_cluster.csv, out/tesserae/gmm_cluster_centroids.csv
+    jobid: 9
+    reason: Input files updated by another job: data/processed/tesserae/all_features_clean.csv
+    wildcards: study=tesserae, algo=gmm
+    resources: tmpdir=/tmp
+
+Activating conda environment: .snakemake/conda/ab5233add898528c77eec06aa91604d6_
+Activating conda environment: .snakemake/conda/ab5233add898528c77eec06aa91604d6_
+2025-03-04 15:44:36,759 - INFO - 🔍 Starting GridSearchCV for Gaussian Mixture Model (GMM)...
+/home/luongn1/.local/lib/python3.9/site-packages/seaborn/axisgrid.py:854: FutureWarning: 
+
+The `ci` parameter is deprecated. Use `errorbar=None` for the same effect.
+
+  func(*plot_args, **plot_kwargs)
+2025-03-04 15:45:20,734 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+/home/luongn1/.local/lib/python3.9/site-packages/seaborn/axisgrid.py:854: FutureWarning: 
+
+Setting a gradient palette using color= is deprecated and will be removed in v0.14.0. Set `palette='dark:#4c72b0'` for the same effect.
+
+  func(*plot_args, **plot_kwargs)
+/home/luongn1/.local/lib/python3.9/site-packages/seaborn/axisgrid.py:854: FutureWarning: 
+
+The `errwidth` parameter is deprecated. And will be removed in v0.15.0. Pass `err_kws={'linewidth': 1}` instead.
+
+  func(*plot_args, **plot_kwargs)
+2025-03-04 15:45:20,743 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+/home/luongn1/.local/lib/python3.9/site-packages/seaborn/axisgrid.py:854: FutureWarning: 
+
+The `ci` parameter is deprecated. Use `errorbar=None` for the same effect.
+
+  func(*plot_args, **plot_kwargs)
+2025-03-04 15:45:20,915 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+/home/luongn1/.local/lib/python3.9/site-packages/seaborn/axisgrid.py:854: FutureWarning: 
+
+Setting a gradient palette using color= is deprecated and will be removed in v0.14.0. Set `palette='dark:#4c72b0'` for the same effect.
+
+  func(*plot_args, **plot_kwargs)
+/home/luongn1/.local/lib/python3.9/site-packages/seaborn/axisgrid.py:854: FutureWarning: 
+
+The `errwidth` parameter is deprecated. And will be removed in v0.15.0. Pass `err_kws={'linewidth': 1}` instead.
+
+  func(*plot_args, **plot_kwargs)
+2025-03-04 15:45:20,924 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+/home/luongn1/.local/lib/python3.9/site-packages/seaborn/axisgrid.py:854: FutureWarning: 
+
+The `ci` parameter is deprecated. Use `errorbar=None` for the same effect.
+
+  func(*plot_args, **plot_kwargs)
+2025-03-04 15:45:21,025 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+/home/luongn1/.local/lib/python3.9/site-packages/seaborn/axisgrid.py:854: FutureWarning: 
+
+Setting a gradient palette using color= is deprecated and will be removed in v0.14.0. Set `palette='dark:#4c72b0'` for the same effect.
+
+  func(*plot_args, **plot_kwargs)
+/home/luongn1/.local/lib/python3.9/site-packages/seaborn/axisgrid.py:854: FutureWarning: 
+
+The `errwidth` parameter is deprecated. And will be removed in v0.15.0. Pass `err_kws={'linewidth': 1}` instead.
+
+  func(*plot_args, **plot_kwargs)
+2025-03-04 15:45:21,034 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/clusters/base.py:256: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  X['Cluster'] = labels
+/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/clusters/base.py:257: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  X['split'] = tag
+2025-03-04 15:45:25,227 - INFO - 🔍 Starting GridSearchCV for Gaussian Mixture Model (GMM)...
+/home/luongn1/.local/lib/python3.9/site-packages/seaborn/axisgrid.py:854: FutureWarning: 
+
+The `ci` parameter is deprecated. Use `errorbar=None` for the same effect.
+
+  func(*plot_args, **plot_kwargs)
+2025-03-04 15:46:15,584 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+/home/luongn1/.local/lib/python3.9/site-packages/seaborn/axisgrid.py:854: FutureWarning: 
+
+Setting a gradient palette using color= is deprecated and will be removed in v0.14.0. Set `palette='dark:#4c72b0'` for the same effect.
+
+  func(*plot_args, **plot_kwargs)
+/home/luongn1/.local/lib/python3.9/site-packages/seaborn/axisgrid.py:854: FutureWarning: 
+
+The `errwidth` parameter is deprecated. And will be removed in v0.15.0. Pass `err_kws={'linewidth': 1}` instead.
+
+  func(*plot_args, **plot_kwargs)
+2025-03-04 15:46:15,593 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+/home/luongn1/.local/lib/python3.9/site-packages/seaborn/axisgrid.py:854: FutureWarning: 
+
+The `ci` parameter is deprecated. Use `errorbar=None` for the same effect.
+
+  func(*plot_args, **plot_kwargs)
+2025-03-04 15:46:15,695 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+/home/luongn1/.local/lib/python3.9/site-packages/seaborn/axisgrid.py:854: FutureWarning: 
+
+Setting a gradient palette using color= is deprecated and will be removed in v0.14.0. Set `palette='dark:#4c72b0'` for the same effect.
+
+  func(*plot_args, **plot_kwargs)
+/home/luongn1/.local/lib/python3.9/site-packages/seaborn/axisgrid.py:854: FutureWarning: 
+
+The `errwidth` parameter is deprecated. And will be removed in v0.15.0. Pass `err_kws={'linewidth': 1}` instead.
+
+  func(*plot_args, **plot_kwargs)
+2025-03-04 15:46:15,703 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+/home/luongn1/.local/lib/python3.9/site-packages/seaborn/axisgrid.py:854: FutureWarning: 
+
+The `ci` parameter is deprecated. Use `errorbar=None` for the same effect.
+
+  func(*plot_args, **plot_kwargs)
+2025-03-04 15:46:15,804 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+/home/luongn1/.local/lib/python3.9/site-packages/seaborn/axisgrid.py:854: FutureWarning: 
+
+Setting a gradient palette using color= is deprecated and will be removed in v0.14.0. Set `palette='dark:#4c72b0'` for the same effect.
+
+  func(*plot_args, **plot_kwargs)
+/home/luongn1/.local/lib/python3.9/site-packages/seaborn/axisgrid.py:854: FutureWarning: 
+
+The `errwidth` parameter is deprecated. And will be removed in v0.15.0. Pass `err_kws={'linewidth': 1}` instead.
+
+  func(*plot_args, **plot_kwargs)
+2025-03-04 15:46:15,812 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/clusters/base.py:256: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  X['Cluster'] = labels
+/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/clusters/base.py:257: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  X['split'] = tag
+[Tue Mar  4 15:46:19 2025]
+Finished job 22.
+17 of 25 steps (68%) done
+Select jobs to execute...
+Execute 1 jobs...
+
+[Tue Mar  4 15:46:19 2025]
 localrule build_embeddings:
     input: data/processed/tesserae/all_features_clean.csv
     output: data/output/tesserae/embeddings.csv
     jobid: 2
-    reason: Software environment definition has changed since last execution
+    reason: Input files updated by another job: data/processed/tesserae/all_features_clean.csv
     wildcards: study=tesserae
     resources: tmpdir=/tmp, mem_mb=10000, mem_mib=9537
 
-Activating conda environment: .snakemake/conda/6d267da6e2faa2167f55b5151bf5dbca_
-Activating conda environment: .snakemake/conda/6d267da6e2faa2167f55b5151bf5dbca_
-/scratch/work/luongn1/digirhythm-v2/.snakemake/conda/6d267da6e2faa2167f55b5151bf5dbca_/lib/python3.13/site-packages/sklearn/utils/deprecation.py:151: FutureWarning: 'force_all_finite' was renamed to 'ensure_all_finite' in 1.6 and will be removed in 1.8.
-  warnings.warn(
-/scratch/work/luongn1/digirhythm-v2/.snakemake/conda/6d267da6e2faa2167f55b5151bf5dbca_/lib/python3.13/site-packages/umap/umap_.py:1952: UserWarning: n_jobs value 1 overridden to 1 by setting random_state. Use no seed for parallelism.
-  warn(
-2025-02-25 02:24:54,442 - INFO - k=7, Silhouette Score=0.0797
-[Tue Feb 25 02:27:11 2025]
+Activating conda environment: .snakemake/conda/ab5233add898528c77eec06aa91604d6_
+Activating conda environment: .snakemake/conda/ab5233add898528c77eec06aa91604d6_
+[Tue Mar  4 15:49:49 2025]
 Finished job 2.
-2 of 6 steps (33%) done
+18 of 25 steps (72%) done
 Select jobs to execute...
 Execute 1 jobs...
 
-[Tue Feb 25 02:27:11 2025]
+[Tue Mar  4 15:49:49 2025]
 localrule plot_embeddings:
-    input: data/output/tesserae/embeddings.csv, out/tesserae/gmm_cluster.csv
-    output: data/output/tesserae/gmm_cluster_embeddings.png
-    jobid: 6
-    reason: Missing output files: data/output/tesserae/gmm_cluster_embeddings.png; Input files updated by another job: data/output/tesserae/embeddings.csv, out/tesserae/gmm_cluster.csv
-    wildcards: study=tesserae, algo=gmm
+    input: data/output/globem/embeddings.csv, out/globem/gmm_cluster.csv
+    output: data/output/globem/gmm_cluster_embeddings.png
+    jobid: 14
+    reason: Input files updated by another job: out/globem/gmm_cluster.csv, data/output/globem/embeddings.csv
+    wildcards: study=globem, algo=gmm
     resources: tmpdir=/tmp
 
-Activating conda environment: .snakemake/conda/6d267da6e2faa2167f55b5151bf5dbca_
-Activating conda environment: .snakemake/conda/6d267da6e2faa2167f55b5151bf5dbca_
-[Tue Feb 25 02:27:20 2025]
-Finished job 6.
-3 of 6 steps (50%) done
-2025-02-25 02:27:30,760 - INFO - k=8, Silhouette Score=0.0826
-2025-02-25 02:30:02,811 - INFO - k=9, Silhouette Score=0.0900
-2025-02-25 02:32:34,551 - INFO - k=10, Silhouette Score=0.0811
-2025-02-25 02:35:06,440 - INFO - k=11, Silhouette Score=0.0878
-2025-02-25 02:37:38,357 - INFO - k=12, Silhouette Score=0.0864
-2025-02-25 02:40:09,867 - INFO - k=13, Silhouette Score=0.0810
-2025-02-25 02:42:41,424 - INFO - k=14, Silhouette Score=0.0775
-2025-02-25 02:42:41,425 - INFO - ✅ Optimal number of clusters: 2 with Silhouette Score: 0.1588
-[Tue Feb 25 02:45:22 2025]
-Finished job 5.
-4 of 6 steps (67%) done
+Activating conda environment: .snakemake/conda/ab5233add898528c77eec06aa91604d6_
+Activating conda environment: .snakemake/conda/ab5233add898528c77eec06aa91604d6_
+[Tue Mar  4 15:49:54 2025]
+Finished job 14.
+19 of 25 steps (76%) done
 Select jobs to execute...
 Execute 1 jobs...
 
-[Tue Feb 25 02:45:22 2025]
-localrule plot_embeddings:
-    input: data/output/tesserae/embeddings.csv, out/tesserae/kmeans_cluster.csv
-    output: data/output/tesserae/kmeans_cluster_embeddings.png
-    jobid: 1
-    reason: Missing output files: data/output/tesserae/kmeans_cluster_embeddings.png; Input files updated by another job: data/output/tesserae/embeddings.csv, out/tesserae/kmeans_cluster.csv
-    wildcards: study=tesserae, algo=kmeans
+[Tue Mar  4 15:49:54 2025]
+localrule visualize_cluster:
+    input: out/globem/gmm_cluster_centroids.csv
+    output: out/globem/cluster_centroids.png, out/globem/distance_between_centroids.png
+    jobid: 25
+    reason: Missing output files: out/globem/distance_between_centroids.png, out/globem/cluster_centroids.png; Input files updated by another job: out/globem/gmm_cluster_centroids.csv
+    wildcards: study=globem
     resources: tmpdir=/tmp
 
-Activating conda environment: .snakemake/conda/6d267da6e2faa2167f55b5151bf5dbca_
-Activating conda environment: .snakemake/conda/6d267da6e2faa2167f55b5151bf5dbca_
-[Tue Feb 25 02:45:30 2025]
-Finished job 1.
-5 of 6 steps (83%) done
-Select jobs to execute...
-Execute 1 jobs...
+Activating conda environment: .snakemake/conda/ab5233add898528c77eec06aa91604d6_
+Activating conda environment: .snakemake/conda/ab5233add898528c77eec06aa91604d6_
+Traceback (most recent call last):
+  File "/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpgxz3q2ie.visualize_cluster.py", line 67, in <module>
+    main(snakemake.input, snakemake.output, snakemake.params)
+  File "/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpgxz3q2ie.visualize_cluster.py", line 60, in main
+    centroids_viz = centroids_heatmap(data)
+  File "/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpgxz3q2ie.visualize_cluster.py", line 18, in centroids_heatmap
+    splits = df["split"].unique()
+NameError: name 'df' is not defined
+RuleException:
+CalledProcessError in file /scratch/work/luongn1/digirhythm-v2/workflow/rules/cluster.smk, line 15:
+Command 'source /appl/scibuilder-mamba/aalto-rhel9/prod/software/mamba/2024-01/39cf5e1/bin/activate '/scratch/work/luongn1/digirhythm-v2/.snakemake/conda/ab5233add898528c77eec06aa91604d6_'; set -euo pipefail;  python /scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpgxz3q2ie.visualize_cluster.py' returned non-zero exit status 1.
+[Tue Mar  4 15:49:57 2025]
+Error in rule visualize_cluster:
+    jobid: 25
+    input: out/globem/gmm_cluster_centroids.csv
+    output: out/globem/cluster_centroids.png, out/globem/distance_between_centroids.png
+    conda-env: /scratch/work/luongn1/digirhythm-v2/.snakemake/conda/ab5233add898528c77eec06aa91604d6_
 
-[Tue Feb 25 02:45:30 2025]
-localrule all:
-    input: data/output/tesserae/kmeans_cluster_embeddings.png, data/output/tesserae/gmm_cluster_embeddings.png, data/output/momo/kmeans_cluster_embeddings.png, data/output/momo/gmm_cluster_embeddings.png, data/output/globem/kmeans_cluster_embeddings.png, data/output/globem/gmm_cluster_embeddings.png, out/tesserae/kmeans_cluster.csv, out/tesserae/gmm_cluster.csv, out/momo/kmeans_cluster.csv, out/momo/gmm_cluster.csv, out/globem/kmeans_cluster.csv, out/globem/gmm_cluster.csv, out/tesserae/kmeans_cluster_centroids.csv, out/tesserae/gmm_cluster_centroids.csv, out/momo/kmeans_cluster_centroids.csv, out/momo/gmm_cluster_centroids.csv, out/globem/kmeans_cluster_centroids.csv, out/globem/gmm_cluster_centroids.csv, report.png
-    jobid: 0
-    reason: Input files updated by another job: out/tesserae/gmm_cluster_centroids.csv, out/tesserae/kmeans_cluster_centroids.csv, data/output/tesserae/gmm_cluster_embeddings.png, data/output/tesserae/kmeans_cluster_embeddings.png, out/tesserae/kmeans_cluster.csv, out/tesserae/gmm_cluster.csv
-    resources: tmpdir=/tmp
+/home/luongn1/.local/lib/python3.9/site-packages/seaborn/axisgrid.py:854: FutureWarning: 
 
-[Tue Feb 25 02:45:30 2025]
-Finished job 0.
-6 of 6 steps (100%) done
-Complete log: .snakemake/log/2025-02-25T015744.807201.snakemake.log
+The `ci` parameter is deprecated. Use `errorbar=None` for the same effect.
+
+  func(*plot_args, **plot_kwargs)
+2025-03-04 15:52:35,264 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+/home/luongn1/.local/lib/python3.9/site-packages/seaborn/axisgrid.py:854: FutureWarning: 
+
+Setting a gradient palette using color= is deprecated and will be removed in v0.14.0. Set `palette='dark:#4c72b0'` for the same effect.
+
+  func(*plot_args, **plot_kwargs)
+/home/luongn1/.local/lib/python3.9/site-packages/seaborn/axisgrid.py:854: FutureWarning: 
+
+The `errwidth` parameter is deprecated. And will be removed in v0.15.0. Pass `err_kws={'linewidth': 1}` instead.
+
+  func(*plot_args, **plot_kwargs)
+2025-03-04 15:52:35,270 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+/home/luongn1/.local/lib/python3.9/site-packages/seaborn/axisgrid.py:854: FutureWarning: 
+
+The `ci` parameter is deprecated. Use `errorbar=None` for the same effect.
+
+  func(*plot_args, **plot_kwargs)
+2025-03-04 15:52:35,360 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+/home/luongn1/.local/lib/python3.9/site-packages/seaborn/axisgrid.py:854: FutureWarning: 
+
+Setting a gradient palette using color= is deprecated and will be removed in v0.14.0. Set `palette='dark:#4c72b0'` for the same effect.
+
+  func(*plot_args, **plot_kwargs)
+/home/luongn1/.local/lib/python3.9/site-packages/seaborn/axisgrid.py:854: FutureWarning: 
+
+The `errwidth` parameter is deprecated. And will be removed in v0.15.0. Pass `err_kws={'linewidth': 1}` instead.
+
+  func(*plot_args, **plot_kwargs)
+2025-03-04 15:52:35,366 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+/home/luongn1/.local/lib/python3.9/site-packages/seaborn/axisgrid.py:854: FutureWarning: 
+
+The `ci` parameter is deprecated. Use `errorbar=None` for the same effect.
+
+  func(*plot_args, **plot_kwargs)
+2025-03-04 15:52:35,457 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+/home/luongn1/.local/lib/python3.9/site-packages/seaborn/axisgrid.py:854: FutureWarning: 
+
+Setting a gradient palette using color= is deprecated and will be removed in v0.14.0. Set `palette='dark:#4c72b0'` for the same effect.
+
+  func(*plot_args, **plot_kwargs)
+/home/luongn1/.local/lib/python3.9/site-packages/seaborn/axisgrid.py:854: FutureWarning: 
+
+The `errwidth` parameter is deprecated. And will be removed in v0.15.0. Pass `err_kws={'linewidth': 1}` instead.
+
+  func(*plot_args, **plot_kwargs)
+2025-03-04 15:52:35,463 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/clusters/base.py:256: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  X['Cluster'] = labels
+/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/clusters/base.py:257: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  X['split'] = tag
+2025-03-04 15:53:23,844 - INFO - 🔍 Starting GridSearchCV for Gaussian Mixture Model (GMM)...
+/home/luongn1/.local/lib/python3.9/site-packages/seaborn/axisgrid.py:854: FutureWarning: 
+
+The `ci` parameter is deprecated. Use `errorbar=None` for the same effect.
+
+  func(*plot_args, **plot_kwargs)
+2025-03-04 16:00:48,510 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+/home/luongn1/.local/lib/python3.9/site-packages/seaborn/axisgrid.py:854: FutureWarning: 
+
+Setting a gradient palette using color= is deprecated and will be removed in v0.14.0. Set `palette='dark:#4c72b0'` for the same effect.
+
+  func(*plot_args, **plot_kwargs)
+/home/luongn1/.local/lib/python3.9/site-packages/seaborn/axisgrid.py:854: FutureWarning: 
+
+The `errwidth` parameter is deprecated. And will be removed in v0.15.0. Pass `err_kws={'linewidth': 1}` instead.
+
+  func(*plot_args, **plot_kwargs)
+2025-03-04 16:00:48,517 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+/home/luongn1/.local/lib/python3.9/site-packages/seaborn/axisgrid.py:854: FutureWarning: 
+
+The `ci` parameter is deprecated. Use `errorbar=None` for the same effect.
+
+  func(*plot_args, **plot_kwargs)
+2025-03-04 16:00:48,609 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+/home/luongn1/.local/lib/python3.9/site-packages/seaborn/axisgrid.py:854: FutureWarning: 
+
+Setting a gradient palette using color= is deprecated and will be removed in v0.14.0. Set `palette='dark:#4c72b0'` for the same effect.
+
+  func(*plot_args, **plot_kwargs)
+/home/luongn1/.local/lib/python3.9/site-packages/seaborn/axisgrid.py:854: FutureWarning: 
+
+The `errwidth` parameter is deprecated. And will be removed in v0.15.0. Pass `err_kws={'linewidth': 1}` instead.
+
+  func(*plot_args, **plot_kwargs)
+2025-03-04 16:00:48,615 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+/home/luongn1/.local/lib/python3.9/site-packages/seaborn/axisgrid.py:854: FutureWarning: 
+
+The `ci` parameter is deprecated. Use `errorbar=None` for the same effect.
+
+  func(*plot_args, **plot_kwargs)
+2025-03-04 16:00:48,706 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+/home/luongn1/.local/lib/python3.9/site-packages/seaborn/axisgrid.py:854: FutureWarning: 
+
+Setting a gradient palette using color= is deprecated and will be removed in v0.14.0. Set `palette='dark:#4c72b0'` for the same effect.
+
+  func(*plot_args, **plot_kwargs)
+/home/luongn1/.local/lib/python3.9/site-packages/seaborn/axisgrid.py:854: FutureWarning: 
+
+The `errwidth` parameter is deprecated. And will be removed in v0.15.0. Pass `err_kws={'linewidth': 1}` instead.
+
+  func(*plot_args, **plot_kwargs)
+2025-03-04 16:00:48,712 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/clusters/base.py:256: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  X['Cluster'] = labels
+/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/clusters/base.py:257: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  X['split'] = tag
+[Tue Mar  4 16:01:35 2025]
+Finished job 9.
+20 of 25 steps (80%) done
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: .snakemake/log/2025-03-04T153455.777149.snakemake.log
+WorkflowError:
+At least one job did not complete successfully.

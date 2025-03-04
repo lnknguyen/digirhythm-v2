@@ -19,6 +19,7 @@ logging.basicConfig(
 
 SEED = 2508
 
+
 class GMMClustering(BaseClustering):
 
     def __post_init__(self):
@@ -224,13 +225,16 @@ class GMMClustering(BaseClustering):
         # Generate plot
         self.score_plot = self.generate_score_plot(scores)
 
-        # Find best model: 
-    # Select top 3 models with lowest BIC and pick the one with highest Bhattacharyya distance
-        full_bic_scores = [(n, np.mean(scores["full"][n]["bic"])) for n in
-                           param_grid["n_components"]]
+        # Find best model:
+        # Select top 3 models with lowest BIC and pick the one with highest Bhattacharyya distance
+        full_bic_scores = [
+            (n, np.mean(scores["full"][n]["bic"])) for n in param_grid["n_components"]
+        ]
         top_3_models = sorted(full_bic_scores, key=lambda x: x[1], reverse=True)[:3]
-    
-        best_n, _ = max(top_3_models, key=lambda x: np.mean(scores["full"][x[0]]["bhatt"]))
+
+        best_n, _ = max(
+            top_3_models, key=lambda x: np.mean(scores["full"][x[0]]["bhatt"])
+        )
 
         # Init best model
         best_model = GaussianMixture(

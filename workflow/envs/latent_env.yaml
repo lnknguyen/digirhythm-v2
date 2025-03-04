@@ -1,12 +1,15 @@
+name: clustering_env  
 channels:
   - conda-forge
 dependencies:
-  - numpy
-  - pandas
-  - seaborn
-  - matplotlib
-  - scikit-learn
-  - umap-learn
-  - hdbscan
+  - python=3.9  
+  - numpy=1.23.5
+  - pandas=1.5.3
+  - seaborn=0.12.2
+  - matplotlib=3.6.3
+  - scikit-learn=1.2.1
+  - umap-learn=0.5.3
+  - hdbscan=0.8.29
+  - pip
   - pip:
-      - minisom
+      - minisom==2.3.0
