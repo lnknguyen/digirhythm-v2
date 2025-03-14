@@ -59,6 +59,10 @@ class BaseProcessor:
         # Output
         self.data = pd.concat(res)
 
+    def fill_nan_with_zeros(self, df, columns):
+        df[columns] = df[columns].fillna(0)
+        return df
+
     @progress_decorator
     def extract_features(self) -> pd.DataFrame:
         """

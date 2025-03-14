@@ -43,6 +43,9 @@ class StepsProcessor(BaseProcessor):
         ]
         df = df[cols_to_retain]
 
+        df = self.fill_nan_with_zeros(
+            df, columns="screen:screen_use_durationtotal:night"
+        )
         return df
 
 

@@ -22,11 +22,8 @@ SEED = 2508
 
 class GMMClustering(BaseClustering):
 
-    def __post_init__(self):
-        self.score_plot = None
-
     def init_model(self, n_components):
-        self.model = GaussianMixture(n_components=2)
+        self.model = GaussianMixture(n_components=n_components, covariance_type="full")
 
     def _gaussian_bhattacharyya_distance(self, mean1, cov1, mean2, cov2):
         """
@@ -70,106 +67,24 @@ class GMMClustering(BaseClustering):
 
         return distance
 
-    def generate_score_plot(self, scores):
-        """
-        Generate a plot for AIC, BIC, and Bhattacharyya distances from GMM model selection.
+    def model_selection(self, X, mode="grid"):
 
-        Parameters:
-        ----------
-        scores : dict
-            Dictionary containing AIC, BIC, and Bhattacharyya distances for each
-            covariance type and number of components.
+        if mode == "manual":
+            best_model, score = self.manual_model_selection(X)
+        elif mode == "grid":
+            best_model, score = self.grid_model_selection(X)
+        else:
+            raise ValueError("Mode not recognized. Valid type: 'manual', 'grid'")
 
-        Returns:
-        -------
-        matplotlib.figure.Figure
-            The generated plot figure.
-        """
+        return best_model, score
 
-        # Prepare DataFrame for plotting
-        plot_data = []
+    def manual_model_selection(self, X):
 
-        for cov_type, components in scores.items():
-            for n_component, metrics in components.items():
-                # Default Bhattacharyya to NaN if not available
-                bhatt_list = (
-                    metrics["bhatt"]
-                    if cov_type == "full" and "bhatt" in metrics
-                    else [np.nan] * len(metrics["aic"])
-                )
-
-                # Iterate over AIC, BIC, and Bhattacharyya
-                for aic, bic, bhatt in zip(metrics["aic"], metrics["bic"], bhatt_list):
-                    plot_data.append(
-                        {
-                            "Covariance Type": cov_type,
-                            "Number of Components": n_component,
-                            "AIC": aic,
-                            "BIC": bic,
-                            "Bhattacharyya distance": bhatt,
-                        }
-                    )
-
-        # Convert to DataFrame for easier plotting
-        # Convert to DataFrame for easier plotting
-        df = pd.DataFrame(plot_data)
-
-        # Melt DataFrame for Seaborn FacetGrid
-        df_melted = df.melt(
-            id_vars=["Covariance Type", "Number of Components"],
-            value_vars=["AIC", "BIC", "Bhattacharyya distance"],
-            var_name="Score Type",
-            value_name="Score",
-        )
-
-        # Compute mean and standard deviation for error bars
-        df_summary = (
-            df_melted.groupby(["Covariance Type", "Number of Components", "Score Type"])
-            .agg(Mean_Score=("Score", "mean"), Std_Score=("Score", "std"))
-            .reset_index()
-        )
-
-        # Plot using Seaborn FacetGrid with barplot
-        sns.set(style="whitegrid")
-        g = sns.FacetGrid(
-            df_summary,
-            col="Score Type",
-            sharex=False,
-            sharey=False,
-            height=4,
-            aspect=1.3,
-            col_wrap=1,
-        )
-
-        g.map_dataframe(
-            sns.barplot,
-            x="Number of Components",
-            y="Mean_Score",
-            hue="Covariance Type",
-            ci=None,
-            capsize=0.1,
-            errwidth=1,
-            dodge=True,
-        )
-
-        # Add legend, titles, and labels
-        g.set_titles("{col_name}")
-        g.set_axis_labels("Number of Components", "Score")
-        g.fig.suptitle("GMM Model Selection Metrics", y=1.05)
-        g.add_legend()
-
-        # Adjust layout
-        plt.tight_layout()
-
-        return g.fig
-
-    def model_selection(self, X):
-
-        logging.info("🔍 Starting GridSearchCV for Gaussian Mixture Model (GMM)...")
+        logging.info("🔍 Starting Manual selection for Gaussian Mixture Model (GMM)...")
 
         # Define hyperparameter grid
         param_grid = {
-            "n_components": range(5, 15),  # Number of clusters/components
+            "n_components": range(3, 20),  # Number of clusters/components
             "covariance_type": [
                 "spherical",
                 "diag",
@@ -203,8 +118,8 @@ class GMMClustering(BaseClustering):
                     model.fit(X)
 
                     # Collect AIC and BIC scores
-                    scores[cov_type][n_component]["aic"].append(-model.aic(X))
-                    scores[cov_type][n_component]["bic"].append(-model.bic(X))
+                    scores[cov_type][n_component]["aic"].append(model.aic(X))
+                    scores[cov_type][n_component]["bic"].append(model.bic(X))
 
                     # Compute average pairwise Bhattacharyya distance for "full" covariance matrix
                     if cov_type == "full":
@@ -221,9 +136,8 @@ class GMMClustering(BaseClustering):
 
                         avg_bhatt = np.mean(bhatt_distances)
                         scores[cov_type][n_component]["bhatt"].append(avg_bhatt)
-
-        # Generate plot
-        self.score_plot = self.generate_score_plot(scores)
+                    else:
+                        scores[cov_type][n_component]["bhatt"].append(-1)
 
         # Find best model:
         # Select top 3 models with lowest BIC and pick the one with highest Bhattacharyya distance
@@ -243,4 +157,45 @@ class GMMClustering(BaseClustering):
             init_params="k-means++",
             random_state=SEED,
         )
-        return (best_model, self.score_plot)
+
+        # Convert scores to dataframe
+
+        scores = pd.concat({k: pd.DataFrame(v).T for k, v in scores.items()}, axis=0)
+
+        scores = pd.DataFrame(scores)
+        return (best_model, scores)
+
+    def grid_model_selection(self, X, scorer="bic"):
+
+        logging.info("🔍 Starting GridSearchCV for Gaussian Mixture Model (GMM)...")
+
+        param_grid = {
+            "n_components": range(3, 20),
+            "covariance_type": ["spherical", "diag", "tied", "full"],
+        }
+
+        def bic_scorer(estimator, X):
+            return -estimator.bic(X)
+
+        def aic_scorer(estimator, X):
+            return -estimator.aic(X)
+
+        scoring_func = {"bic": bic_scorer, "aic": aic_scorer}
+
+        if scorer not in scoring_func:
+            raise ValueError("Scorer must be 'bic' or 'aic' for GridSearchCV")
+
+        grid_search = GridSearchCV(
+            GaussianMixture(random_state=SEED),
+            param_grid,
+            scoring=scoring_func[scorer],
+            cv=3,
+            verbose=1,
+            n_jobs=-1,
+        )
+        grid_search.fit(X)
+
+        best_model = grid_search.best_estimator_
+        results_df = pd.DataFrame(grid_search.cv_results_)
+
+        return best_model, results_df

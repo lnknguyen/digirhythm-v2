@@ -39,6 +39,12 @@ class BaseClustering(ABC):
         self.split = cluster_settings["split"]
         self.group_col = cluster_settings["group_col"]
 
+        # Optimal cluster settings
+        self.run_model_selection = cluster_settings["run_model_selection"]
+        self.optimal_n_components = cluster_settings["optimal_gmm_settings"][
+            "n_components"
+        ]
+
     @abstractmethod
     def init_model(self):
         """Initialize the clustering model."""
@@ -224,8 +230,6 @@ class BaseClustering(ABC):
         # TEST
         # self.df = self.df.head(1000)
 
-        labels_list, centroids_list, model_selection_scores = [], [], []
-
         if self.split:
             # Split dataset into subsets if self.split is True
             dfs = self.split_dataset(
@@ -234,6 +238,8 @@ class BaseClustering(ABC):
         else:
             # Treat the whole dataset as a single subset
             dfs = [("full_data", self.df)]
+
+        labels_list, centroids_list, model_selection_scores = [], [], []
 
         # Process each subset (either split parts or full dataset)
         for item in dfs:
@@ -247,27 +253,56 @@ class BaseClustering(ABC):
             ### Perform clustering ###
 
             # Select best model
-            self.model, self.score = self.model_selection(X)
+            if self.run_model_selection == True:
+                self.model, score = self.model_selection(X)
 
-            # Get cluster labels
-            labels = self.fit_predict(self.model, X)
+                # Get cluster labels
+                labels = self.fit_predict(self.model, X)
 
-            # Assign labels and split
-            X["Cluster"] = labels
-            X["split"] = tag
-            centroids = self.centroid_characteristics(X)
+                # Assign labels and split
+                X["Cluster"] = labels
+                X["split"] = tag
+                centroids = self.centroid_characteristics(X)
 
-            # Update dataframe
-            labels_list.append(X)
+                # Update model selection scores
+                score["split"] = tag
+                model_selection_scores.append(score)
 
-            centroids["split"] = tag
-            centroids_list.append(centroids)
+                # Update labels
+                df["Cluster"] = labels
+                df["split"] = tag
+                labels_list.append(df)
 
-            # This is not recommended, mostly for my convenience
-            # But directly save the plot here
-            self.score_plot.savefig(f"{tag}_score.png")
+                # Update centrods
+                centroids["split"] = tag
+                centroids_list.append(centroids)
 
-        labels_list = pd.concat(labels_list)
-        centroids_list = pd.concat(centroids_list)
+                labels_list = pd.concat(labels_list)
+                centroids_list = pd.concat(centroids_list)
+                model_selection_scores = pd.concat(model_selection_scores)
+            else:
+                self.init_model(n_components=self.optimal_n_components)
 
-        return labels_list, centroids_list
+                # Get cluster labels
+                labels = self.fit_predict(self.model, X)
+
+                # Assign labels and split
+                X["Cluster"] = labels
+                X["split"] = tag
+                centroids = self.centroid_characteristics(X)
+
+                # Update labels
+                df["Cluster"] = labels
+                df["split"] = tag
+                labels_list.append(df)
+
+                # Update centrods
+                centroids["split"] = tag
+                centroids_list.append(centroids)
+
+                labels_list = pd.concat(labels_list)
+                centroids_list = pd.concat(centroids_list)
+
+                # Empty scores
+                model_selection_scores = pd.DataFrame()
+        return labels_list, centroids_list, model_selection_scores

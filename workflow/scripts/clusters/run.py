@@ -1,5 +1,4 @@
 import pandas as pd
-from kmeans import KMeansClustering
 from gmm import GMMClustering
 from sklearn.metrics import silhouette_score
 import logging
@@ -19,24 +18,18 @@ def main(input_fns, output_fns, params):
 
     cluster_settings = params.cluster_settings
 
-    if algo == "kmeans":
-        model = KMeansClustering(data, features, cluster_settings)
-        model.init_model(n_clusters=2)
-    elif algo == "gmm":
+    if algo == "gmm":
         model = GMMClustering(data, features, cluster_settings)
         model.init_model(n_components=2)
     else:
         logging.error("Algo no available", stack_info=True)
         raise ValueError("Algo not available")
 
-    labels, centroids = model.run_pipeline()
-
-    # Save
-    if algo == "gmm":
-        model.score_plot.savefig(f"out/{snakemake.wildcards.study}/gmm_score_plot.png")
+    labels, centroids, model_selection_scores = model.run_pipeline()
 
     labels.to_csv(output_fns.clusters)
     centroids.to_csv(output_fns.centroids)
+    model_selection_scores.to_csv(output_fns.scores)
 
 
 if __name__ == "__main__":

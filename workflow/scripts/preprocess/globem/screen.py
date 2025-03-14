@@ -40,10 +40,22 @@ class ScreenProcessor(BaseProcessor):
 
         return df
 
+    def fill_nan_with_zeros(self, df, columns):
+        df[columns] = df[columns].fillna(0)
+        return df
+
     def extract_features(self) -> pd.DataFrame:
 
-        df = self.data.pipe(self.process_screen_data).pipe(
-            self.normalize_within_user, prefixes=["screen:screen_use_durationtotal"]
+        df = (
+            self.data.pipe(self.process_screen_data)
+            .pipe(
+                self.normalize_within_user, prefixes=["screen:screen_use_durationtotal"]
+            )
+            .pipe(
+                self.fill_nan_with_zeros(
+                    columns="screen:screen_use_durationtotal:night"
+                )
+            )
         )
 
         return df
