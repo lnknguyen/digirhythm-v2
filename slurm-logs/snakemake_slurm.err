@@ -1,6 +1,3 @@
-
-Lmod is automatically replacing "scicomp-python-env/2024-01" with "mamba/2024-01".
-
 Assuming unrestricted shared filesystem usage.
 Building DAG of jobs...
 CreateCondaEnvironmentException:

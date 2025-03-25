@@ -9,7 +9,6 @@ import polars as pl
 import os
 
 path = os.path.abspath(niimpy.__file__)
-print(path)
 
 
 @dataclass
@@ -23,8 +22,6 @@ class SleepProcessor(BaseProcessor):
 
     def _process_sleep_data(self, df):
 
-        for col in df.columns:
-            print(col)
 
         """Process sleep data."""
         column_mapper = {
@@ -76,6 +73,7 @@ def main(input_fns, output_fn):
     processor = SleepProcessor(input_fns=input_fns)
 
     res = processor.extract_features().reset_index()
+    res = processor.re_id_returning_users(res)
     res.to_csv(output_fn, index=False)
 
 

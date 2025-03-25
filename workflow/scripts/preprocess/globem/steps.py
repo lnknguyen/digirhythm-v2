@@ -44,7 +44,7 @@ class StepsProcessor(BaseProcessor):
         df = df[cols_to_retain]
 
         df = self.fill_nan_with_zeros(
-            df, columns="screen:screen_use_durationtotal:night"
+            df, columns="activity_night"
         )
         return df
 
@@ -54,6 +54,7 @@ def main(input_fns, output_fn):
     processor = StepsProcessor(input_fns=input_fns)
 
     res = processor.extract_features().reset_index()
+    res = processor.re_id_returning_users(res)
     res.to_csv(output_fn, index=False)
 
 

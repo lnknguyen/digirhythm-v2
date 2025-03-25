@@ -85,6 +85,8 @@ def main(input_fns, output_fn):
     processor = CallProcessor(input_fns=input_fns)
 
     res = processor.extract_features().reset_index()
+    res = processor.re_id_returning_users(res)
+    
     res.to_csv(output_fn, index=False)
 
 

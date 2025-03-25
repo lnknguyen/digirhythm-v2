@@ -45,7 +45,8 @@ WAVES = ['INS-W_1', 'INS-W_2', 'INS-W_3', 'INS-W_4']
 
 rule extract_globem:
     input:
-        expand('/m/cs/work/luongn1/globem/{wave}/FeatureData/{{sensor}}.csv', wave = WAVES)
+        raw_files = expand('/m/cs/work/luongn1/globem/{wave}/FeatureData/{{sensor}}.csv', wave = WAVES),
+        pid_mappings = '/m/cs/work/luongn1/globem/pid_mappings.csv'
     output:
         'data/interim/globem/{sensor}_4epochs.csv'
     conda:

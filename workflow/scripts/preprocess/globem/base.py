@@ -45,6 +45,8 @@ class BaseProcessor:
     def __post_init__(self) -> None:
 
         res = []
+        raw_files = self.input_fns.raw_files
+        
         for fn in self.input_fns:
             df = pd.read_csv(fn, index_col=0)
 
@@ -59,9 +61,18 @@ class BaseProcessor:
         # Output
         self.data = pd.concat(res)
 
+        # Also, load pid mappings
+        self.pid_mappings = pd.read_csv(self.input_fns.pid_mappings, index_col=0)
+
     def fill_nan_with_zeros(self, df, columns):
         df[columns] = df[columns].fillna(0)
         return df
+
+    def re_id_returning_users(self, df):
+
+
+        print( ,l...™™äöself.pid_mappings)
+        return 
 
     @progress_decorator
     def extract_features(self) -> pd.DataFrame:
@@ -77,7 +88,7 @@ class BaseProcessor:
     @progress_decorator
     def normalize_within_user(self, df, prefixes):
         """
-        For each user, create a min-max normalized version of numerical columns
+        For each user, create a min-max normalized version of numerical col. mns
         """
 
         for prefix in prefixes:
