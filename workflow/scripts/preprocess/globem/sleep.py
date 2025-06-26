@@ -21,8 +21,6 @@ class SleepProcessor(BaseProcessor):
         return df
 
     def _process_sleep_data(self, df):
-
-
         """Process sleep data."""
         column_mapper = {
             "pid": "user",

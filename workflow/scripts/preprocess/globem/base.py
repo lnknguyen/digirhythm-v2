@@ -46,8 +46,8 @@ class BaseProcessor:
 
         res = []
         raw_files = self.input_fns.raw_files
-        
-        for fn in self.input_fns:
+
+        for fn in raw_files:
             df = pd.read_csv(fn, index_col=0)
 
             # Extract wave name from the file path if needed
@@ -68,11 +68,80 @@ class BaseProcessor:
         df[columns] = df[columns].fillna(0)
         return df
 
-    def re_id_returning_users(self, df):
+    def re_id_returning_user(self, df):
 
+        id_mappings = self.pid_mappings.copy()
+        wave_cols = ["PID I", "PID II", "PID III", "PID IV"]
+        new_wave_cols = ["INS-W_1", "INS-W_2", "INS-W_3", "INS-W_4"]
 
-        print( ,l...™™äöself.pid_mappings)
-        return 
+        # Retain only these columns
+        id_mappings = id_mappings[wave_cols]
+
+        # Retain rows with at least values in two columns
+        mask = id_mappings[wave_cols].notna().sum(axis=1) >= 2
+        id_mappings_filtered = id_mappings[mask].copy()
+
+        # Rename waves
+        cols_map = {
+            "PID I": "INS-W_1",
+            "PID II": "INS-W_2",
+            "PID III": "INS-W_3",
+            "PID IV": "INS-W_4",
+        }
+        id_mappings_filtered = id_mappings_filtered.rename(cols_map, axis="columns")
+
+        # convert every numeric cell in the DataFrame to INS_W_XXX / INS_W_XXXX
+        def map_to_sensor_id(val):
+            """
+            Map a numeric ID to the 'INS-W_' format:
+            - If val < 1000 => 'INS-W_003' (zero-padded to three digits)
+            - If val ≥ 1000 => 'INS-W_1320'
+            Non-numeric or missing values are left unchanged.
+            """
+            if pd.isna(val):
+                return np.nan
+            try:
+                n = int(val)
+                return f"INS-W_{n:03d}" if n < 1000 else f"INS-W_{n}"
+            except (ValueError, TypeError):
+                return val
+
+        # Apply to all columns
+        id_mappings_filtered = id_mappings_filtered.apply(
+            lambda col: col.map(map_to_sensor_id)
+        )
+
+        # ID mapping function
+        def build_uid(row):
+            """Return unified ID based on how many waves the person appears in."""
+            ids = [x for x in row[new_wave_cols] if pd.notna(x)]
+
+            if not ids:
+                return np.nan  # no ID present in any wave
+            if len(ids) == 1:
+                return ids[0]  # single-wave subject => keep original code
+            ids = sorted(ids)
+            return f"{len(ids)}_{'-'.join(ids)}"  # e.g. 3_INS-W_001_INS_W_033_INS_W_192
+
+        # Create a unique id
+        id_mappings_filtered["unique_id"] = id_mappings_filtered.apply(
+            build_uid, axis=1
+        )
+
+        # Melt
+        id_mappings_filtered = pd.melt(
+            id_mappings_filtered,
+            id_vars=["unique_id"],
+            value_vars=["INS-W_1", "INS-W_2", "INS-W_3", "INS-W_4"],
+            var_name="wave",
+            value_name="user",
+        )
+
+        # Merge with original ids
+
+        df = df.merge(id_mappings_filtered, on=["user", "wave"])
+        
+        return df
 
     @progress_decorator
     def extract_features(self) -> pd.DataFrame:

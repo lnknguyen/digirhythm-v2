@@ -1,7 +1,10 @@
 
 STUDIES = ['tesserae', 'momo', 'globem']
-#STUDIES = ['globem']
+#STUDIES = ['tesserae', 'momo']
 ALGOS = ['gmm']
+
+# ranked or unranked signature
+RANKS = ["ranked", "unranked"]
 
 def all_outputs():
 
@@ -9,7 +12,16 @@ def all_outputs():
     outputs.extend(expand('out/{study}/{algo}_cluster.csv', study=STUDIES, algo=ALGOS))
     outputs.extend(expand('out/{study}/{algo}_cluster_centroids.csv', study=STUDIES, algo=ALGOS))
 
-    # NMF
-    #outputs.extend(expand('out/{study}/nmf_components.csv', study=STUDIES))
+    # Signature
+    outputs.extend(expand('out/{study}/signature_{rank}.csv', study=STUDIES, rank=RANKS))
 
     return outputs
+
+rule clean_signature:
+    message: "Cleaning: Removing signature.csv files"
+    run:
+        import os
+        for study in STUDIES:
+            path = f"out/{study}/signature.csv"
+            if os.path.exists(path):
+                os.remove(path)

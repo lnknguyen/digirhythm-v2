@@ -17,11 +17,11 @@ features:
   - activity_afternoon
   - activity_evening
   - activity_allday
-  - call_total_duration_night
-  - call_total_duration_morning
-  - call_total_duration_afternoon
-  - call_total_duration_evening
-  - call_total_duration_allday
+  - call_total_duration_night_log1p
+  - call_total_duration_morning_log1p
+  - call_total_duration_afternoon_log1p
+  - call_total_duration_evening_log1p
+  - call_total_duration_allday_log1p
   - screen_night
   - screen_morning
   - screen_afternoon
@@ -60,4 +60,10 @@ cluster_settings:
     run_model_selection: True
     optimal_gmm_settings:
         n_components: 5
-        
+
+# CLUSTERING SETTINGS
+signature:
+    ranked: 
+        - ranked
+        - unranked
+    

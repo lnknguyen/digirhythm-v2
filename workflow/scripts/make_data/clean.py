@@ -69,8 +69,6 @@ def main(input_fns, output_fn):
     # Filter
     df = _filter(df, features)
 
-    # keep only groupby + features
-
     # Export column names to txt
     colnames = df.columns.tolist()
 

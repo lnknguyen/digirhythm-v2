@@ -49,6 +49,8 @@ rule extract_globem:
         pid_mappings = '/m/cs/work/luongn1/globem/pid_mappings.csv'
     output:
         'data/interim/globem/{sensor}_4epochs.csv'
+    params:
+        features = config['features']
     conda:
         '../envs/python_env.yaml'
     script:

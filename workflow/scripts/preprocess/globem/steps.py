@@ -43,9 +43,7 @@ class StepsProcessor(BaseProcessor):
         ]
         df = df[cols_to_retain]
 
-        df = self.fill_nan_with_zeros(
-            df, columns="activity_night"
-        )
+        df = self.fill_nan_with_zeros(df, columns="activity_night")
         return df
 
 

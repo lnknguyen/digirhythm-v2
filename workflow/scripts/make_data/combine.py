@@ -1,3 +1,4 @@
+import numpy as np
 import pandas as pd
 import os
 import logging
@@ -106,6 +107,27 @@ def concatenate_features(dfs, groupby):
     return merged_df
 
 
+def _log_transform(df, features, suffix="_log1p", inplace=False):
+
+    transformed = {}
+    for col in features:
+        if (df[col] < 0).any():
+            raise ValueError(
+                f"Feature '{col}' contains negative values; "
+                "log1p is intended for non-negative data."
+            )
+        transformed[col] = np.log1p(df[col])
+
+    if inplace:
+        for col in features:
+            df[col] = transformed[col]
+    else:
+        for col in features:
+            df[f"{col}{suffix}"] = transformed[col]
+
+    return df
+
+
 def main(input_fns, output_fn, params, wildcards):
 
     groupby = params["groupby"][wildcards.study]
@@ -115,6 +137,24 @@ def main(input_fns, output_fn, params, wildcards):
 
     # Convert columns name
     df = rename_columns(df)
+
+    # Convert call features to log
+    call_features = [
+        "call_total_duration_night",
+        "call_total_duration_morning",
+        "call_total_duration_afternoon",
+        "call_total_duration_evening",
+        "call_total_duration_allday",
+    ]
+    df = _log_transform(df, call_features)
+
+    # ID mapping for GLOBEM
+    # Rule: if a user belongs to more than one wave, map them to a unique id as follows:
+    # {num_of_wave}_{concat_of_ids}
+    # The new id will replace the old id
+    if wildcards.study == "globem":
+
+        df = _globem_id_mappings(df)
 
     # Save
     df.to_csv(output_fn)
