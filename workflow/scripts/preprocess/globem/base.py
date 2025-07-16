@@ -68,7 +68,7 @@ class BaseProcessor:
         df[columns] = df[columns].fillna(0)
         return df
 
-    def re_id_returning_user(self, df):
+    def re_id_returning_users(self, df):
 
         id_mappings = self.pid_mappings.copy()
         wave_cols = ["PID I", "PID II", "PID III", "PID IV"]
@@ -77,10 +77,6 @@ class BaseProcessor:
         # Retain only these columns
         id_mappings = id_mappings[wave_cols]
 
-        # Retain rows with at least values in two columns
-        mask = id_mappings[wave_cols].notna().sum(axis=1) >= 2
-        id_mappings_filtered = id_mappings[mask].copy()
-
         # Rename waves
         cols_map = {
             "PID I": "INS-W_1",
@@ -88,7 +84,7 @@ class BaseProcessor:
             "PID III": "INS-W_3",
             "PID IV": "INS-W_4",
         }
-        id_mappings_filtered = id_mappings_filtered.rename(cols_map, axis="columns")
+        id_mappings = id_mappings.rename(cols_map, axis="columns")
 
         # convert every numeric cell in the DataFrame to INS_W_XXX / INS_W_XXXX
         def map_to_sensor_id(val):
@@ -107,7 +103,7 @@ class BaseProcessor:
                 return val
 
         # Apply to all columns
-        id_mappings_filtered = id_mappings_filtered.apply(
+        id_mappings = id_mappings.apply(
             lambda col: col.map(map_to_sensor_id)
         )
 
@@ -116,7 +112,7 @@ class BaseProcessor:
             """Return unified ID based on how many waves the person appears in."""
             ids = [x for x in row[new_wave_cols] if pd.notna(x)]
 
-            if not ids:
+            if len(ids) == 0:
                 return np.nan  # no ID present in any wave
             if len(ids) == 1:
                 return ids[0]  # single-wave subject => keep original code
@@ -124,14 +120,14 @@ class BaseProcessor:
             return f"{len(ids)}_{'-'.join(ids)}"  # e.g. 3_INS-W_001_INS_W_033_INS_W_192
 
         # Create a unique id
-        id_mappings_filtered["unique_id"] = id_mappings_filtered.apply(
+        id_mappings["unique_id"] = id_mappings.apply(
             build_uid, axis=1
         )
 
         # Melt
-        id_mappings_filtered = pd.melt(
-            id_mappings_filtered,
-            id_vars=["unique_id"],
+        id_mappings = pd.melt(
+            id_mappings,
+            id_vars=["unique_id"], 
             value_vars=["INS-W_1", "INS-W_2", "INS-W_3", "INS-W_4"],
             var_name="wave",
             value_name="user",
@@ -139,7 +135,11 @@ class BaseProcessor:
 
         # Merge with original ids
 
-        df = df.merge(id_mappings_filtered, on=["user", "wave"])
+        df = df.merge(id_mappings, on=["user", "wave"])
+
+        # Replace user id with the new unique id 
+        df = df.drop(columns=['user'])
+        df = df.rename(columns={"unique_id": "user"})
         
         return df
 

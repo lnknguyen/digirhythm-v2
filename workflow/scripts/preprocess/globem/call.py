@@ -87,6 +87,7 @@ def main(input_fns, output_fn):
     res = processor.extract_features().reset_index()
     res = processor.re_id_returning_users(res)
 
+    print(res)
     res.to_csv(output_fn, index=False)
 
 

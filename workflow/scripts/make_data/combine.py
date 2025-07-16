@@ -148,14 +148,6 @@ def main(input_fns, output_fn, params, wildcards):
     ]
     df = _log_transform(df, call_features)
 
-    # ID mapping for GLOBEM
-    # Rule: if a user belongs to more than one wave, map them to a unique id as follows:
-    # {num_of_wave}_{concat_of_ids}
-    # The new id will replace the old id
-    if wildcards.study == "globem":
-
-        df = _globem_id_mappings(df)
-
     # Save
     df.to_csv(output_fn)
 
