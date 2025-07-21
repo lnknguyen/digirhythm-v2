@@ -25,11 +25,12 @@ def main(input_fns, output_fns, params):
         logging.error("Algo no available", stack_info=True)
         raise ValueError("Algo not available")
 
-    labels, centroids, model_selection_scores = model.run_pipeline()
+    labels, centroids, covariances, model_selection_scores = model.run_pipeline()
 
-    labels.to_csv(output_fns.clusters)
-    centroids.to_csv(output_fns.centroids)
-    model_selection_scores.to_csv(output_fns.scores)
+    labels.to_csv(output_fns.clusters, index=False)
+    centroids.to_csv(output_fns.centroids, index=False)
+    covariances.to_csv(output_fns.covariances, index=False)
+    model_selection_scores.to_csv(output_fns.scores, index=False)
 
 
 if __name__ == "__main__":

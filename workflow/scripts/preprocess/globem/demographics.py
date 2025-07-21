@@ -33,11 +33,9 @@ def re_id_returning_users(df, pid_mappings):
             return val
 
     # Apply to all columns
-    
-    df['user'] = df['user'].apply(map_to_sensor_id)
-    id_mappings = id_mappings.apply(
-        lambda col: col.map(map_to_sensor_id)
-    )
+
+    df["user"] = df["user"].apply(map_to_sensor_id)
+    id_mappings = id_mappings.apply(lambda col: col.map(map_to_sensor_id))
 
     # ID mapping function
     def build_uid(row):
@@ -52,14 +50,12 @@ def re_id_returning_users(df, pid_mappings):
         return f"{len(ids)}_{'-'.join(ids)}"  # e.g. 3_INS-W_001_INS_W_033_INS_W_192
 
     # Create a unique id
-    id_mappings["unique_id"] = id_mappings.apply(
-        build_uid, axis=1
-    )
+    id_mappings["unique_id"] = id_mappings.apply(build_uid, axis=1)
 
     # Melt
     id_mappings = pd.melt(
         id_mappings,
-        id_vars=["unique_id"], 
+        id_vars=["unique_id"],
         value_vars=["INS-W_1", "INS-W_2", "INS-W_3", "INS-W_4"],
         var_name="wave",
         value_name="user",
@@ -69,23 +65,24 @@ def re_id_returning_users(df, pid_mappings):
 
     df = df.merge(id_mappings, on=["user"])
 
-    # Replace user id with the new unique id 
-    df = df.drop(columns=['user'])
+    # Replace user id with the new unique id
+    df = df.drop(columns=["user"])
     df = df.rename(columns={"unique_id": "user"})
-    
+
     return df
 
-ROOT = '/m/cs/work/luongn1'
+
+ROOT = "/m/cs/work/luongn1"
 # Load demographics
 demo = []
 for i in [2018, 2019, 2020, 2021]:
-    df = pd.read_csv(f'{ROOT}/globem/demo_{i}.csv')
+    df = pd.read_csv(f"{ROOT}/globem/demo_{i}.csv")
     demo.append(df)
 
 # mapping
-pid_mappings = pd.read_csv(f'{ROOT}/globem/pid_mappings.csv')
+pid_mappings = pd.read_csv(f"{ROOT}/globem/pid_mappings.csv")
 
 demo = pd.concat(demo)
-demo = demo.rename(columns={'pid': 'user'})
+demo = demo.rename(columns={"pid": "user"})
 res = re_id_returning_users(demo, pid_mappings)
-res.to_csv(f'{ROOT}/globem/demographics.csv', index=False)
+res.to_csv(f"{ROOT}/globem/demographics.csv", index=False)

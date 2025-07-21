@@ -18,9 +18,10 @@ rule cluster:
     input: 
         'data/processed/{study}/all_features_clean.csv'
     output:
-        clusters = 'out/{study}/{algo}_cluster.csv',
-        centroids = 'out/{study}/{algo}_cluster_centroids.csv',
-        scores = 'out/{study}/{algo}_model_selection.csv',
+        clusters = 'out/clusters/{study}/{algo}_cluster.csv',
+        centroids = 'out/clusters/{study}/{algo}_cluster_centroids.csv',
+        covariances = 'out/clusters/{study}/{algo}_cluster_covariances.csv',
+        scores = 'out/model_selection/{study}/{algo}_model_selection.csv',
     params:
         features = config['features'],
         cluster_settings = lambda w: config["cluster_settings"]["{}".format(w.study)]

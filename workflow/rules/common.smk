@@ -9,11 +9,11 @@ RANKS = ["ranked", "unranked"]
 def all_outputs():
 
     outputs = []
-    outputs.extend(expand('out/{study}/{algo}_cluster.csv', study=STUDIES, algo=ALGOS))
-    outputs.extend(expand('out/{study}/{algo}_cluster_centroids.csv', study=STUDIES, algo=ALGOS))
+    outputs.extend(expand('out/clusters/{study}/{algo}_cluster.csv', study=STUDIES, algo=ALGOS))
+    outputs.extend(expand('out/clusters/{study}/{algo}_cluster_centroids.csv', study=STUDIES, algo=ALGOS))
 
     # Signature
-    outputs.extend(expand('out/{study}/signature_{rank}.csv', study=STUDIES, rank=RANKS))
+    outputs.extend(expand('out/signature/{study}/signature_{rank}.csv', study=STUDIES, rank=RANKS))
 
     return outputs
 

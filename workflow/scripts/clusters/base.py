@@ -10,6 +10,7 @@ class BaseClustering(ABC):
         self,
         df: pd.DataFrame,
         features: list,
+        threshold: int,
         cluster_settings: dict,
         random_state=2508,
     ):
@@ -22,11 +23,14 @@ class BaseClustering(ABC):
             The input data.
         features : list
             List of feature columns for clustering.
+        threshold : int
+            Number of records required to be included in the analysis
         random_state : int, optional
             Random seed for reproducibility.
         """
         self.df = df.copy()
         self.features = features
+        self.threshold = threshold
 
         self.random_state = random_state
         self.model = None
@@ -91,8 +95,7 @@ class BaseClustering(ABC):
 
             # Create a separate DataFrame for each unique group with a tag
             split_datasets = [
-                (f"group_{group}", df[df[group_col] == group])
-                for group in unique_groups
+                (f"{group}", df[df[group_col] == group]) for group in unique_groups
             ]
 
             return split_datasets
@@ -199,7 +202,7 @@ class BaseClustering(ABC):
         print(f"Silhouette Score: {score:.4f}")
         return score
 
-    def centroid_characteristics(self, df):
+    def get_centroids(self, df):
         """
         Compute centroid characteristics (mean of features per cluster).
 
@@ -214,95 +217,159 @@ class BaseClustering(ABC):
         centroids = df.groupby("Cluster")[self.features].mean().reset_index()
         return centroids
 
+    def get_cov_matrix(self, model, *, as_array: bool = False):
+        """
+        Retrieve the covariance matrix (or matrices) from a fitted GaussianMixture.
+
+        Parameters
+        ----------
+        model : sklearn.mixture.GaussianMixture
+            A *fitted* GaussianMixture instance whose covariance matrices
+            you want to inspect.
+        as_array : bool, default False
+            • ``False`` → return a dict mapping *component‑id → DataFrame*
+              (rows / columns = ``self.features``).
+            • ``True``  → return the raw NumPy stack with shape
+              ``(n_components, n_features, n_features)``.
+
+        Returns
+        -------
+        dict[int, pandas.DataFrame] | numpy.ndarray
+            Covariance matrices per component in the format requested.
+
+        Notes
+        -----
+        * Handles all four ``covariance_type`` options––``'full'``, ``'tied'``,
+          ``'diag'``, ``'spherical'``––by expanding reduced forms to full
+          matrices before returning them.
+        * Raises ``AttributeError`` if the model has not been fitted.
+        """
+
+        if not hasattr(model, "covariances_"):
+            raise AttributeError(
+                "Model appears to be unfitted: no 'covariances_' attribute."
+            )
+
+        d = len(self.features)
+        cov_type = model.covariance_type
+        covs_raw = model.covariances_
+
+        # ---- expand to full (n_components, d, d) ----------------------------
+        if cov_type == "full":
+            covs_full = covs_raw  # already full
+        elif cov_type == "tied":
+            covs_full = np.repeat(covs_raw[None, :, :], model.n_components, axis=0)
+        elif cov_type == "diag":
+            covs_full = np.array([np.diag(row) for row in covs_raw])
+        elif cov_type == "spherical":
+            covs_full = np.array([np.eye(d) * var for var in covs_raw])
+        else:
+            raise ValueError(f"Unsupported covariance_type: {cov_type}")
+
+        # ---- return in requested format ------------------------------------
+        if as_array:
+            return covs_full
+
+        return {
+            k: pd.DataFrame(cov, index=self.features, columns=self.features)
+            for k, cov in enumerate(covs_full)
+        }
+
     def run_pipeline(self):
         """
-        Run full clustering pipeline: model selection, fit, predict, and evaluate.
+        End‑to‑end clustering pipeline.
 
-        Returns:
+        1. Optionally split the dataset.
+        2. Z‑score normalise features within person.
+        3. Either select the best GMM (model‑selection) or fit a preset model.
+        4. Assign cluster labels and compute centroids for every split.
+        5. Return concatenated results.
+
+        Returns
         -------
-        tuple
-            (cluster labels, centroids, model selection score)
+        tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]
+            labels_df, centroids_df, model_selection_scores_df
         """
 
-        # Retain users with more than 14 days of data
-        self.df = self.filter_by_duration(self.df, threshold=14)  # 14 days
-
-        # TEST
+        # TEST:
         # self.df = self.df.head(1000)
 
+        # -- 1. split dataset ---------------------------------------------------
         if self.split:
-            # Split dataset into subsets if self.split is True
-            dfs = self.split_dataset(
+            raw_splits = self.split_dataset(
                 self.df, strategy=self.strategy, group_col=self.group_col
             )
+
+            # ---- filter each split independently ------------------------------
+            splits = []
+            for tag, part in raw_splits:
+                part_filt = self.filter_by_duration(part, threshold=self.threshold)
+                drops = len(part) - len(part_filt)
+                if drops:
+                    print(
+                        f"[{tag}] dropped {drops} rows below {self.threshold}-day threshold"
+                    )
+                splits.append((tag, part_filt))
+
         else:
-            # Treat the whole dataset as a single subset
-            dfs = [("full_data", self.df)]
+            # no splitting – just filter once
+            df_filt = self.filter_by_duration(self.df, threshold=self.threshold)
+            splits = [("full_data", df_filt)]
 
-        labels_list, centroids_list, model_selection_scores = [], [], []
+        # ---- results -----------------------------------------------------
+        label_frames, centroid_frames, cov_frames, score_frames = [], [], [], []
 
-        # Process each subset (either split parts or full dataset)
-        for item in dfs:
+        # ----------------------------------------------------------------------
+        # 2‒4.   iterate over each split
+        # ----------------------------------------------------------------------
+        for tag, df_part in splits:
 
-            tag = item[0]
-            df = item[1]
+            #  2.  within‑person z‑score
+            norm_part = self.z_score_normalize_per_user(df_part)
+            X = norm_part[self.features].copy()
+            # rows per user, ascending
+            row_counts = df_part.groupby("user").size().sort_values()
+            print(row_counts)
 
-            norm_df = self.z_score_normalize_per_user(df)
-            X = norm_df[self.features]
+            #  3.  choose or initialise model
+            if self.run_model_selection:
 
-            ### Perform clustering ###
-
-            # Select best model
-            if self.run_model_selection == True:
                 self.model, score = self.model_selection(X)
-
-                # Get cluster labels
-                labels = self.fit_predict(self.model, X)
-
-                # Assign labels and split
-                X["Cluster"] = labels
-                X["split"] = tag
-                centroids = self.centroid_characteristics(X)
-
-                # Update model selection scores
-                score["split"] = tag
-                model_selection_scores.append(score)
-
-                # Update labels
-                df["Cluster"] = labels
-                df["split"] = tag
-                labels_list.append(df)
-
-                # Update centrods
-                centroids["split"] = tag
-                centroids_list.append(centroids)
-
-                labels_list = pd.concat(labels_list)
-                centroids_list = pd.concat(centroids_list)
-                model_selection_scores = pd.concat(model_selection_scores)
+                score_frames.append(score.assign(split=tag))
             else:
                 self.init_model(n_components=self.optimal_n_components)
 
-                # Get cluster labels
-                labels = self.fit_predict(self.model, X)
+            #  4.  fit + predict labels
+            labels = self.fit_predict(self.model, X)
 
-                # Assign labels and split
-                X["Cluster"] = labels
-                X["split"] = tag
-                centroids = self.centroid_characteristics(X)
+            # annotate original (un‑normalised) rows
+            labelled_df = df_part.assign(Cluster=labels, split=tag)
+            label_frames.append(labelled_df)
 
-                # Update labels
-                df["Cluster"] = labels
-                df["split"] = tag
-                labels_list.append(df)
+            # compute centroids on the normalised features
+            centroids = self.get_centroids(norm_part.assign(Cluster=labels)).assign(
+                split=tag
+            )
+            centroid_frames.append(centroids)
 
-                # Update centrods
-                centroids["split"] = tag
-                centroids_list.append(centroids)
+            # get cov matrix
+            cov_matrix = self.get_cov_matrix(self.model)
+            cov_df = pd.concat(cov_matrix, names=["Cluster"])
+            cov_long = (
+                cov_df.stack().rename("cov").reset_index()  # or "corr"
+            )  # columns: Cluster, feature_i, feature_j, cov
+            cov_frames.append(cov_long)
 
-                labels_list = pd.concat(labels_list)
-                centroids_list = pd.concat(centroids_list)
+        # ----------------------------------------------------------------------
+        # 5.  concatenate results
+        # ----------------------------------------------------------------------
+        labels_df = pd.concat(label_frames, ignore_index=True)
+        centroids_df = pd.concat(centroid_frames, ignore_index=True)
+        cov_df = pd.concat(cov_frames, ignore_index=True)
+        scores_df = (
+            pd.concat(score_frames, ignore_index=True)
+            if score_frames
+            else pd.DataFrame()
+        )
 
-                # Empty scores
-                model_selection_scores = pd.DataFrame()
-        return labels_list, centroids_list, model_selection_scores
+        return labels_df, centroids_df, cov_df, scores_df

@@ -25,49 +25,20 @@ class GMMClustering(BaseClustering):
     def init_model(self, n_components):
         self.model = GaussianMixture(n_components=n_components, covariance_type="full")
 
-    def _gaussian_bhattacharyya_distance(self, mean1, cov1, mean2, cov2):
-        """
-        Compute the Bhattacharyya distance between two Gaussian distributions.
+    def _gaussian_bhattacharyya_distance(self, mu1, cov1, mu2, cov2):
+        mu1, mu2 = np.atleast_1d(mu1), np.atleast_1d(mu2)
+        cov1, cov2 = np.atleast_2d(cov1), np.atleast_2d(cov2)
 
-        Parameters:
-        ----------
-        mean1, mean2 : ndarray
-            Mean vectors of the two Gaussian distributions (shape: [n_features]).
-        cov1, cov2 : ndarray
-            Covariance matrices of the two Gaussian distributions (shape: [n_features, n_features]).
+        cov_avg = 0.5 * (cov1 + cov2)
+        diff = mu1 - mu2
 
-        Returns:
-        -------
-        float
-            The Bhattacharyya distance between the two distributions.
-        """
+        term1 = 0.125 * diff.T @ np.linalg.inv(cov_avg) @ diff
+        term2 = 0.5 * np.log(
+            np.linalg.det(cov_avg) / np.sqrt(np.linalg.det(cov1) * np.linalg.det(cov2))
+        )
+        return float(term1 + term2)
 
-        # Compute the average covariance matrix
-        cov_mean = (cov1 + cov2) / 2
-
-        # Compute the difference between the means
-        mean_diff = mean1 - mean2
-
-        # First term: Mahalanobis distance component
-        term1 = 0.125 * np.dot(np.dot(mean_diff.T, inv(cov_mean)), mean_diff)
-
-        # Second term: Covariance overlap component
-        det_cov1 = det(cov1)
-        det_cov2 = det(cov2)
-        det_cov_mean = det(cov_mean)
-
-        # To avoid log(0) or division by zero
-        if det_cov1 <= 0 or det_cov2 <= 0 or det_cov_mean <= 0:
-            return np.inf
-
-        term2 = 0.5 * np.log(det_cov_mean / np.sqrt(det_cov1 * det_cov2))
-
-        # Bhattacharyya distance
-        distance = term1 + term2
-
-        return distance
-
-    def model_selection(self, X, mode="grid"):
+    def model_selection(self, X, mode="manual"):
 
         if mode == "manual":
             best_model, score = self.manual_model_selection(X)
@@ -84,7 +55,7 @@ class GMMClustering(BaseClustering):
 
         # Define hyperparameter grid
         param_grid = {
-            "n_components": range(3, 20),  # Number of clusters/components
+            "n_components": range(5, 16),  # Number of clusters/components
             "covariance_type": [
                 "spherical",
                 "diag",
@@ -103,9 +74,8 @@ class GMMClustering(BaseClustering):
                 scores[cov_type][n_component] = {"aic": [], "bic": [], "bhatt": []}
 
                 for i in range(5):
-
-                    # Random seed
-                    seed = random.seed(1000)
+                    # Reset the seed for each run
+                    seed = random.seed(10000)
 
                     # Init model
                     model = GaussianMixture(
@@ -113,7 +83,11 @@ class GMMClustering(BaseClustering):
                         covariance_type=cov_type,
                         init_params="k-means++",
                         random_state=seed,
+                        reg_covar=1e-03,
                     )
+
+                    # Drop na
+
                     # Fit
                     model.fit(X)
 
@@ -144,7 +118,8 @@ class GMMClustering(BaseClustering):
         full_bic_scores = [
             (n, np.mean(scores["full"][n]["bic"])) for n in param_grid["n_components"]
         ]
-        top_3_models = sorted(full_bic_scores, key=lambda x: x[1], reverse=True)[:3]
+
+        top_3_models = sorted(full_bic_scores, key=lambda x: x[1])[:3]
 
         best_n, _ = max(
             top_3_models, key=lambda x: np.mean(scores["full"][x[0]]["bhatt"])
@@ -159,18 +134,25 @@ class GMMClustering(BaseClustering):
         )
 
         # Convert scores to dataframe
+        scores_df = pd.concat(
+            {cov: pd.DataFrame(n_dict).T for cov, n_dict in scores.items()},
+            names=[
+                "covariance_type",
+                "n_components",
+            ],  # give names to the two index levels
+        ).reset_index()  # move both levels into columns
 
-        scores = pd.concat({k: pd.DataFrame(v).T for k, v in scores.items()}, axis=0)
-
-        scores = pd.DataFrame(scores)
-        return (best_model, scores)
+        scores_df = scores_df[
+            ["covariance_type", "n_components", "aic", "bic", "bhatt"]
+        ]
+        return (best_model, scores_df)
 
     def grid_model_selection(self, X, scorer="bic"):
 
         logging.info("🔍 Starting GridSearchCV for Gaussian Mixture Model (GMM)...")
 
         param_grid = {
-            "n_components": range(3, 20),
+            "n_components": range(5, 21),
             "covariance_type": ["spherical", "diag", "tied", "full"],
         }
 
@@ -189,7 +171,7 @@ class GMMClustering(BaseClustering):
             GaussianMixture(random_state=SEED),
             param_grid,
             scoring=scoring_func[scorer],
-            cv=3,
+            cv=10,
             verbose=1,
             n_jobs=-1,
         )

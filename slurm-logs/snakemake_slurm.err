@@ -8,311 +8,108 @@ Using shell: /usr/bin/bash
 Provided cores: 4
 Rules claiming more threads will be scaled down.
 Job stats:
-job                       count
-----------------------  -------
-all                           1
-clean_features                1
-cluster                       1
-extract_globem                4
-rename_and_concatenate        1
-signature                     2
-total                        10
+job          count
+---------  -------
+all              1
+cluster          3
+signature        6
+total           10
 
 Select jobs to execute...
-Execute 4 jobs...
+Execute 3 jobs...
 
-[Thu Jul 17 01:06:20 2025]
-localrule extract_globem:
-    input: /m/cs/work/luongn1/globem/INS-W_1/FeatureData/sleep.csv, /m/cs/work/luongn1/globem/INS-W_2/FeatureData/sleep.csv, /m/cs/work/luongn1/globem/INS-W_3/FeatureData/sleep.csv, /m/cs/work/luongn1/globem/INS-W_4/FeatureData/sleep.csv, /m/cs/work/luongn1/globem/pid_mappings.csv
-    output: data/interim/globem/sleep_4epochs.csv
-    jobid: 14
-    reason: Missing output files: data/interim/globem/sleep_4epochs.csv
-    wildcards: sensor=sleep
+[Mon Jul 21 14:07:45 2025]
+localrule cluster:
+    input: data/processed/momo/all_features_clean.csv
+    output: out/clusters/momo/gmm_cluster.csv, out/clusters/momo/gmm_cluster_centroids.csv, out/clusters/momo/gmm_cluster_covariances.csv, out/model_selection/momo/gmm_model_selection.csv
+    jobid: 8
+    reason: Params have changed since last execution
+    wildcards: study=momo, algo=gmm
     resources: tmpdir=/tmp
 
-[Thu Jul 17 01:06:20 2025]
-localrule extract_globem:
-    input: /m/cs/work/luongn1/globem/INS-W_1/FeatureData/steps.csv, /m/cs/work/luongn1/globem/INS-W_2/FeatureData/steps.csv, /m/cs/work/luongn1/globem/INS-W_3/FeatureData/steps.csv, /m/cs/work/luongn1/globem/INS-W_4/FeatureData/steps.csv, /m/cs/work/luongn1/globem/pid_mappings.csv
-    output: data/interim/globem/steps_4epochs.csv
-    jobid: 13
-    reason: Missing output files: data/interim/globem/steps_4epochs.csv
-    wildcards: sensor=steps
-    resources: tmpdir=/tmp
-
-[Thu Jul 17 01:06:20 2025]
-localrule extract_globem:
-    input: /m/cs/work/luongn1/globem/INS-W_1/FeatureData/screen.csv, /m/cs/work/luongn1/globem/INS-W_2/FeatureData/screen.csv, /m/cs/work/luongn1/globem/INS-W_3/FeatureData/screen.csv, /m/cs/work/luongn1/globem/INS-W_4/FeatureData/screen.csv, /m/cs/work/luongn1/globem/pid_mappings.csv
-    output: data/interim/globem/screen_4epochs.csv
-    jobid: 11
-    reason: Missing output files: data/interim/globem/screen_4epochs.csv
-    wildcards: sensor=screen
-    resources: tmpdir=/tmp
-
-[Thu Jul 17 01:06:20 2025]
-localrule extract_globem:
-    input: /m/cs/work/luongn1/globem/INS-W_1/FeatureData/call.csv, /m/cs/work/luongn1/globem/INS-W_2/FeatureData/call.csv, /m/cs/work/luongn1/globem/INS-W_3/FeatureData/call.csv, /m/cs/work/luongn1/globem/INS-W_4/FeatureData/call.csv, /m/cs/work/luongn1/globem/pid_mappings.csv
-    output: data/interim/globem/call_4epochs.csv
-    jobid: 12
-    reason: Missing output files: data/interim/globem/call_4epochs.csv
-    wildcards: sensor=call
-    resources: tmpdir=/tmp
-
-Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
-Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
-Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
-Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
-Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
-Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
-Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
-Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
-/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/preprocess/globem/base.py:51: DtypeWarning: Columns (556,557,565) have mixed types. Specify dtype option on import or set low_memory=False.
-  df = pd.read_csv(fn, index_col=0)
-/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/preprocess/globem/base.py:51: DtypeWarning: Columns (808,809,810,811,812,813,814) have mixed types. Specify dtype option on import or set low_memory=False.
-  df = pd.read_csv(fn, index_col=0)
-/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/preprocess/globem/base.py:51: DtypeWarning: Columns (478,577) have mixed types. Specify dtype option on import or set low_memory=False.
-  df = pd.read_csv(fn, index_col=0)
-/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/preprocess/globem/base.py:51: DtypeWarning: Columns (556,557,577) have mixed types. Specify dtype option on import or set low_memory=False.
-  df = pd.read_csv(fn, index_col=0)
-/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/preprocess/globem/base.py:51: DtypeWarning: Columns (565) have mixed types. Specify dtype option on import or set low_memory=False.
-  df = pd.read_csv(fn, index_col=0)
-/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/preprocess/globem/base.py:68: SettingWithCopyWarning: 
-A value is trying to be set on a copy of a slice from a DataFrame.
-Try using .loc[row_indexer,col_indexer] = value instead
-
-See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
-  df[columns] = df[columns].fillna(0)
-/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/preprocess/globem/base.py:51: DtypeWarning: Columns (808,809,810,811,812,813,814,820,834) have mixed types. Specify dtype option on import or set low_memory=False.
-  df = pd.read_csv(fn, index_col=0)
-[Thu Jul 17 01:06:39 2025]
-Finished job 13.
-1 of 10 steps (10%) done
-/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/preprocess/globem/base.py:51: DtypeWarning: Columns (52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,178,179,180,181,182,183,184,185,186,187,188,189,190,191,192,193,194,195,196,197,198,199,200,201,202,203,204,205,304,305,306,307,308,309,310,311,312,313,314,315,316,317,318,319,320,321,322,323,324,325,326,327,328,329,330,331,430,431,432,433,434,435,436,437,438,439,440,441,442,443,444,445,446,447,448,449,450,451,452,453,454,455,456,457,556,557,558,559,560,561,562,563,564,565,566,567,568,569,570,571,572,573,574,575,576,577,578,579,580,581,582,583,682,683,684,685,686,687,688,689,690,691,692,693,694,695,696,697,698,699,700,701,702,703,704,705,706,707,708,709,808,809,810,811,812,813,814,815,816,817,818,819,820,821,822,823,824,825,826,827,828,829,830,831,832,833,834,835,934,935,936,937,938,939,940,941,942,943,944,945,946,947,948,949,950,951,952,953,954,955,956,957,958,959,960,961,1060,1061,1062,1063,1064,1065,1066,1067,1068,1069,1070,1071,1072,1073,1074,1075,1076,1077,1078,1079,1080,1081,1082,1083,1084,1085,1086,1087) have mixed types. Specify dtype option on import or set low_memory=False.
-  df = pd.read_csv(fn, index_col=0)
-[Thu Jul 17 01:06:41 2025]
-Finished job 12.
-2 of 10 steps (20%) done
-/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/preprocess/globem/base.py:166: SettingWithCopyWarning: 
-A value is trying to be set on a copy of a slice from a DataFrame.
-Try using .loc[row_indexer,col_indexer] = value instead
-
-See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
-  df[f"{col}:within_norm"] = df.groupby(self.groupby_cols)[col].transform(
-/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/preprocess/globem/base.py:166: SettingWithCopyWarning: 
-A value is trying to be set on a copy of a slice from a DataFrame.
-Try using .loc[row_indexer,col_indexer] = value instead
-
-See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
-  df[f"{col}:within_norm"] = df.groupby(self.groupby_cols)[col].transform(
-[Thu Jul 17 01:06:43 2025]
-Finished job 14.
-3 of 10 steps (30%) done
-/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/preprocess/globem/base.py:51: DtypeWarning: Columns (71,78,197,204,304,305,306,307,308,309,310,311,312,313,314,315,316,317,318,319,320,321,322,323,324,325,326,327,328,329,330,331,430,431,432,433,434,435,436,437,438,439,440,441,442,443,444,445,446,447,448,449,450,451,452,453,454,455,456,457,556,557,558,559,560,561,562,563,564,565,566,567,568,569,570,571,572,573,574,575,576,577,578,579,580,581,582,583,682,683,684,685,686,687,688,689,690,691,692,693,694,695,696,697,698,699,700,701,702,703,704,705,706,707,708,709,808,809,810,811,812,813,814,815,816,817,818,819,820,821,822,823,824,825,826,827,828,829,830,831,832,833,834,835,934,935,936,937,938,939,940,941,942,943,944,945,946,947,948,949,950,951,952,953,954,955,956,957,958,959,960,961,1060,1061,1062,1063,1064,1065,1066,1067,1068,1069,1070,1071,1072,1073,1074,1075,1076,1077,1078,1079,1080,1081,1082,1083,1084,1085,1086,1087) have mixed types. Specify dtype option on import or set low_memory=False.
-  df = pd.read_csv(fn, index_col=0)
-/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/preprocess/globem/base.py:166: SettingWithCopyWarning: 
-A value is trying to be set on a copy of a slice from a DataFrame.
-Try using .loc[row_indexer,col_indexer] = value instead
-
-See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
-  df[f"{col}:within_norm"] = df.groupby(self.groupby_cols)[col].transform(
-/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/preprocess/globem/base.py:166: SettingWithCopyWarning: 
-A value is trying to be set on a copy of a slice from a DataFrame.
-Try using .loc[row_indexer,col_indexer] = value instead
-
-See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
-  df[f"{col}:within_norm"] = df.groupby(self.groupby_cols)[col].transform(
-/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/preprocess/globem/base.py:166: SettingWithCopyWarning: 
-A value is trying to be set on a copy of a slice from a DataFrame.
-Try using .loc[row_indexer,col_indexer] = value instead
-
-See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
-  df[f"{col}:within_norm"] = df.groupby(self.groupby_cols)[col].transform(
-/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/preprocess/globem/base.py:166: SettingWithCopyWarning: 
-A value is trying to be set on a copy of a slice from a DataFrame.
-Try using .loc[row_indexer,col_indexer] = value instead
-
-See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
-  df[f"{col}:within_norm"] = df.groupby(self.groupby_cols)[col].transform(
-/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/preprocess/globem/base.py:166: SettingWithCopyWarning: 
-A value is trying to be set on a copy of a slice from a DataFrame.
-Try using .loc[row_indexer,col_indexer] = value instead
-
-See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
-  df[f"{col}:within_norm"] = df.groupby(self.groupby_cols)[col].transform(
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpic9wqw8j.screen.py:48: SettingWithCopyWarning: 
-A value is trying to be set on a copy of a slice from a DataFrame.
-Try using .loc[row_indexer,col_indexer] = value instead
-
-See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
-  df[columns] = df[columns].fillna(0)
-[Thu Jul 17 01:06:47 2025]
-Finished job 11.
-4 of 10 steps (40%) done
-Select jobs to execute...
-Execute 1 jobs...
-
-[Thu Jul 17 01:06:47 2025]
-localrule rename_and_concatenate:
-    input: data/interim/globem/screen_4epochs.csv, data/interim/globem/call_4epochs.csv, data/interim/globem/steps_4epochs.csv, data/interim/globem/sleep_4epochs.csv
-    output: data/processed/globem/all_features.csv
-    jobid: 10
-    reason: Missing output files: data/processed/globem/all_features.csv; Input files updated by another job: data/interim/globem/steps_4epochs.csv, data/interim/globem/sleep_4epochs.csv, data/interim/globem/call_4epochs.csv, data/interim/globem/screen_4epochs.csv
-    wildcards: study=globem
-    resources: tmpdir=/tmp
-
-Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
-Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
-[Thu Jul 17 01:06:53 2025]
-Finished job 10.
-5 of 10 steps (50%) done
-Select jobs to execute...
-Execute 1 jobs...
-
-[Thu Jul 17 01:06:53 2025]
-localrule clean_features:
-    input: data/processed/globem/all_features.csv
-    output: data/processed/globem/all_features_clean.csv
-    jobid: 9
-    reason: Missing output files: data/processed/globem/all_features_clean.csv; Input files updated by another job: data/processed/globem/all_features.csv
-    wildcards: study=globem
-    resources: tmpdir=/tmp
-
-Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
-Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
-2025-07-17 01:06:56,006 - INFO - All required features are present in the data.
-2025-07-17 01:06:56,006 - INFO - Features identified for filling missing call data: ['call_total_duration_night_log1p', 'call_total_duration_morning_log1p', 'call_total_duration_afternoon_log1p', 'call_total_duration_evening_log1p', 'call_total_duration_allday_log1p']
-2025-07-17 01:06:56,008 - INFO - Filled missing data with 0 for feature: call_total_duration_night_log1p
-2025-07-17 01:06:56,008 - INFO - Filled missing data with 0 for feature: call_total_duration_morning_log1p
-2025-07-17 01:06:56,009 - INFO - Filled missing data with 0 for feature: call_total_duration_afternoon_log1p
-2025-07-17 01:06:56,010 - INFO - Filled missing data with 0 for feature: call_total_duration_evening_log1p
-2025-07-17 01:06:56,011 - INFO - Filled missing data with 0 for feature: call_total_duration_allday_log1p
-2025-07-17 01:06:56,011 - INFO - Initial data shape before filtering: (69602, 55)
-2025-07-17 01:06:56,017 - INFO - Feature 'activity_night' has 0 NaN observations
-2025-07-17 01:06:56,017 - INFO - Feature 'activity_morning' has 26789 NaN observations
-2025-07-17 01:06:56,017 - INFO - Feature 'activity_afternoon' has 26788 NaN observations
-2025-07-17 01:06:56,017 - INFO - Feature 'activity_evening' has 26787 NaN observations
-2025-07-17 01:06:56,017 - INFO - Feature 'activity_allday' has 26783 NaN observations
-2025-07-17 01:06:56,017 - INFO - Feature 'call_total_duration_night_log1p' has 0 NaN observations
-2025-07-17 01:06:56,018 - INFO - Feature 'call_total_duration_morning_log1p' has 0 NaN observations
-2025-07-17 01:06:56,018 - INFO - Feature 'call_total_duration_afternoon_log1p' has 0 NaN observations
-2025-07-17 01:06:56,018 - INFO - Feature 'call_total_duration_evening_log1p' has 0 NaN observations
-2025-07-17 01:06:56,018 - INFO - Feature 'call_total_duration_allday_log1p' has 0 NaN observations
-2025-07-17 01:06:56,018 - INFO - Feature 'screen_night' has 0 NaN observations
-2025-07-17 01:06:56,018 - INFO - Feature 'screen_morning' has 20546 NaN observations
-2025-07-17 01:06:56,018 - INFO - Feature 'screen_afternoon' has 18165 NaN observations
-2025-07-17 01:06:56,018 - INFO - Feature 'screen_evening' has 18619 NaN observations
-2025-07-17 01:06:56,018 - INFO - Feature 'screen_allday' has 17504 NaN observations
-2025-07-17 01:06:56,018 - INFO - Feature 'sleep_onset' has 31523 NaN observations
-2025-07-17 01:06:56,018 - INFO - Feature 'sleep_offset' has 31585 NaN observations
-2025-07-17 01:06:56,018 - INFO - Feature 'sleep_duration' has 31523 NaN observations
-2025-07-17 01:06:56,029 - INFO - Data shape after removing NaNs based on features: (31909, 55)
-2025-07-17 01:06:56,046 - INFO - Data shape after removing zero activity: (31909, 55)
-2025-07-17 01:06:56,049 - INFO - Data shape after removing zero screen use: (31909, 55)
-2025-07-17 01:06:56,052 - INFO - Data shape after removing negative sleep duration: (31909, 55)
-2025-07-17 01:06:56,054 - INFO - Final data shape before saving to CSV: (31909, 55)
-[Thu Jul 17 01:06:57 2025]
-Finished job 9.
-6 of 10 steps (60%) done
-Select jobs to execute...
-Execute 1 jobs...
-
-[Thu Jul 17 01:06:57 2025]
+[Mon Jul 21 14:07:45 2025]
 localrule cluster:
     input: data/processed/globem/all_features_clean.csv
-    output: out/globem/gmm_cluster.csv, out/globem/gmm_cluster_centroids.csv, out/globem/gmm_model_selection.csv
-    jobid: 8
-    reason: Missing output files: out/globem/gmm_cluster_centroids.csv, out/globem/gmm_cluster.csv; Input files updated by another job: data/processed/globem/all_features_clean.csv
+    output: out/clusters/globem/gmm_cluster.csv, out/clusters/globem/gmm_cluster_centroids.csv, out/clusters/globem/gmm_cluster_covariances.csv, out/model_selection/globem/gmm_model_selection.csv
+    jobid: 11
+    reason: Missing output files: out/clusters/globem/gmm_cluster_centroids.csv, out/clusters/globem/gmm_cluster.csv
     wildcards: study=globem, algo=gmm
     resources: tmpdir=/tmp
 
+[Mon Jul 21 14:07:45 2025]
+localrule cluster:
+    input: data/processed/tesserae/all_features_clean.csv
+    output: out/clusters/tesserae/gmm_cluster.csv, out/clusters/tesserae/gmm_cluster_centroids.csv, out/clusters/tesserae/gmm_cluster_covariances.csv, out/model_selection/tesserae/gmm_model_selection.csv
+    jobid: 1
+    reason: Params have changed since last execution
+    wildcards: study=tesserae, algo=gmm
+    resources: tmpdir=/tmp
+
 Activating conda environment: .snakemake/conda/ab5233add898528c77eec06aa91604d6_
 Activating conda environment: .snakemake/conda/ab5233add898528c77eec06aa91604d6_
-2025-07-17 01:07:07,936 - INFO - 🔍 Starting GridSearchCV for Gaussian Mixture Model (GMM)...
-/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/clusters/base.py:263: SettingWithCopyWarning: 
-A value is trying to be set on a copy of a slice from a DataFrame.
-Try using .loc[row_indexer,col_indexer] = value instead
+Activating conda environment: .snakemake/conda/ab5233add898528c77eec06aa91604d6_
+Activating conda environment: .snakemake/conda/ab5233add898528c77eec06aa91604d6_
+Activating conda environment: .snakemake/conda/ab5233add898528c77eec06aa91604d6_
+Activating conda environment: .snakemake/conda/ab5233add898528c77eec06aa91604d6_
+Traceback (most recent call last):
+Traceback (most recent call last):
+  File "/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpt3csyj4o.run.py", line 5, in <module>
+  File "/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmp0bi8kplq.run.py", line 5, in <module>
+    from gmm import GMMClustering
+    from gmm import GMMClustering
+  File "/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/clusters/gmm.py", line 3, in <module>
+  File "/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/clusters/gmm.py", line 3, in <module>
+Traceback (most recent call last):
+  File "/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpcfro0u1s.run.py", line 5, in <module>
+    from base import BaseClustering
+  File "/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/clusters/base.py", line 13
+    threshold: int:
+                  ^
+SyntaxError: invalid syntax
+    from gmm import GMMClustering
+  File "/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/clusters/gmm.py", line 3, in <module>
+    from base import BaseClustering
+  File "/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/clusters/base.py", line 13
+    threshold: int:
+                  ^
+SyntaxError: invalid syntax
+    from base import BaseClustering
+  File "/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/clusters/base.py", line 13
+    threshold: int:
+                  ^
+SyntaxError: invalid syntax
+RuleException:
+CalledProcessError in file /scratch/work/luongn1/digirhythm-v2/workflow/rules/cluster.smk, line 31:
+Command 'source /appl/scibuilder-mamba/aalto-rhel9/prod/software/mamba/2025.1/f67be15/bin/activate '/scratch/work/luongn1/digirhythm-v2/.snakemake/conda/ab5233add898528c77eec06aa91604d6_'; set -euo pipefail;  python /scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpcfro0u1s.run.py' returned non-zero exit status 1.
+[Mon Jul 21 14:07:52 2025]
+Error in rule cluster:
+    jobid: 8
+    input: data/processed/momo/all_features_clean.csv
+    output: out/clusters/momo/gmm_cluster.csv, out/clusters/momo/gmm_cluster_centroids.csv, out/clusters/momo/gmm_cluster_covariances.csv, out/model_selection/momo/gmm_model_selection.csv
+    conda-env: /scratch/work/luongn1/digirhythm-v2/.snakemake/conda/ab5233add898528c77eec06aa91604d6_
 
-See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
-  X["Cluster"] = labels
-/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/clusters/base.py:264: SettingWithCopyWarning: 
-A value is trying to be set on a copy of a slice from a DataFrame.
-Try using .loc[row_indexer,col_indexer] = value instead
+RuleException:
+CalledProcessError in file /scratch/work/luongn1/digirhythm-v2/workflow/rules/cluster.smk, line 31:
+Command 'source /appl/scibuilder-mamba/aalto-rhel9/prod/software/mamba/2025.1/f67be15/bin/activate '/scratch/work/luongn1/digirhythm-v2/.snakemake/conda/ab5233add898528c77eec06aa91604d6_'; set -euo pipefail;  python /scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmp0bi8kplq.run.py' returned non-zero exit status 1.
+[Mon Jul 21 14:07:52 2025]
+Error in rule cluster:
+    jobid: 11
+    input: data/processed/globem/all_features_clean.csv
+    output: out/clusters/globem/gmm_cluster.csv, out/clusters/globem/gmm_cluster_centroids.csv, out/clusters/globem/gmm_cluster_covariances.csv, out/model_selection/globem/gmm_model_selection.csv
+    conda-env: /scratch/work/luongn1/digirhythm-v2/.snakemake/conda/ab5233add898528c77eec06aa91604d6_
 
-See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
-  X["split"] = tag
-[Thu Jul 17 01:10:17 2025]
-Finished job 8.
-7 of 10 steps (70%) done
-Select jobs to execute...
-Execute 2 jobs...
+RuleException:
+CalledProcessError in file /scratch/work/luongn1/digirhythm-v2/workflow/rules/cluster.smk, line 31:
+Command 'source /appl/scibuilder-mamba/aalto-rhel9/prod/software/mamba/2025.1/f67be15/bin/activate '/scratch/work/luongn1/digirhythm-v2/.snakemake/conda/ab5233add898528c77eec06aa91604d6_'; set -euo pipefail;  python /scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpt3csyj4o.run.py' returned non-zero exit status 1.
+[Mon Jul 21 14:07:52 2025]
+Error in rule cluster:
+    jobid: 1
+    input: data/processed/tesserae/all_features_clean.csv
+    output: out/clusters/tesserae/gmm_cluster.csv, out/clusters/tesserae/gmm_cluster_centroids.csv, out/clusters/tesserae/gmm_cluster_covariances.csv, out/model_selection/tesserae/gmm_model_selection.csv
+    conda-env: /scratch/work/luongn1/digirhythm-v2/.snakemake/conda/ab5233add898528c77eec06aa91604d6_
 
-[Thu Jul 17 01:10:17 2025]
-localrule signature:
-    input: out/globem/gmm_cluster.csv
-    output: out/globem/signature_ranked.csv, out/globem/signature_d_self_ranked.csv, out/globem/signature_d_ref_ranked.csv
-    jobid: 19
-    reason: Missing output files: out/globem/signature_ranked.csv; Input files updated by another job: out/globem/gmm_cluster.csv
-    wildcards: study=globem, rank=ranked
-    resources: tmpdir=/tmp
-
-Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
-
-[Thu Jul 17 01:10:17 2025]
-localrule signature:
-    input: out/globem/gmm_cluster.csv
-    output: out/globem/signature_unranked.csv, out/globem/signature_d_self_unranked.csv, out/globem/signature_d_ref_unranked.csv
-    jobid: 20
-    reason: Missing output files: out/globem/signature_unranked.csv; Input files updated by another job: out/globem/gmm_cluster.csv
-    wildcards: study=globem, rank=unranked
-    resources: tmpdir=/tmp
-
-Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
-Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
-Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
-2025-07-17 01:10:20,578 - INFO - Loading data...
-2025-07-17 01:10:20,578 - INFO - Loading data...
-2025-07-17 01:10:20,794 - INFO - Processing with ranked=False, method=cosine
-2025-07-17 01:10:20,812 - INFO - Processing with ranked=True, method=jsd
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmp993crwjc.signature.py:65: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
-  df.groupby(["user", "split", "Cluster"]).size().reset_index(name="count")
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpqfpc741b.signature.py:65: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
-  df.groupby(["user", "split", "Cluster"]).size().reset_index(name="count")
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmp993crwjc.signature.py:68: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
-  user_signature["percentage"] = user_signature.groupby(["user", "split"])[
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpqfpc741b.signature.py:68: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
-  user_signature["percentage"] = user_signature.groupby(["user", "split"])[
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmp993crwjc.signature.py:94: FutureWarning: The default value of observed=False is deprecated and will change to observed=True in a future version of pandas. Specify observed=False to silence this warning and retain the current behavior
-  user_signature = user_signature.pivot_table(
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpqfpc741b.signature.py:78: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
-  user_signature.sort_values(
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpqfpc741b.signature.py:87: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
-  user_signature.groupby(["user", "split"]).cumcount() + 1
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpqfpc741b.signature.py:90: FutureWarning: The default value of observed=False is deprecated and will change to observed=True in a future version of pandas. Specify observed=False to silence this warning and retain the current behavior
-  user_signature = user_signature.pivot_table(
-2025-07-17 01:10:20,982 - INFO - Computing d_self...
-2025-07-17 01:10:20,983 - INFO - Computing d_ref...
-2025-07-17 01:10:20,983 - INFO - Saving outputs...
-2025-07-17 01:10:20,985 - INFO - Computing d_self...
-2025-07-17 01:10:20,986 - INFO - Computing d_ref...
-2025-07-17 01:10:20,987 - INFO - Saving outputs...
-2025-07-17 01:10:20,987 - INFO - Done.
-2025-07-17 01:10:20,990 - INFO - Done.
-[Thu Jul 17 01:10:21 2025]
-Finished job 19.
-8 of 10 steps (80%) done
-[Thu Jul 17 01:10:21 2025]
-Finished job 20.
-9 of 10 steps (90%) done
-Select jobs to execute...
-Execute 1 jobs...
-
-[Thu Jul 17 01:10:21 2025]
-localrule all:
-    input: out/tesserae/gmm_cluster.csv, out/momo/gmm_cluster.csv, out/globem/gmm_cluster.csv, out/tesserae/gmm_cluster_centroids.csv, out/momo/gmm_cluster_centroids.csv, out/globem/gmm_cluster_centroids.csv, out/tesserae/signature_ranked.csv, out/tesserae/signature_unranked.csv, out/momo/signature_ranked.csv, out/momo/signature_unranked.csv, out/globem/signature_ranked.csv, out/globem/signature_unranked.csv
-    jobid: 0
-    reason: Input files updated by another job: out/globem/gmm_cluster_centroids.csv, out/globem/signature_unranked.csv, out/globem/signature_ranked.csv, out/globem/gmm_cluster.csv
-    resources: tmpdir=/tmp
-
-[Thu Jul 17 01:10:21 2025]
-Finished job 0.
-10 of 10 steps (100%) done
-Complete log: .snakemake/log/2025-07-17T010616.911879.snakemake.log
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: .snakemake/log/2025-07-21T140741.735239.snakemake.log
+WorkflowError:
+At least one job did not complete successfully.

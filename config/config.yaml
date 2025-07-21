@@ -35,25 +35,27 @@ features:
 cluster_settings:
   tesserae:
     algorithm: gmm 
-    split: false  # Apply clustering on data splits instead of the full dataset
+    split: False  # Apply clustering on data splits instead of the full dataset
     strategy: random  # Split strategy, only available if split is turned on
-    group_col: null
-
+    group_col: null # grouping col, used for splitting the dataset
+    threshold: 14 # number of records needed to be included in the analysis
     run_model_selection: False # Turn on this flag if model selection is required
     optimal_gmm_settings:
-        n_components: 12
+        n_components: 6
   momo:
     algorithm: gmm 
-    split: false  
+    split: False  
     strategy: random 
     group_col: null
-
-    run_model_selection: 
+    threshold: 14 # number of records needed to be included in the analysis
+    run_model_selection: False
     optimal_gmm_settings:
-        n_components: 5
+        n_components: 6
+        
   globem:
     algorithm: gmm 
-    split: false  
+    split: True  
+    threshold: 6 # number of records needed to be included in the analysis
     strategy: group 
     group_col: wave
 

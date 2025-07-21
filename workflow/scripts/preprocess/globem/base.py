@@ -103,9 +103,7 @@ class BaseProcessor:
                 return val
 
         # Apply to all columns
-        id_mappings = id_mappings.apply(
-            lambda col: col.map(map_to_sensor_id)
-        )
+        id_mappings = id_mappings.apply(lambda col: col.map(map_to_sensor_id))
 
         # ID mapping function
         def build_uid(row):
@@ -120,14 +118,12 @@ class BaseProcessor:
             return f"{len(ids)}_{'-'.join(ids)}"  # e.g. 3_INS-W_001_INS_W_033_INS_W_192
 
         # Create a unique id
-        id_mappings["unique_id"] = id_mappings.apply(
-            build_uid, axis=1
-        )
+        id_mappings["unique_id"] = id_mappings.apply(build_uid, axis=1)
 
         # Melt
         id_mappings = pd.melt(
             id_mappings,
-            id_vars=["unique_id"], 
+            id_vars=["unique_id"],
             value_vars=["INS-W_1", "INS-W_2", "INS-W_3", "INS-W_4"],
             var_name="wave",
             value_name="user",
@@ -137,10 +133,10 @@ class BaseProcessor:
 
         df = df.merge(id_mappings, on=["user", "wave"])
 
-        # Replace user id with the new unique id 
-        df = df.drop(columns=['user'])
+        # Replace user id with the new unique id
+        df = df.drop(columns=["user"])
         df = df.rename(columns={"unique_id": "user"})
-        
+
         return df
 
     @progress_decorator
