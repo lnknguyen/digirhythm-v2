@@ -19,7 +19,6 @@ logging.basicConfig(
 
 SEED = 2508
 
-
 class GMMClustering(BaseClustering):
 
     def init_model(self, n_components):

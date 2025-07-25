@@ -31,6 +31,7 @@ features:
   - sleep_offset
   - sleep_duration
 
+
 # CLUSTERING SETTINGS
 cluster_settings:
   tesserae:
@@ -61,7 +62,7 @@ cluster_settings:
 
     run_model_selection: True
     optimal_gmm_settings:
-        n_components: 5
+        n_components: 7
 
 # CLUSTERING SETTINGS
 signature:

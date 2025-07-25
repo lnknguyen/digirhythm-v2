@@ -14,6 +14,7 @@ def main(input_fns, output_fns, params):
     # Load data
     data = pd.read_csv(input_fns[0])
     features = params.features
+    run_selection = params.run_selection
     algo = snakemake.wildcards.algo
 
     cluster_settings = params.cluster_settings
@@ -27,10 +28,13 @@ def main(input_fns, output_fns, params):
 
     labels, centroids, covariances, model_selection_scores = model.run_pipeline()
 
-    labels.to_csv(output_fns.clusters, index=False)
-    centroids.to_csv(output_fns.centroids, index=False)
-    covariances.to_csv(output_fns.covariances, index=False)
-    model_selection_scores.to_csv(output_fns.scores, index=False)
+    if run_selection == True:
+        model_selection_scores.to_csv(output_fns.scores, index=False)
+    else:
+        labels.to_csv(output_fns.clusters, index=False)
+        centroids.to_csv(output_fns.centroids, index=False)
+        covariances.to_csv(output_fns.covariances, index=False)
+        
 
 
 if __name__ == "__main__":
