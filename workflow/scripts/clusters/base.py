@@ -21,7 +21,7 @@ class BaseClustering(ABC):
         df : pandas.DataFrame
             The input data.
         features : list
-            List of feature columns for clustering.            
+            List of feature columns for clustering.
         random_state : int, optional
             Random seed for reproducibility.
         """
@@ -38,7 +38,9 @@ class BaseClustering(ABC):
         self.strategy = cluster_settings["strategy"]
         self.split = cluster_settings["split"]
         self.group_col = cluster_settings["group_col"]
-        self.threshold = cluster_settings["threshold"] #Number of records required to be included in the analysis
+        self.threshold = cluster_settings[
+            "threshold"
+        ]  # Number of records required to be included in the analysis
 
         # Optimal cluster settings
         self.run_model_selection = cluster_settings["run_model_selection"]

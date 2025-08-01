@@ -17,11 +17,9 @@ features:
   - activity_afternoon
   - activity_evening
   - activity_allday
-  - call_total_duration_night_log1p
-  - call_total_duration_morning_log1p
-  - call_total_duration_afternoon_log1p
-  - call_total_duration_evening_log1p
-  - call_total_duration_allday_log1p
+  
+  
+  
   - screen_night
   - screen_morning
   - screen_afternoon
@@ -42,7 +40,7 @@ cluster_settings:
     threshold: 14 # number of records needed to be included in the analysis
     run_model_selection: False # Turn on this flag if model selection is required
     optimal_gmm_settings:
-        n_components: 6
+        n_components: 8
   momo:
     algorithm: gmm 
     split: False  
@@ -51,7 +49,7 @@ cluster_settings:
     threshold: 14 # number of records needed to be included in the analysis
     run_model_selection: False
     optimal_gmm_settings:
-        n_components: 6
+        n_components: 11
         
   globem:
     algorithm: gmm 
@@ -60,9 +58,9 @@ cluster_settings:
     strategy: group 
     group_col: wave
 
-    run_model_selection: True
+    run_model_selection: False
     optimal_gmm_settings:
-        n_components: 7
+        n_components: 8
 
 # CLUSTERING SETTINGS
 signature:

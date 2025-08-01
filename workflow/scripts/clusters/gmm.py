@@ -19,6 +19,7 @@ logging.basicConfig(
 
 SEED = 2508
 
+
 class GMMClustering(BaseClustering):
 
     def init_model(self, n_components):
@@ -82,7 +83,7 @@ class GMMClustering(BaseClustering):
                         covariance_type=cov_type,
                         init_params="k-means++",
                         random_state=seed,
-                        reg_covar=1e-03,
+                        reg_covar=1e-06,
                     )
 
                     # Drop na

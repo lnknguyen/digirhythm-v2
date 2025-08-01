@@ -34,7 +34,6 @@ def main(input_fns, output_fns, params):
         labels.to_csv(output_fns.clusters, index=False)
         centroids.to_csv(output_fns.centroids, index=False)
         covariances.to_csv(output_fns.covariances, index=False)
-        
 
 
 if __name__ == "__main__":
