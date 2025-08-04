@@ -103,4 +103,5 @@ neos = pd.concat(neos)
 df = demos.merge(neos, on=["user", "group"])
 
 # To csv
-OUT_DIR = "/m/cs/work/luongn1/digirhythm-v2/data/interim/momo/demographics_neo.csv"
+out_fn = "/m/cs/work/luongn1/digirhythm-v2/data/interim/momo/demographics_neo.csv"
+df.to_csv(out_fn)

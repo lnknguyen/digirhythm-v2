@@ -49,11 +49,11 @@ cluster_settings:
     threshold: 14 # number of records needed to be included in the analysis
     run_model_selection: False
     optimal_gmm_settings:
-        n_components: 11
+        n_components: 8
         
   globem:
     algorithm: gmm 
-    split: True  
+    split: False  
     threshold: 6 # number of records needed to be included in the analysis
     strategy: group 
     group_col: wave
