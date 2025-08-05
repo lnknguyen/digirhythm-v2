@@ -1,4 +1,4 @@
-from .base import BaseProcessor
+from base import BaseProcessor
 from dataclasses import dataclass, field
 import niimpy
 import pandas as pd
@@ -16,10 +16,12 @@ print(path)
 class ScreenProcessor(BaseProcessor):
     def __post_init__(self, *args, **kwargs):
         super().__post_init__(*args, **kwargs)
+        self.sensor_name = "screen"
+        self.frequency = "4epochs"
 
     def extract_features(self) -> pd.DataFrame:
 
-        prefixes = ["screen:screen_use_durationtotal"]
+        prefixes = ["screen:screen_on_durationtotal"]
 
         # Agg daily events into 6H bins
         rule = "6H"
@@ -33,7 +35,9 @@ class ScreenProcessor(BaseProcessor):
             }
         }
 
-        print(self.data.head())
+        # Test run
+        self.data = self.data.head(1000)
+
         df = (
             self.data.pipe(self.convert_copenhagen_time)
             .pipe(self.set_datetime_index)
@@ -46,7 +50,7 @@ class ScreenProcessor(BaseProcessor):
                 features=wrapper_features,
             )  # call niimpy to extract features with pre-defined time bin
             .sort_index()
-            .pipe(self.filter_outliers, cols=["screen_use_durationtotal"])
+            .pipe(self.filter_outliers, cols=["screen_on_durationtotal"])
             .reset_index()
             .pipe(self.pivot)
             .pipe(self.flatten_columns)
@@ -85,8 +89,31 @@ class ScreenProcessor(BaseProcessor):
         pivoted_df = df.pivot_table(
             index=["user", "date"],
             columns="hour",
-            values=["screen_use_durationtotal"],
+            values=["screen_on_durationtotal"],
             fill_value=0,
         )
 
         return pivoted_df
+
+
+def main():
+
+    input_fn = snakemake.input[0]
+    output_fn = snakemake.output[0]
+
+    processor = ScreenProcessor(input_fn=input_fn)
+
+    res = processor.extract_features().reset_index()
+
+    # Rename
+    res.rename(
+        columns=res.columns.to_series().replace(
+            r"screen_on_durationtotal", "screen_use_durationtotal", regex=True
+        ),
+        inplace=True,
+    )
+
+    res.to_csv(output_fn, index=False)
+
+if __name__ == "__main__":
+    main()

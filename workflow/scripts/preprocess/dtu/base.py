@@ -35,9 +35,8 @@ class BaseProcessor:
 
     """
 
-    sensor_name: str
-    path: str
-    frequency: str
+    input_fn: str
+
     data: pd.DataFrame = field(default_factory=pd.DataFrame)
 
     # Optional var
@@ -46,23 +45,10 @@ class BaseProcessor:
 
     def __post_init__(self) -> None:
 
-        # Extract the file extension from the path
-        _, file_extension = os.path.splitext(self.path)
+        self.data = pd.read_parquet(self.input_fn)
 
-        # Convert the file extension to lowercase to handle cases like '.CSV'
-        file_extension = file_extension.lower()
-
-        # Choose the appropriate Pandas function based on the file extension
-        if file_extension == ".csv":
-            self.data = pd.read_csv(self.path, dtype={"user": "str"})
-        elif file_extension == ".parquet":
-            self.data = pd.read_parquet(self.path)
-        else:
-            raise ValueError(f"Unsupported file type: {file_extension}")
-
-        # Set the data types for the columns
-
-        self.col_suffix = "" if self.frequency == "4epochs" else f":{self.frequency}"
+        # Convert user to str
+        self.data["user"] = self.data["user"].asttype(str)
 
     def remove_timezone_info(self, df: pd.DataFrame) -> pd.DataFrame:
         df = df.tz_localize(None)
@@ -215,10 +201,11 @@ class BaseProcessor:
         For each user, create a normalize version of numerical columns
         """
 
+        print(df.head())
         for prefix in prefixes:
             cols = [col for col in df if col.startswith(prefix)]
             for col in cols:
-                df[f"{col}:within_norm"] = df.groupby(groupby_cols)[col].transform(
+                df[f"{col}:within_norm"] = df.groupby(self.groupby_cols)[col].transform(
                     lambda x: (x - x.min()) / (x.max() - x.min())
                 )
 

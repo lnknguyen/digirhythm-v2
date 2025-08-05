@@ -1,5 +1,7 @@
 import pandas as pd
 import numpy as np
+
+
 def re_id_returning_users(df, pid_mappings):
 
     id_mappings = pid_mappings.copy()
@@ -78,7 +80,7 @@ ROOT = "/m/cs/work/luongn1"
 # Load surveys
 
 surveys = []
-for di in ['INS-W_1', 'INS-W_2', 'INS-W_3', 'INS-W_4']:
+for di in ["INS-W_1", "INS-W_2", "INS-W_3", "INS-W_4"]:
     df = pd.read_csv(f"{ROOT}/globem/{di}/SurveyData/pre.csv")
     surveys.append(df)
 

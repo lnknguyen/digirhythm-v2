@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 
+
 def re_id_returning_users(df, pid_mappings):
 
     id_mappings = pid_mappings.copy()

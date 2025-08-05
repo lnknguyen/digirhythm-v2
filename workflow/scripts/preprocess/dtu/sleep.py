@@ -1,4 +1,4 @@
-from .base import BaseProcessor
+from base import BaseProcessor
 from dataclasses import dataclass, field
 import niimpy
 import pandas as pd
@@ -177,3 +177,18 @@ class SleepProcessor(BaseProcessor):
         )
 
         return results_df
+
+
+def main():
+
+    input_fn = snakemake.input[0]
+    output_fn = snakemake.output[0]
+
+    processor = SleepProcessor(input_fn=input_fn)
+
+    res = processor.extract_features().reset_index()
+    res.to_csv(output_fn, index=False)
+
+
+if __name__ == "__main__":
+    main()

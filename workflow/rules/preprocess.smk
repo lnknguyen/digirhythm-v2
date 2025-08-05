@@ -1,4 +1,9 @@
-SENSORS = ['screen', 'call', 'steps', 'sleep']
+SENSORS = {
+
+    'globem': ['screen', 'steps', 'call', 'sleep'],
+    'dtu': ['screen', 'sleep'],
+    'tesserae': ['screen', 'steps', 'call', 'sleep'],
+}
 
 # Write up report
 rule write_report:
@@ -29,7 +34,7 @@ rule clean_features:
 # then concat all the files
 rule rename_and_concatenate:
     input:
-        expand('data/interim/{{study}}/{sensor}_4epochs.csv', sensor=SENSORS)
+        lambda wildcards: expand('data/interim/{{study}}/{sensor}_4epochs.csv', sensor =  SENSORS[wildcards.study])
     output:
         'data/processed/{study}/all_features.csv'
     conda:
@@ -41,7 +46,6 @@ rule rename_and_concatenate:
 
 # GLobem rule
 WAVES = ['INS-W_1', 'INS-W_2', 'INS-W_3', 'INS-W_4']
-
 
 rule extract_globem:
     input:
@@ -66,3 +70,14 @@ rule extract_tesserae:
         '../envs/python_env.yaml'
     script:
         '../scripts/preprocess/tesserae/{wildcards.sensor}.py'
+
+# DTU rule
+rule extract_dtu:
+    input:
+        '/scratch/cs/dtu-screen/dtu_aware_screen.parquet'
+    output:
+        'data/interim/dtu/{sensor}_4epochs.csv'
+    conda:
+        '../envs/python_env.yaml'
+    script:
+        '../scripts/preprocess/dtu/{wildcards.sensor}.py'

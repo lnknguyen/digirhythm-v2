@@ -1,5 +1,9 @@
+
 groupby:
   tesserae:
+    - user
+    - date
+  dtu:
     - user
     - date
   momo:
@@ -11,6 +15,12 @@ groupby:
     - date
     - wave
 
+# Sensors to extract
+sensors:
+  tesserae: ['screen', 'call', 'steps', 'sleep']
+  globem: ['screen', 'call', 'steps', 'sleep']
+  dtu: ['screen', 'sleep']
+  
 features:
   - activity_night
   - activity_morning
@@ -18,13 +28,12 @@ features:
   - activity_evening
   - activity_allday
   
-  
-  
   - screen_night
   - screen_morning
   - screen_afternoon
   - screen_evening
   - screen_allday
+  
   - sleep_onset
   - sleep_offset
   - sleep_duration
@@ -54,12 +63,23 @@ cluster_settings:
   globem:
     algorithm: gmm 
     split: False  
-    threshold: 6 # number of records needed to be included in the analysis
+    threshold: 14 # number of records needed to be included in the analysis
     strategy: group 
     group_col: wave
 
     run_model_selection: False
     optimal_gmm_settings:
+        n_components: 8
+
+  dtu:
+    algorithm: gmm 
+    split: False  
+    threshold: 14 # number of records needed to be included in the analysis
+    strategy: group 
+    group_col: null
+
+    run_model_selection: True
+    optimal_gmm_settings: # This will be ignored if run_model_selection is set to True
         n_components: 8
 
 # CLUSTERING SETTINGS

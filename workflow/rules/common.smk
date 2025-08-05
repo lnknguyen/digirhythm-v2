@@ -1,6 +1,6 @@
 
-STUDIES = ['tesserae', 'momo', 'globem']
-#STUDIES = ['tesserae', 'momo']
+STUDIES = ['tesserae', 'momo', 'globem', 'dtu']
+
 ALGOS = ['gmm']
 
 # ranked or unranked signature
