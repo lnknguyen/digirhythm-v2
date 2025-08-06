@@ -38,10 +38,13 @@ class BaseClustering(ABC):
         self.strategy = cluster_settings["strategy"]
         self.split = cluster_settings["split"]
         self.group_col = cluster_settings["group_col"]
-        self.threshold = cluster_settings[
-            "threshold"
+        self.min_threshold = cluster_settings[
+            "min_threshold"
         ]  # Number of records required to be included in the analysis
-
+        self.max_threshold = cluster_settings[
+            "max_threshold"
+        ]  # Max Number of records allowed per user
+        
         # Optimal cluster settings
         self.run_model_selection = cluster_settings["run_model_selection"]
         self.optimal_n_components = cluster_settings["optimal_gmm_settings"][
@@ -102,14 +105,22 @@ class BaseClustering(ABC):
         else:
             raise ValueError("Invalid strategy. Use 'random' or 'group'.")
 
-    def filter_by_duration(self, df, threshold):
+    def filter_by_duration(self, df, min_threshold: int, max_threshold: int):
 
+        # Sort by date per user 
+        df = df.sort_values(['user', 'date'])
+        
         # Count number of observations per user
         user_duration = df.groupby("user").size().reset_index(name="duration")
 
-        filtered_users = user_duration[user_duration["duration"] >= threshold]["user"]
+        # Retain user with more observation than threshold
+        filtered_users = user_duration[user_duration["duration"] >= min_threshold]["user"]
         filtered_df = df[df["user"].isin(filtered_users)]
 
+        # If user has more record than max_threshold, clip the surplus observations 
+        if max_threshold is not None:
+            filtered_df = filtered_df[filtered_df.groupby('user').cumcount() < max_threshold]
+        
         return filtered_df
 
     ##### Normalization ####
@@ -169,11 +180,8 @@ class BaseClustering(ABC):
 
         # Apply normalization per user
         normalized_df = df.copy()
-        features = (
-            self.features
-        )  # Assuming self.features holds the list of feature columns
 
-        normalized_df[features] = normalized_df.groupby("user")[features].transform(
+        normalized_df[self.features] = normalized_df.groupby("user")[self.features].transform(
             safe_z_score
         )
 
@@ -302,17 +310,17 @@ class BaseClustering(ABC):
             # ---- filter each split independently ------------------------------
             splits = []
             for tag, part in raw_splits:
-                part_filt = self.filter_by_duration(part, threshold=self.threshold)
+                part_filt = self.filter_by_duration(part, min_threshold=self.min_threshold, max_threshold=self.max_threshold)
                 drops = len(part) - len(part_filt)
                 if drops:
                     print(
-                        f"[{tag}] dropped {drops} rows below {self.threshold}-day threshold"
+                        f"[{tag}] dropped {drops} rows below {self.min_threshold}-day threshold"
                     )
                 splits.append((tag, part_filt))
 
         else:
             # no splitting – just filter once
-            df_filt = self.filter_by_duration(self.df, threshold=self.threshold)
+            df_filt = self.filter_by_duration(self.df, min_threshold=self.min_threshold, max_threshold=self.max_threshold)
             splits = [("full_data", df_filt)]
 
         # ---- results -----------------------------------------------------

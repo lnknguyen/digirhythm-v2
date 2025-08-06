@@ -22,21 +22,62 @@ sensors:
   dtu: ['screen', 'sleep']
   
 features:
-  - activity_night
-  - activity_morning
-  - activity_afternoon
-  - activity_evening
-  - activity_allday
-  
-  - screen_night
-  - screen_morning
-  - screen_afternoon
-  - screen_evening
-  - screen_allday
-  
-  - sleep_onset
-  - sleep_offset
-  - sleep_duration
+  tesserae: [
+    "activity_night",
+    "activity_morning",
+    "activity_afternoon",
+    "activity_evening",
+    "activity_allday",
+
+    "screen_night",
+    "screen_morning",
+    "screen_afternoon",
+    "screen_evening",
+    "screen_allday",
+
+    "sleep_onset",
+    "sleep_offset",
+    "sleep_duration"
+]
+
+  globem: [
+    "activity_night",
+    "activity_morning",
+    "activity_afternoon",
+    "activity_evening",
+    "activity_allday",
+
+]
+
+  momo: [
+    "activity_night",
+    "activity_morning",
+    "activity_afternoon",
+    "activity_evening",
+    "activity_allday",
+
+    "screen_night",
+    "screen_morning",
+    "screen_afternoon",
+    "screen_evening",
+    "screen_allday",
+
+    "sleep_onset",
+    "sleep_offset",
+    "sleep_duration"
+]
+
+  dtu: [
+    "screen_night",
+    "screen_morning",
+    "screen_afternoon",
+    "screen_evening",
+    "screen_allday",
+
+    "sleep_onset",
+    "sleep_offset",
+    "sleep_duration"
+]
 
 
 # CLUSTERING SETTINGS
@@ -46,7 +87,8 @@ cluster_settings:
     split: False  # Apply clustering on data splits instead of the full dataset
     strategy: random  # Split strategy, only available if split is turned on
     group_col: null # grouping col, used for splitting the dataset
-    threshold: 14 # number of records needed to be included in the analysis
+    min_threshold: 14 # min number of records needed to be included in the analysis
+    max_threshold: 365 # max number of records per user, if user has more observation than this, it will be capped at this threshold
     run_model_selection: False # Turn on this flag if model selection is required
     optimal_gmm_settings:
         n_components: 8
@@ -55,26 +97,29 @@ cluster_settings:
     split: False  
     strategy: random 
     group_col: null
-    threshold: 14 # number of records needed to be included in the analysis
+    min_threshold: 14 # number of records needed to be included in the analysis
+    max_threshold: 365
     run_model_selection: False
     optimal_gmm_settings:
         n_components: 8
         
   globem:
     algorithm: gmm 
-    split: False  
-    threshold: 14 # number of records needed to be included in the analysis
+    split: True  
+    min_threshold: 14 # number of records needed to be included in the analysis
+    max_threshold: 365
     strategy: group 
     group_col: wave
 
     run_model_selection: False
     optimal_gmm_settings:
-        n_components: 8
+        n_components: 14
 
   dtu:
     algorithm: gmm 
     split: False  
-    threshold: 14 # number of records needed to be included in the analysis
+    min_threshold: 14 # number of records needed to be included in the analysis
+    max_threshold: 365
     strategy: group 
     group_col: null
 

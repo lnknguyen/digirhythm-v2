@@ -26,7 +26,7 @@ rule clean_features:
         '../envs/python_env.yaml'
     params:
         groupby = config['groupby'],
-        features = config['features']
+        features = lambda w: config["features"]["{}".format(w.study)]
     script:
         "../scripts/make_data/clean.py"
 

@@ -15,6 +15,9 @@ def all_outputs():
     # Signature
     outputs.extend(expand('out/signature/{study}/signature_{rank}.csv', study=STUDIES, rank=RANKS))
 
+    # Optional: model selection
+    outputs.extend(model_selection_targets())
+
     return outputs
 
 rule clean_signature:

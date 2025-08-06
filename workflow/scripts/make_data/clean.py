@@ -23,18 +23,21 @@ def _filter(df, features):
     )
 
     # Remove days with zero activity (or step)
-    filtered_df = filtered_df[filtered_df["activity_allday"] != 0]
-    logging.info(f"Data shape after removing zero activity: {filtered_df.shape}")
+    if "activity_allday" in features:
+        filtered_df = filtered_df[filtered_df["activity_allday"] != 0]
+        logging.info(f"Data shape after removing zero activity: {filtered_df.shape}")
+        
+    if "screen_allday" in features:
+        # Remove days with zero screen use
+        filtered_df = filtered_df[filtered_df["screen_allday"] != 0]
+        logging.info(f"Data shape after removing zero screen use: {filtered_df.shape}")
 
-    # Remove days with zero screen use
-    filtered_df = filtered_df[filtered_df["screen_allday"] != 0]
-    logging.info(f"Data shape after removing zero screen use: {filtered_df.shape}")
-
-    # Remove days negative sleep duration
-    filtered_df = filtered_df[filtered_df["sleep_duration"] > 0]
-    logging.info(
-        f"Data shape after removing negative sleep duration: {filtered_df.shape}"
-    )
+    if "sleep_duration" in features:
+        # Remove days negative sleep duration
+        filtered_df = filtered_df[filtered_df["sleep_duration"] > 0]
+        logging.info(
+            f"Data shape after removing negative sleep duration: {filtered_df.shape}"
+        )
 
     return filtered_df
 

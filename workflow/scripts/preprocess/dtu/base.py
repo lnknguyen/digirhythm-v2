@@ -48,7 +48,7 @@ class BaseProcessor:
         self.data = pd.read_parquet(self.input_fn)
 
         # Convert user to str
-        self.data["user"] = self.data["user"].asttype(str)
+        self.data["user"] = self.data["user"].astype(str)
 
     def remove_timezone_info(self, df: pd.DataFrame) -> pd.DataFrame:
         df = df.tz_localize(None)

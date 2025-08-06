@@ -7,7 +7,7 @@ rule signature:
         d_self = 'out/signature/{study}/signature_d_self_{rank}.csv',
         d_ref = 'out/signature/{study}/signature_d_ref_{rank}.csv'
     params:
-        features = config['features'],
+        features = lambda w: config["features"]["{}".format(w.study)],
         ranked =lambda wc: wc.get("rank"),
         dist_method = "l2"
     conda:

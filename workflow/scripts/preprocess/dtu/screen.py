@@ -35,9 +35,6 @@ class ScreenProcessor(BaseProcessor):
             }
         }
 
-        # Test run
-        self.data = self.data.head(1000)
-
         df = (
             self.data.pipe(self.convert_copenhagen_time)
             .pipe(self.set_datetime_index)
@@ -67,7 +64,6 @@ class ScreenProcessor(BaseProcessor):
             .pipe(self.normalize_segments, cols=prefixes)
         )
 
-        print(df)
         return df
 
     def pivot(self, df):
@@ -78,7 +74,7 @@ class ScreenProcessor(BaseProcessor):
 
         print(df.head())
         df.rename(
-            columns={"level_0": "user", "level_1": "device", "level_2": "datetime"},
+            columns={"level_1": "user", "level_0": "device", "level_2": "datetime"},
             inplace=True,
         )
 

@@ -2,6 +2,19 @@
 #               CLUSTERING        #
 ###########################################
 
+# Gather desired outputs for model selection, per-study
+def model_selection_targets():
+    outs = []
+    for study, cs in config.get("cluster_settings", {}).items():
+        if not cs.get("run_model_selection", False):
+            continue
+        algos = cs.get("algorithms")
+        if algos is None:
+            algos = [cs.get("algorithm")] if cs.get("algorithm") else []
+        for algo in (algos if isinstance(algos, (list, tuple)) else [algos]):
+            outs.append(f"out/model_selection/{study}/{algo}_model_selection.csv")
+    return outs
+
 rule run_model_selection:
     input: 
         'data/processed/{study}/all_features_clean.csv'
@@ -9,7 +22,7 @@ rule run_model_selection:
         scores = 'out/model_selection/{study}/{algo}_model_selection.csv'
     params:
         run_selection = True,
-        features = config['features'],
+        features = lambda w: config["features"]["{}".format(w.study)],
         cluster_settings = lambda w: config["cluster_settings"]["{}".format(w.study)]
     conda:
         "../envs/latent_env.yaml"
@@ -38,7 +51,7 @@ rule cluster:
         covariances = 'out/clusters/{study}/{algo}_cluster_covariances.csv'
     params:
         run_selection = False,
-        features = config['features'],
+        features = lambda w: config["features"]["{}".format(w.study)],
         cluster_settings = lambda w: config["cluster_settings"]["{}".format(w.study)]
     conda:
         "../envs/latent_env.yaml"

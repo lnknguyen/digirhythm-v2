@@ -146,7 +146,13 @@ def main(input_fns, output_fn, params, wildcards):
         "call_total_duration_evening",
         "call_total_duration_allday",
     ]
-    df = _log_transform(df, call_features)
+
+    # Safety check
+    existing_call_features = [col for col in call_features if col in df.columns]
+
+    if existing_call_features:
+        df = _log_transform(df, existing_call_features)
+    
 
     # Save
     df.to_csv(output_fn)
