@@ -3,6 +3,7 @@ import numpy as np
 from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score
 from abc import ABC, abstractmethod
+from scipy.stats import zscore
 
 
 class BaseClustering(ABC):
@@ -44,7 +45,7 @@ class BaseClustering(ABC):
         self.max_threshold = cluster_settings[
             "max_threshold"
         ]  # Max Number of records allowed per user
-        
+
         # Optimal cluster settings
         self.run_model_selection = cluster_settings["run_model_selection"]
         self.optimal_n_components = cluster_settings["optimal_gmm_settings"][
@@ -107,20 +108,24 @@ class BaseClustering(ABC):
 
     def filter_by_duration(self, df, min_threshold: int, max_threshold: int):
 
-        # Sort by date per user 
-        df = df.sort_values(['user', 'date'])
-        
+        # Sort by date per user
+        df = df.sort_values(["user", "date"])
+
         # Count number of observations per user
         user_duration = df.groupby("user").size().reset_index(name="duration")
 
         # Retain user with more observation than threshold
-        filtered_users = user_duration[user_duration["duration"] >= min_threshold]["user"]
+        filtered_users = user_duration[user_duration["duration"] >= min_threshold][
+            "user"
+        ]
         filtered_df = df[df["user"].isin(filtered_users)]
 
-        # If user has more record than max_threshold, clip the surplus observations 
+        # If user has more record than max_threshold, clip the surplus observations
         if max_threshold is not None:
-            filtered_df = filtered_df[filtered_df.groupby('user').cumcount() < max_threshold]
-        
+            filtered_df = filtered_df[
+                filtered_df.groupby("user").cumcount() < max_threshold
+            ]
+
         return filtered_df
 
     ##### Normalization ####
@@ -169,21 +174,12 @@ class BaseClustering(ABC):
             DataFrame with Z-Score normalized features.
         """
 
-        def safe_z_score(x):
-            mean_val = x.mean()
-            std_val = x.std()
-            # Handle zero standard deviation by assigning 0
-            if std_val == 0:
-                return np.zeros_like(x)
-            else:
-                return (x - mean_val) / std_val
-
         # Apply normalization per user
         normalized_df = df.copy()
 
-        normalized_df[self.features] = normalized_df.groupby("user")[self.features].transform(
-            safe_z_score
-        )
+        normalized_df[self.features] = normalized_df.groupby("user")[
+            self.features
+        ].transform(lambda x: zscore(x, nan_policy="omit"))
 
         return normalized_df
 
@@ -310,7 +306,11 @@ class BaseClustering(ABC):
             # ---- filter each split independently ------------------------------
             splits = []
             for tag, part in raw_splits:
-                part_filt = self.filter_by_duration(part, min_threshold=self.min_threshold, max_threshold=self.max_threshold)
+                part_filt = self.filter_by_duration(
+                    part,
+                    min_threshold=self.min_threshold,
+                    max_threshold=self.max_threshold,
+                )
                 drops = len(part) - len(part_filt)
                 if drops:
                     print(
@@ -320,7 +320,11 @@ class BaseClustering(ABC):
 
         else:
             # no splitting – just filter once
-            df_filt = self.filter_by_duration(self.df, min_threshold=self.min_threshold, max_threshold=self.max_threshold)
+            df_filt = self.filter_by_duration(
+                self.df,
+                min_threshold=self.min_threshold,
+                max_threshold=self.max_threshold,
+            )
             splits = [("full_data", df_filt)]
 
         # ---- results -----------------------------------------------------
@@ -336,7 +340,6 @@ class BaseClustering(ABC):
             X = norm_part[self.features].copy()
             # rows per user, ascending
             row_counts = df_part.groupby("user").size().sort_values()
-            print(row_counts)
 
             #  3.  choose or initialise model
             if self.run_model_selection:

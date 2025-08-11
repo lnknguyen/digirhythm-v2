@@ -152,7 +152,6 @@ def main(input_fns, output_fn, params, wildcards):
 
     if existing_call_features:
         df = _log_transform(df, existing_call_features)
-    
 
     # Save
     df.to_csv(output_fn)

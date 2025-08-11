@@ -26,7 +26,7 @@ def _filter(df, features):
     if "activity_allday" in features:
         filtered_df = filtered_df[filtered_df["activity_allday"] != 0]
         logging.info(f"Data shape after removing zero activity: {filtered_df.shape}")
-        
+
     if "screen_allday" in features:
         # Remove days with zero screen use
         filtered_df = filtered_df[filtered_df["screen_allday"] != 0]
