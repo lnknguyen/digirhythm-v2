@@ -6,6 +6,9 @@ ALGOS = ['gmm']
 # ranked or unranked signature
 RANKS = ["ranked", "unranked"]
 
+# Different type of distance metric
+DIST_METHOD = ["jsd", "cosine"]
+
 def all_outputs():
 
     outputs = []
@@ -13,7 +16,11 @@ def all_outputs():
     outputs.extend(expand('out/clusters/{study}/{algo}_cluster_centroids.csv', study=STUDIES, algo=ALGOS))
 
     # Signature
-    outputs.extend(expand('out/signature/{study}/signature_{rank}.csv', study=STUDIES, rank=RANKS))
+    outputs.extend(expand('out/signature/{study}/signature_{rank}_{dist}.csv', study=STUDIES, rank=RANKS, dist=DIST_METHOD))
+
+    # Self and Ref distance
+    outputs.extend(expand('out/signature/{study}/signature_d_self_{rank}_{dist}.csv', study=STUDIES, rank=RANKS, dist=DIST_METHOD))
+    outputs.extend(expand('out/signature/{study}/signature_d_ref_{rank}_{dist}.csv', study=STUDIES, rank=RANKS, dist=DIST_METHOD))
 
     # Optional: model selection
     outputs.extend(model_selection_targets())

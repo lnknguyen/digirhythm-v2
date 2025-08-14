@@ -1,19 +1,9 @@
-
 groupby:
-  tesserae:
-    - user
-    - date
-  dtu:
-    - user
-    - date
-  momo:
-    - user
-    - date
-    - group
-  globem:
-    - user
-    - date
-    - wave
+  tesserae: ['user', 'date']
+  dtu: ['user', 'date']
+  momo: ['user', 'date', 'group']
+  globem: ['user', 'date', 'wave']
+
 
 # Sensors to extract
 sensors:
@@ -23,113 +13,113 @@ sensors:
   
 features:
   tesserae: [
-    "activity_night",
-    "activity_morning",
-    "activity_afternoon",
-    "activity_evening",
-    "activity_allday",
-
-    "screen_night",
-    "screen_morning",
-    "screen_afternoon",
-    "screen_evening",
-    "screen_allday",
-
-    "sleep_onset",
-    "sleep_offset",
-    "sleep_duration"
-]
+    "activity_night", "activity_morning", "activity_afternoon", "activity_evening", "activity_allday",
+    "screen_night", "screen_morning", "screen_afternoon", "screen_evening", "screen_allday",
+    "sleep_onset", "sleep_offset", "sleep_duration"
+  ]
 
   globem: [
-    "activity_night",
-    "activity_morning",
-    "activity_afternoon",
-    "activity_evening",
-    "activity_allday",
+    "activity_night", "activity_morning", "activity_afternoon", "activity_evening", "activity_allday",
+    "screen_night", "screen_morning", "screen_afternoon", "screen_evening", "screen_allday",
+    "sleep_onset", "sleep_offset", "sleep_duration"
 
-]
+  ]
 
   momo: [
-    "activity_night",
-    "activity_morning",
-    "activity_afternoon",
-    "activity_evening",
-    "activity_allday",
-
-    "screen_night",
-    "screen_morning",
-    "screen_afternoon",
-    "screen_evening",
-    "screen_allday",
-
-    "sleep_onset",
-    "sleep_offset",
-    "sleep_duration"
-]
+    "activity_night", "activity_morning", "activity_afternoon", "activity_evening", "activity_allday",
+    "screen_night", "screen_morning", "screen_afternoon", "screen_evening", "screen_allday",
+    "sleep_onset", "sleep_offset", "sleep_duration"
+  ]
 
   dtu: [
-    "screen_night",
-    "screen_morning",
-    "screen_afternoon",
-    "screen_evening",
-    "screen_allday",
-
-    "sleep_onset",
-    "sleep_offset",
-    "sleep_duration"
-]
+    "screen_night", "screen_morning", "screen_afternoon", "screen_evening", "screen_allday",
+    "sleep_onset", "sleep_offset", "sleep_duration"
+  ]
 
 
 # CLUSTERING SETTINGS
 cluster_settings:
   tesserae:
-    algorithm: gmm 
-    split: False  # Apply clustering on data splits instead of the full dataset
-    strategy: random  # Split strategy, only available if split is turned on
-    group_col: null # grouping col, used for splitting the dataset
-    min_threshold: 14 # min number of records needed to be included in the analysis
-    max_threshold: 365 # max number of records per user, if user has more observation than this, it will be capped at this threshold
-    run_model_selection: False # Turn on this flag if model selection is required
-    optimal_gmm_settings:
-        n_components: 8
-  momo:
-    algorithm: gmm 
-    split: False  
-    strategy: random 
+    algorithm: gmm
+    split: False
+    strategy: random
     group_col: null
-    min_threshold: 14 # number of records needed to be included in the analysis
+    min_threshold: 14
     max_threshold: 365
     run_model_selection: False
     optimal_gmm_settings:
-        n_components: 8
-        
-  globem:
-    algorithm: gmm 
-    split: True  
-    min_threshold: 14 # number of records needed to be included in the analysis
-    max_threshold: 365
-    strategy: group 
-    group_col: wave
+      n_components: 8
+      covariance_type: 'full'
+      max_iter: 1000
+      tol: 0.001
+      n_init: 10    
 
+  momo:
+    algorithm: gmm
+    split: False
+    strategy: random
+    group_col: null
+    min_threshold: 14
+    max_threshold: 365
     run_model_selection: False
     optimal_gmm_settings:
-        n_components: 14
+      n_components: 8
+      covariance_type: 'full'
+      max_iter: 1000
+      tol: 0.001
+      n_init: 10
+
+  globem:
+    algorithm: gmm
+    split: True
+    strategy: group
+    group_col: wave
+    min_threshold: 14
+    max_threshold: 365
+    run_model_selection: False
+    optimal_gmm_settings:
+      n_components: 8
+      covariance_type: 'full'
+      max_iter: 1000
+      tol: 0.001
+      n_init: 10
 
   dtu:
-    algorithm: gmm 
-    split: False  
-    min_threshold: 14 # number of records needed to be included in the analysis
-    max_threshold: 365
-    strategy: group 
+    algorithm: gmm
+    split: False
+    strategy: group
     group_col: null
+    min_threshold: 14
+    max_threshold: 365
+    run_model_selection: False
+    optimal_gmm_settings:
+      n_components: 8
+      covariance_type: 'full'
+      max_iter: 1000
+      tol: 0.001
+      n_init: 10
 
-    run_model_selection: True
-    optimal_gmm_settings: # This will be ignored if run_model_selection is set to True
-        n_components: 8
-
-# CLUSTERING SETTINGS
 signature:
-    ranked: 
-        - ranked
-        - unranked
-    
+    ranked: True
+    dist_method: jsd # distance method to use for signature; default is 'jsd' (Jensen-Shannon Divergence, suitable for probability distributions), 'cosine' measures angular similarity (useful for vector comparison)
+
+    tesserae:
+        split: True # whether to split the data by study
+        splits: ['split_1', 'split_2', 'split_3']   
+        split_col: null # if None, will use the default split from cluster_settings
+        threshold_days: 270 # days to consider a user active
+    momo:
+      split: False # whether to split the data by study
+      splits: ['split_1', 'split_2', 'split_3']   
+      split_col: null # if None, will use the default split from cluster_settings
+      threshold_days: 270 # days to consider a user active
+    globem:
+      split: False # whether to split the data by study
+      splits: ['split_1', 'split_2', 'split_3']   
+      split_col: null # if None, will use the default split from cluster_settings
+      threshold_days: 14 # days to consider a user active
+    dtu:
+      split: False # whether to split the data by study
+      splits: ['split_1', 'split_2', 'split_3']   
+      split_col: null # if None, will use the default split from cluster_settings
+      threshold_days: 270 # days to consider a user active  

@@ -181,6 +181,8 @@ class BaseClustering(ABC):
             self.features
         ].transform(lambda x: zscore(x, nan_policy="omit"))
 
+        # Fill na with zero, meaning that no feature was found for user in this feature
+        normalized_df[self.features] = normalized_df[self.features].fillna(0)
         return normalized_df
 
     @abstractmethod

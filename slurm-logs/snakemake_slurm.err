@@ -1,6 +1,5 @@
 
-Lmod is automatically replacing "scicomp-python-env/2025.1" with
-"mamba/2025.1".
+Lmod is automatically replacing "scicomp-python-env/2025.1" with "mamba/2025.1".
 
 Assuming unrestricted shared filesystem usage.
 Building DAG of jobs...
@@ -9,101 +8,137 @@ Using shell: /usr/bin/bash
 Provided cores: 4
 Rules claiming more threads will be scaled down.
 Job stats:
-job          count
----------  -------
-all              1
-cluster          1
-signature        2
-total            4
+job                       count
+----------------------  -------
+all                           1
+clean_features                1
+cluster                       4
+rename_and_concatenate        1
+signature                    16
+total                        23
 
 Select jobs to execute...
-Execute 1 jobs...
+Execute 4 jobs...
 
-[Wed Aug  6 14:41:27 2025]
+[Thu Aug 14 02:04:13 2025]
+localrule rename_and_concatenate:
+    input: data/interim/globem/screen_4epochs.csv, data/interim/globem/steps_4epochs.csv, data/interim/globem/call_4epochs.csv, data/interim/globem/sleep_4epochs.csv
+    output: data/processed/globem/all_features.csv
+    jobid: 11
+    reason: Updated input files: data/interim/globem/steps_4epochs.csv, data/interim/globem/sleep_4epochs.csv, data/interim/globem/screen_4epochs.csv, data/interim/globem/call_4epochs.csv
+    wildcards: study=globem
+    resources: tmpdir=/tmp
+
+[Thu Aug 14 02:04:13 2025]
 localrule cluster:
-    input: data/processed/globem/all_features_clean.csv
-    output: out/clusters/globem/gmm_cluster.csv, out/clusters/globem/gmm_cluster_centroids.csv, out/clusters/globem/gmm_cluster_covariances.csv
-    jobid: 9
+    input: data/processed/tesserae/all_features_clean.csv
+    output: out/clusters/tesserae/gmm_cluster.csv, out/clusters/tesserae/gmm_cluster_centroids.csv, out/clusters/tesserae/gmm_cluster_covariances.csv
+    jobid: 1
     reason: Params have changed since last execution
-    wildcards: study=globem, algo=gmm
+    wildcards: study=tesserae, algo=gmm
+    resources: tmpdir=/tmp
+
+[Thu Aug 14 02:04:13 2025]
+localrule cluster:
+    input: data/processed/momo/all_features_clean.csv
+    output: out/clusters/momo/gmm_cluster.csv, out/clusters/momo/gmm_cluster_centroids.csv, out/clusters/momo/gmm_cluster_covariances.csv
+    jobid: 8
+    reason: Params have changed since last execution
+    wildcards: study=momo, algo=gmm
+    resources: tmpdir=/tmp
+
+[Thu Aug 14 02:04:13 2025]
+localrule cluster:
+    input: data/processed/dtu/all_features_clean.csv
+    output: out/clusters/dtu/gmm_cluster.csv, out/clusters/dtu/gmm_cluster_centroids.csv, out/clusters/dtu/gmm_cluster_covariances.csv
+    jobid: 16
+    reason: Params have changed since last execution
+    wildcards: study=dtu, algo=gmm
     resources: tmpdir=/tmp
 
 Activating conda environment: .snakemake/conda/ab5233add898528c77eec06aa91604d6_
 Activating conda environment: .snakemake/conda/ab5233add898528c77eec06aa91604d6_
-[Wed Aug  6 14:41:56 2025]
-Finished job 9.
-1 of 4 steps (25%) done
-Select jobs to execute...
-Execute 2 jobs...
-
-[Wed Aug  6 14:41:56 2025]
-localrule signature:
-    input: out/clusters/globem/gmm_cluster.csv
-    output: out/signature/globem/signature_ranked.csv, out/signature/globem/signature_d_self_ranked.csv, out/signature/globem/signature_d_ref_ranked.csv
-    jobid: 25
-    reason: Input files updated by another job: out/clusters/globem/gmm_cluster.csv
-    wildcards: study=globem, rank=ranked
-    resources: tmpdir=/tmp
-
 Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
-
-[Wed Aug  6 14:41:56 2025]
-localrule signature:
-    input: out/clusters/globem/gmm_cluster.csv
-    output: out/signature/globem/signature_unranked.csv, out/signature/globem/signature_d_self_unranked.csv, out/signature/globem/signature_d_ref_unranked.csv
-    jobid: 26
-    reason: Input files updated by another job: out/clusters/globem/gmm_cluster.csv
-    wildcards: study=globem, rank=unranked
-    resources: tmpdir=/tmp
-
+Activating conda environment: .snakemake/conda/ab5233add898528c77eec06aa91604d6_
+Activating conda environment: .snakemake/conda/ab5233add898528c77eec06aa91604d6_
+Activating conda environment: .snakemake/conda/ab5233add898528c77eec06aa91604d6_
+Activating conda environment: .snakemake/conda/ab5233add898528c77eec06aa91604d6_
 Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
-Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
-Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
-2025-08-06 14:42:40,586 - INFO - Loading data...
-2025-08-06 14:42:40,586 - INFO - Loading data...
-2025-08-06 14:42:41,500 - INFO - Processing with ranked=True, method=jsd
-2025-08-06 14:42:41,504 - INFO - Processing with ranked=False, method=cosine
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmphhechpgz.signature.py:65: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
-  df.groupby(["user", "split", "Cluster"]).size().reset_index(name="count")
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpme1b9gnw.signature.py:65: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
-  df.groupby(["user", "split", "Cluster"]).size().reset_index(name="count")
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmphhechpgz.signature.py:68: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
-  user_signature["percentage"] = user_signature.groupby(["user", "split"])[
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpme1b9gnw.signature.py:68: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
-  user_signature["percentage"] = user_signature.groupby(["user", "split"])[
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmphhechpgz.signature.py:78: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
-  user_signature.sort_values(
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpme1b9gnw.signature.py:94: FutureWarning: The default value of observed=False is deprecated and will change to observed=True in a future version of pandas. Specify observed=False to silence this warning and retain the current behavior
-  user_signature = user_signature.pivot_table(
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmphhechpgz.signature.py:87: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
-  user_signature.groupby(["user", "split"]).cumcount() + 1
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmphhechpgz.signature.py:90: FutureWarning: The default value of observed=False is deprecated and will change to observed=True in a future version of pandas. Specify observed=False to silence this warning and retain the current behavior
-  user_signature = user_signature.pivot_table(
-2025-08-06 14:42:43,370 - INFO - Computing d_self...
-2025-08-06 14:42:43,370 - INFO - Computing d_self...
-2025-08-06 14:42:43,417 - INFO - Computing d_ref...
-2025-08-06 14:42:43,428 - INFO - Computing d_ref...
-2025-08-06 14:42:43,485 - INFO - Saving outputs...
-2025-08-06 14:42:43,486 - INFO - Saving outputs...
-2025-08-06 14:42:43,644 - INFO - Done.
-2025-08-06 14:42:43,644 - INFO - Done.
-[Wed Aug  6 14:42:47 2025]
-Finished job 25.
-2 of 4 steps (50%) done
-[Wed Aug  6 14:42:47 2025]
-Finished job 26.
-3 of 4 steps (75%) done
+[Thu Aug 14 02:04:30 2025]
+Finished job 11.
+1 of 23 steps (4%) done
 Select jobs to execute...
 Execute 1 jobs...
 
-[Wed Aug  6 14:42:47 2025]
-localrule all:
-    input: out/clusters/tesserae/gmm_cluster.csv, out/clusters/momo/gmm_cluster.csv, out/clusters/globem/gmm_cluster.csv, out/clusters/dtu/gmm_cluster.csv, out/clusters/tesserae/gmm_cluster_centroids.csv, out/clusters/momo/gmm_cluster_centroids.csv, out/clusters/globem/gmm_cluster_centroids.csv, out/clusters/dtu/gmm_cluster_centroids.csv, out/signature/tesserae/signature_ranked.csv, out/signature/tesserae/signature_unranked.csv, out/signature/momo/signature_ranked.csv, out/signature/momo/signature_unranked.csv, out/signature/globem/signature_ranked.csv, out/signature/globem/signature_unranked.csv, out/signature/dtu/signature_ranked.csv, out/signature/dtu/signature_unranked.csv, out/model_selection/dtu/gmm_model_selection.csv
-    jobid: 0
-    reason: Input files updated by another job: out/clusters/globem/gmm_cluster_centroids.csv, out/clusters/globem/gmm_cluster.csv, out/signature/globem/signature_unranked.csv, out/signature/globem/signature_ranked.csv
+[Thu Aug 14 02:04:30 2025]
+localrule clean_features:
+    input: data/processed/globem/all_features.csv
+    output: data/processed/globem/all_features_clean.csv
+    jobid: 10
+    reason: Input files updated by another job: data/processed/globem/all_features.csv
+    wildcards: study=globem
     resources: tmpdir=/tmp
 
-[Wed Aug  6 14:42:47 2025]
-Finished job 0.
-4 of 4 steps (100%) done
-Complete log: .snakemake/log/2025-08-06T144123.237533.snakemake.log
+Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
+[Thu Aug 14 02:04:31 2025]
+Finished job 8.
+2 of 23 steps (9%) done
+Select jobs to execute...
+Execute 1 jobs...
+
+[Thu Aug 14 02:04:31 2025]
+localrule signature:
+    input: out/clusters/momo/gmm_cluster.csv
+    output: out/signature/momo/signature_ranked_jsd.csv, out/signature/momo/signature_d_self_ranked_jsd.csv, out/signature/momo/signature_d_ref_ranked_jsd.csv
+    jobid: 25
+    reason: Missing output files: out/signature/momo/signature_ranked_jsd.csv, out/signature/momo/signature_d_ref_ranked_jsd.csv, out/signature/momo/signature_d_self_ranked_jsd.csv; Input files updated by another job: out/clusters/momo/gmm_cluster.csv
+    wildcards: study=momo, rank=ranked, dist=jsd
+    resources: tmpdir=/tmp
+
+RuleException:
+WorkflowError in file /scratch/work/luongn1/digirhythm-v2/workflow/rules/signature.smk, line 15:
+Failed to open source file /scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/signature.py
+FileNotFoundError: [Errno 2] No such file or directory: '/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/signature.py'
+[Thu Aug 14 02:04:31 2025]
+Error in rule signature:
+    jobid: 25
+    input: out/clusters/momo/gmm_cluster.csv
+    output: out/signature/momo/signature_ranked_jsd.csv, out/signature/momo/signature_d_self_ranked_jsd.csv, out/signature/momo/signature_d_ref_ranked_jsd.csv
+    conda-env: /scratch/work/luongn1/digirhythm-v2/.snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
+
+Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
+2025-08-14 02:04:36,101 - INFO - All required features are present in the data.
+2025-08-14 02:04:36,101 - INFO - Features identified for filling missing call data: []
+2025-08-14 02:04:36,101 - INFO - Initial data shape before filtering: (69602, 55)
+2025-08-14 02:04:36,105 - INFO - Feature 'activity_night' has 0 NaN observations
+2025-08-14 02:04:36,105 - INFO - Feature 'activity_morning' has 26789 NaN observations
+2025-08-14 02:04:36,105 - INFO - Feature 'activity_afternoon' has 26788 NaN observations
+2025-08-14 02:04:36,105 - INFO - Feature 'activity_evening' has 26787 NaN observations
+2025-08-14 02:04:36,105 - INFO - Feature 'activity_allday' has 26783 NaN observations
+2025-08-14 02:04:36,105 - INFO - Feature 'screen_night' has 0 NaN observations
+2025-08-14 02:04:36,105 - INFO - Feature 'screen_morning' has 20546 NaN observations
+2025-08-14 02:04:36,105 - INFO - Feature 'screen_afternoon' has 18165 NaN observations
+2025-08-14 02:04:36,105 - INFO - Feature 'screen_evening' has 18619 NaN observations
+2025-08-14 02:04:36,105 - INFO - Feature 'screen_allday' has 17504 NaN observations
+2025-08-14 02:04:36,105 - INFO - Feature 'sleep_onset' has 31523 NaN observations
+2025-08-14 02:04:36,105 - INFO - Feature 'sleep_offset' has 31585 NaN observations
+2025-08-14 02:04:36,105 - INFO - Feature 'sleep_duration' has 31523 NaN observations
+2025-08-14 02:04:36,124 - INFO - Data shape after removing NaNs based on features: (31909, 55)
+2025-08-14 02:04:36,128 - INFO - Data shape after removing zero activity: (31909, 55)
+2025-08-14 02:04:36,129 - INFO - Data shape after removing zero screen use: (31909, 55)
+2025-08-14 02:04:36,132 - INFO - Data shape after removing negative sleep duration: (31909, 55)
+2025-08-14 02:04:36,146 - INFO - Final data shape before saving to CSV: (31909, 55)
+[Thu Aug 14 02:04:37 2025]
+Finished job 10.
+3 of 23 steps (13%) done
+[Thu Aug 14 02:04:40 2025]
+Finished job 1.
+4 of 23 steps (17%) done
+[Thu Aug 14 02:04:41 2025]
+Finished job 16.
+5 of 23 steps (22%) done
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: .snakemake/log/2025-08-14T020410.767487.snakemake.log
+WorkflowError:
+At least one job did not complete successfully.
