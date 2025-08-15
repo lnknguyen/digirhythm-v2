@@ -139,7 +139,7 @@ def d_self(signature_df: pd.DataFrame, splits=['split_1', 'split_2', 'split_3'],
 def d_ref(signature_df: pd.DataFrame,
           splits=['split_1', 'split_2', 'split_3'],
           method: str = "jsd",
-          return_: str = "full") -> pd.DataFrame | pd.Series:
+          return_: str = "full") -> pd.DataFrame:
     """
     Build a user×user distance matrix by averaging distances across the given splits.
     Returns the upper triangle by default (NaNs below the diagonal).

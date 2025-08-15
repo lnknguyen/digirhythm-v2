@@ -74,7 +74,7 @@ cluster_settings:
     split: True
     strategy: group
     group_col: wave
-    min_threshold: 14
+    min_threshold: 60
     max_threshold: 365
     run_model_selection: False
     optimal_gmm_settings:

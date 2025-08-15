@@ -1,0 +1,268 @@
+import pandas as pd
+import numpy as np
+from scipy.spatial.distance import jensenshannon, cosine
+from collections import defaultdict
+from itertools import combinations
+import os
+import seaborn as sns
+import matplotlib.pyplot as plt
+from collections import defaultdict
+import logging
+
+# ------- Distance Functions -------
+
+def dist_func(p, q, method="jsd"):
+    if method == "jsd":
+        return jensenshannon(p, q)
+    elif method == "cosine":
+        return cosine(p, q)
+    else:
+        raise ValueError(f"Unknown distance method: {method}")
+
+def _flat(arr_like):
+    # fillna(0) works for DataFrame/Series; np.asarray handles ndarray
+    return np.asarray(arr_like.fillna(0).values, dtype=float).ravel()
+
+# ------- Data Filtering and Splitting -------
+
+def filter_by_threshold(df: pd.DataFrame, threshold_days: int = 30 * 9) -> pd.DataFrame:
+    df = df.copy()
+    df["date"] = pd.to_datetime(df["date"], errors="coerce")
+
+    user_day_counts = df.groupby("user")["date"].nunique()
+    valid_users = user_day_counts[user_day_counts >= threshold_days].index
+
+    return df[df["user"].isin(valid_users)]
+
+
+def split_chunk(
+    df: pd.DataFrame, window: int, id_col: str = "user", split_col = None
+) -> pd.DataFrame:
+    df = df.copy()
+    df["date"] = pd.to_datetime(df["date"], errors="coerce")
+    df = df.sort_values(by=[id_col, "date"])
+    df["day_number"] = df.groupby(id_col).cumcount()
+
+    if split_col == None:
+        # Make 3 splits
+        split_labels = ["split_1", "split_2", "split_3"]
+        df["split"] = pd.cut(
+            df["day_number"],
+            bins=[-1, window - 1, 2 * window - 1, 3 * window - 1, float("inf")],
+            labels=split_labels + ["rest"],
+        )
+    else:
+        df["split"] = df[split_col]
+
+    df = df[df["split"] != "rest"]
+    df = df.drop(columns=["day_number"])
+
+    return df
+
+def transition_matrix(df, user_col="user", date_col="date", cluster_col="Cluster",
+                      states=[0,1,2,3,4,5,6,7], normalize=True):
+    d = df[[user_col, date_col, cluster_col]].copy()
+    d[date_col] = pd.to_datetime(d[date_col])
+    d = d.sort_values([user_col, date_col], kind="mergesort")
+
+    # build consecutive pairs (within user if multiple users in df)
+    d["from_cluster"] = d[cluster_col]
+    d["to_cluster"]   = d.groupby(user_col, sort=False)[cluster_col].shift(-1)
+    pairs = d.dropna(subset=["to_cluster"])
+
+    # all desired states (ensure the full square)
+    if states is None:
+        if isinstance(d[cluster_col], pd.CategoricalDtype):
+            states = list(d[cluster_col].cat.categories)
+        else:
+            states = sorted(pd.unique(d[cluster_col].dropna()))
+    states = list(states)
+
+    # count transitions
+    mat = (pairs.groupby(["from_cluster", "to_cluster"])
+                .size()
+                .unstack())
+
+    # reindex to full square
+    mat = mat.reindex(index=states, columns=states)
+
+    # mark states entirely absent in the data as NaN rows/cols
+    present_from = set(pairs["from_cluster"].unique())
+    present_to   = set(pairs["to_cluster"].unique())
+    absent = [s for s in states if (s not in present_from and s not in present_to)]
+    if absent:
+        mat.loc[absent, :] = np.nan
+        mat.loc[:, absent] = np.nan
+
+    # fill remaining missing cells (unseen transitions between present states) with 0
+    mat = mat.fillna(0.0).astype(float)
+
+    if normalize:
+        # row-normalize where there is data; keep NaN rows as NaN
+        sums = mat.sum(axis=1)
+        mat = mat.div(sums.replace(0, np.nan), axis=0)
+
+    return mat, pairs
+
+def _flat(arr_like):
+    # fillna(0) works for DataFrame/Series; np.asarray handles ndarray
+    return np.asarray(arr_like.fillna(0).values, dtype=float).ravel()
+
+def d_self_transition(all_mats, splits=['split_1', 'split_2', 'split_3'], method="jsd") -> pd.DataFrame:
+    """
+    Within-user distances across splits.
+    Returns: DataFrame with columns ['user', 'd_self']
+    d_self = mean distance between splits (pairwise average).
+    """
+
+    users = []
+    distances = []
+
+    for user, trans_mat in all_mats.items():
+        try:
+            mats = [ _flat(trans_mat[s]) for s in splits ]
+            if len(mats) == 3:
+                d12 = dist_func(mats[0], mats[1], method)
+                d23 = dist_func(mats[1], mats[2], method)
+                # d_self is average of d12 and d23
+                d_s = 0.5 * (d12 + d23)
+            elif len(mats) == 2:
+                d_s = dist_func(mats[0], mats[1], method)
+            else:
+                raise ValueError(f"d_self_transition only supports 2 or 3 splits, got {len(mats)}")
+            users.append(user)
+            distances.append(d_s)
+        except KeyError:
+            continue
+
+    return pd.DataFrame({"user": users, "d_self": distances})
+
+def d_ref_transition(all_mats, splits=['split_1', 'split_2', 'split_3'], method="jsd") -> pd.DataFrame:
+    """
+    Between-user reference distances: match split k vs split k.
+    Returns: DataFrame with columns ['user_i', 'user_j', 'd_ref']
+    d_ref = mean distance across splits (pairwise average).
+    """
+    from scipy.spatial.distance import jensenshannon, cosine
+
+    def dist_func(p, q, method="jsd"):
+        if method == "jsd":
+            return jensenshannon(p, q)
+        elif method == "cosine":
+            return cosine(p, q)
+        else:
+            raise ValueError(f"Unknown distance method: {method}")
+
+    users = list(all_mats.keys())
+    results = []
+
+    # Pre-flatten for speed
+    flat = {u: {s: _flat(m[s]) for s in splits if s in m} for u, m in all_mats.items()}
+
+    for i, ui in enumerate(users):
+        for uj in users[i+1:]:
+            dists = []
+            for s in splits:
+                if s in flat[ui] and s in flat[uj]:
+                    dists.append(dist_func(flat[ui][s], flat[uj][s], method))
+            if len(dists) == len(splits):
+                d_ref = sum(dists) / len(dists)
+                results.append({"user_i": ui, "user_j": uj, "d_ref": d_ref})
+
+    return pd.DataFrame(results)
+
+# ------- Main Workflow -------
+
+
+def main(input_fns, output_fns, params):
+    logging.info("Loading data...")
+    data = pd.read_csv(input_fns[0])
+
+    dist_func = params.dist_method
+    study = snakemake.wildcards.study
+
+    print(f"Distance Method: {dist_func}, study: {snakemake.wildcards.study}")
+
+    all_mats = defaultdict(dict)
+
+    if study == 'globem':
+        target_waves = [['INS-W_1', 'INS-W_2'],['INS-W_2', 'INS-W_3'],['INS-W_3', 'INS-W_4']]
+
+        signatures, dselfs, drefs = {}, {}, {}
+        # Create dictionary keys
+        keys = ["_".join(t) for t in target_waves]
+
+        for i, target in enumerate(target_waves):
+            
+            # users present in all target waves
+            users_in_waves = (
+                data[data['wave'].isin(target)]
+                .drop_duplicates(['user', 'wave'])
+                .groupby('user')['wave'].nunique()
+                .pipe(lambda s: s[s == len(target)].index)
+            )
+            
+            filtered_clusters_df = data[(data.user.isin(users_in_waves)) & (data.wave.isin(target))]
+            for (user, wave), g in filtered_clusters_df.groupby(["user", "wave"], sort=False):
+                mat, _ = transition_matrix(g)
+                all_mats[user][wave] = mat
+
+            # Dictionary contains user, split, and trans matrix
+            all_mats = dict(all_mats)
+
+            logging.info(f"Processing waves: {target} with {len(users_in_waves)} users")
+
+            logging.info("Calculating self-distances...")
+            d_self_df = d_self_transition(all_mats, splits=target, method=dist_func)
+
+            logging.info("Calculating reference distances...")
+            d_ref_df = d_ref_transition(all_mats, splits=target, method=dist_func)
+
+            # Create key
+            dselfs[keys[i]] = d_self_df
+            drefs[keys[i]] = d_ref_df
+
+
+        # Combine all dselfs and drefs into DataFrames
+        all_mats_df = pd.concat({(user, wave): mat for (user, wave), mat in all_mats.items()}, names=["user", "wave"]).reset_index()
+        combined_dself = pd.concat(dselfs, names=["wave"], keys=dselfs.keys()).reset_index(level=0).rename(columns={"level_0": "wave"})
+        combined_dref = pd.concat(drefs, names=["wave"], keys=drefs.keys()).reset_index(level=0).rename(columns={"level_0": "wave"})
+        
+        
+        # Save to output files
+        all_mats_df.to_csv(output_fns[0], index=False)
+        combined_dself.to_csv(output_fns[1], index=False)
+        combined_dref.to_csv(output_fns[2])
+    else:
+
+        
+        logging.info("Filtering data by threshold...")
+        data = filter_by_threshold(data, params.threshold_days)
+
+        logging.info("Splitting data into chunks...")
+        window = int(params.threshold_days / 3)
+        data = split_chunk(data, window = window, id_col="user")
+
+        logging.info("Calculating user signatures...")
+        for (user, split), g in filtered_clusters_df.groupby(["user", "split"], sort=False):
+                mat, _ = transition_matrix(g)
+                all_mats[user][split] = mat
+
+        logging.info("Calculating self-distances...")
+        d_self_df = d_self_transition(all_mats, splits=params.splits, method=dist_func)
+
+        logging.info("Calculating reference distances...")
+        d_ref_df = d_ref_transition(all_mats, splits=params.splits, method=dist_func)
+
+        logging.info("Saving results...")
+
+        all_mats_df = pd.concat({(user, split): mat for (user, split), mat in all_mats.items()}, names=["user", "split"]).reset_index()
+        all_mats_df.to_csv(output_fns[0], index=False)
+        d_self_df.to_csv(output_fns[1], index=False)
+        d_ref_df.to_csv(output_fns[2])
+
+        logging.info("Processing complete.")
+
+    
+if __name__ == "__main__":
+    main(snakemake.input, snakemake.output, snakemake.params)
