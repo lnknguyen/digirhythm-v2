@@ -13,7 +13,7 @@ logging.basicConfig(
 def dist_func(p, q, method="jsd"):
     """
     Generalized distance function.
-    Supports 'jsd' (Jensen-Shannon) and 'cosine' 
+    Supports 'jsd' (Jensen-Shannon) and 'cosine'
     """
     p = np.asarray(p)
     q = np.asarray(q)
@@ -21,7 +21,7 @@ def dist_func(p, q, method="jsd"):
     if method == "jsd":
         return jensenshannon(p, q, base=2)
     elif method == "cosine":
-        return cosine(p,q)
+        return cosine(p, q)
     else:
         raise ValueError(f"Unknown distance method: {method}")
 
@@ -36,10 +36,8 @@ def filter_by_threshold(df: pd.DataFrame, threshold_days: int) -> pd.DataFrame:
     return df[df["user"].isin(valid_users)]
 
 
-def split_chunk(
-    df: pd.DataFrame, window: int, id_col: str = "user"
-) -> pd.DataFrame:
-    
+def split_chunk(df: pd.DataFrame, window: int, id_col: str = "user") -> pd.DataFrame:
+
     df = df.copy()
     df["date"] = pd.to_datetime(df["date"], errors="coerce")
     df = df.sort_values(by=[id_col, "date"])
@@ -60,11 +58,12 @@ def split_chunk(
 
     return df
 
+
 def signature(df: pd.DataFrame, ranked: bool) -> pd.DataFrame:
 
     # Assert: dataset must contain a 'split' column
-    assert 'split' in df.columns, "Expected column 'split' in `df`."
-    
+    assert "split" in df.columns, "Expected column 'split' in `df`."
+
     user_signature = (
         df.groupby(["user", "split", "Cluster"]).size().reset_index(name="count")
     )
@@ -82,9 +81,9 @@ def signature(df: pd.DataFrame, ranked: bool) -> pd.DataFrame:
             user_signature.sort_values(
                 ["user", "split", "percentage"], ascending=[True, True, False]
             )
-            #.groupby(["user", "split"])
-            #.head(5)
-            #.reset_index(drop=True)
+            # .groupby(["user", "split"])
+            # .head(5)
+            # .reset_index(drop=True)
         )
 
         user_signature["rank"] = (
@@ -104,10 +103,15 @@ def signature(df: pd.DataFrame, ranked: bool) -> pd.DataFrame:
 
     return user_signature
 
-def d_self(signature_df: pd.DataFrame, splits=['split_1', 'split_2', 'split_3'], method: str = "jsd") -> pd.DataFrame:
+
+def d_self(
+    signature_df: pd.DataFrame,
+    splits=["split_1", "split_2", "split_3"],
+    method: str = "jsd",
+) -> pd.DataFrame:
     users = []
     distances = []
-    
+
     for user, group in signature_df.groupby(level="user"):
         try:
 
@@ -115,7 +119,7 @@ def d_self(signature_df: pd.DataFrame, splits=['split_1', 'split_2', 'split_3'],
                 dist1 = group.loc[(user, splits[0])].values
                 dist2 = group.loc[(user, splits[1])].values
                 dist3 = group.loc[(user, splits[2])].values
-                
+
                 d_s = 0.5 * (
                     dist_func(dist1, dist2, method) + dist_func(dist2, dist3, method)
                 )
@@ -128,18 +132,21 @@ def d_self(signature_df: pd.DataFrame, splits=['split_1', 'split_2', 'split_3'],
                 raise ValueError(
                     f"d_self only supports exactly 2 or 3 splits, got {len(splits)}"
                 )
-                
+
             users.append(user)
             distances.append(d_s)
         except KeyError:
             continue
 
     return pd.DataFrame({"user": users, "d_self": distances})
-    
-def d_ref(signature_df: pd.DataFrame,
-          splits=['split_1', 'split_2', 'split_3'],
-          method: str = "jsd",
-          return_: str = "full") -> pd.DataFrame:
+
+
+def d_ref(
+    signature_df: pd.DataFrame,
+    splits=["split_1", "split_2", "split_3"],
+    method: str = "jsd",
+    return_: str = "full",
+) -> pd.DataFrame:
     """
     Build a user×user distance matrix by averaging distances across the given splits.
     Returns the upper triangle by default (NaNs below the diagonal).
@@ -183,13 +190,15 @@ def d_ref(signature_df: pd.DataFrame,
     if return_ == "condensed":
         A = d_ref_df.to_numpy()
         iu, ju = np.triu_indices_from(A, k=1)
-        idx = pd.MultiIndex.from_arrays([users.take(iu), users.take(ju)],
-                                        names=["user_i", "user_j"])
+        idx = pd.MultiIndex.from_arrays(
+            [users.take(iu), users.take(ju)], names=["user_i", "user_j"]
+        )
         return pd.Series(A[iu, ju], index=idx, name="d_ref").dropna()
 
     # default: upper triangle DataFrame (NaN below diagonal, no diagonal)
     mask = np.triu(np.ones(d_ref_df.shape, dtype=bool), k=1)
     return d_ref_df.where(mask)
+
 
 def main(input_fns, output_fns, params):
     logging.info("Loading data...")
@@ -199,32 +208,45 @@ def main(input_fns, output_fns, params):
     dist_func = params.dist_method
     study = snakemake.wildcards.study
 
-    print(f"Ranked: {ranked}, Distance Method: {dist_func}, study: {snakemake.wildcards.study}")
+    print(
+        f"Ranked: {ranked}, Distance Method: {dist_func}, study: {snakemake.wildcards.study}"
+    )
 
-    if study == 'globem':
-        target_waves = [['INS-W_1', 'INS-W_2'],['INS-W_2', 'INS-W_3'],['INS-W_3', 'INS-W_4']]
+    if study == "globem":
+        target_waves = [
+            ["INS-W_1", "INS-W_2"],
+            ["INS-W_2", "INS-W_3"],
+            ["INS-W_3", "INS-W_4"],
+        ]
 
         signatures, dselfs, drefs = {}, {}, {}
         # Create dictionary keys
         keys = ["_".join(t) for t in target_waves]
 
         for i, target in enumerate(target_waves):
-            
+
             # users present in all target waves
             users_in_waves = (
-                data[data['wave'].isin(target)]
-                .drop_duplicates(['user', 'wave'])
-                .groupby('user')['wave'].nunique()
+                data[data["wave"].isin(target)]
+                .drop_duplicates(["user", "wave"])
+                .groupby("user")["wave"]
+                .nunique()
                 .pipe(lambda s: s[s == len(target)].index)
             )
-            
-            filtered_clusters_df = data[(data.user.isin(users_in_waves)) & (data.wave.isin(target))]
-            
+
+            filtered_clusters_df = data[
+                (data.user.isin(users_in_waves)) & (data.wave.isin(target))
+            ]
+
             logging.info(f"Processing waves: {target} with {len(users_in_waves)} users")
 
+            # Assign wave to 'split', as split 
+            # column will be used to compute signature
+            filtered_clusters_df['split'] = filtered_clusters_df['wave']
+            
             logging.info("Calculating user signatures...")
             signature_df = signature(filtered_clusters_df, ranked)
-            #signature_df['wave'] = target
+            
 
             logging.info("Calculating self-distances...")
             d_self_df = d_self(signature_df, splits=target, method=dist_func)
@@ -238,10 +260,22 @@ def main(input_fns, output_fns, params):
             signatures[keys[i]] = signature_df
 
         # Combine all dselfs and drefs into DataFrames
-        combined_dself = pd.concat(dselfs, names=["wave"], keys=dselfs.keys()).reset_index(level=0).rename(columns={"level_0": "wave"})
-        combined_dref = pd.concat(drefs, names=["wave"], keys=drefs.keys()).reset_index(level=0).rename(columns={"level_0": "wave"})
-        combined_signatures = pd.concat(signatures, names=["wave"], keys=signatures.keys()).reset_index(level=0).rename(columns={"level_0": "wave"})
-        
+        combined_dself = (
+            pd.concat(dselfs, names=["wave"], keys=dselfs.keys())
+            .reset_index(level=0)
+            .rename(columns={"level_0": "wave"})
+        )
+        combined_dref = (
+            pd.concat(drefs, names=["wave"], keys=drefs.keys())
+            .reset_index(level=0)
+            .rename(columns={"level_0": "wave"})
+        )
+        combined_signatures = (
+            pd.concat(signatures, names=["wave"], keys=signatures.keys())
+            .reset_index(level=0)
+            .rename(columns={"level_0": "wave"})
+        )
+
         # Save to output files
         combined_signatures.to_csv(output_fns[0])
         combined_dself.to_csv(output_fns[1], index=False)
@@ -252,13 +286,13 @@ def main(input_fns, output_fns, params):
 
         logging.info("Splitting data into chunks...")
         window = int(params.threshold_days / 3)
-        data = split_chunk(data, window = window, id_col="user")
+        data = split_chunk(data, window=window, id_col="user")
 
         logging.info("Calculating user signatures...")
         user_signature = signature(data, ranked)
 
         logging.info("Calculating self-distances...")
-        d_self_df = d_self(user_signature, splits=params.splits, method=dist_func)  
+        d_self_df = d_self(user_signature, splits=params.splits, method=dist_func)
 
         logging.info("Calculating reference distances...")
         d_ref_df = d_ref(user_signature, splits=params.splits, method=dist_func)
@@ -270,6 +304,6 @@ def main(input_fns, output_fns, params):
 
         logging.info("Processing complete.")
 
-    
+
 if __name__ == "__main__":
     main(snakemake.input, snakemake.output, snakemake.params)

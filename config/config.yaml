@@ -41,7 +41,7 @@ features:
 cluster_settings:
   tesserae:
     algorithm: gmm
-    split: False
+    split: False # 
     strategy: random
     group_col: null
     min_threshold: 14
@@ -71,10 +71,10 @@ cluster_settings:
 
   globem:
     algorithm: gmm
-    split: True
+    split: False
     strategy: group
     group_col: wave
-    min_threshold: 60
+    min_threshold: 30
     max_threshold: 365
     run_model_selection: False
     optimal_gmm_settings:

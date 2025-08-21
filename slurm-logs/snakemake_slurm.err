@@ -1,6 +1,5 @@
 
-Lmod is automatically replacing "scicomp-python-env/2025.1" with
-"mamba/2025.1".
+Lmod is automatically replacing "scicomp-python-env/2025.1" with "mamba/2025.1".
 
 Assuming unrestricted shared filesystem usage.
 Building DAG of jobs...
@@ -9,53 +8,49 @@ Using shell: /usr/bin/bash
 Provided cores: 4
 Rules claiming more threads will be scaled down.
 Job stats:
-job                       count
-----------------------  -------
-all                           1
-clean_features                2
-cluster                       3
-extract_globem                4
-rename_and_concatenate        1
-signature                    12
-total                        23
+job          count
+---------  -------
+all              1
+signature       16
+total           17
 
 Select jobs to execute...
 Execute 4 jobs...
 
-[Fri Aug 15 00:16:30 2025]
-localrule extract_globem:
-    input: /m/cs/work/luongn1/globem/INS-W_1/FeatureData/sleep.csv, /m/cs/work/luongn1/globem/INS-W_2/FeatureData/sleep.csv, /m/cs/work/luongn1/globem/INS-W_3/FeatureData/sleep.csv, /m/cs/work/luongn1/globem/INS-W_4/FeatureData/sleep.csv, /m/cs/work/luongn1/globem/pid_mappings.csv
-    output: data/interim/globem/sleep_4epochs.csv
-    jobid: 15
-    reason: Params have changed since last execution
-    wildcards: sensor=sleep
+[Fri Aug 15 23:59:12 2025]
+localrule signature:
+    input: out/clusters/dtu/gmm_cluster.csv
+    output: out/signature/dtu/signature_unranked_cosine.csv, out/signature/dtu/signature_d_self_unranked_cosine.csv, out/signature/dtu/signature_d_ref_unranked_cosine.csv
+    jobid: 36
+    reason: Code has changed since last execution
+    wildcards: study=dtu, rank=unranked, dist=cosine
     resources: tmpdir=/tmp
 
-[Fri Aug 15 00:16:30 2025]
-localrule clean_features:
-    input: data/processed/tesserae/all_features.csv
-    output: data/processed/tesserae/all_features_clean.csv
-    jobid: 2
-    reason: Params have changed since last execution
-    wildcards: study=tesserae
+[Fri Aug 15 23:59:12 2025]
+localrule signature:
+    input: out/clusters/dtu/gmm_cluster.csv
+    output: out/signature/dtu/signature_ranked_jsd.csv, out/signature/dtu/signature_d_self_ranked_jsd.csv, out/signature/dtu/signature_d_ref_ranked_jsd.csv
+    jobid: 33
+    reason: Code has changed since last execution
+    wildcards: study=dtu, rank=ranked, dist=jsd
     resources: tmpdir=/tmp
 
-[Fri Aug 15 00:16:30 2025]
-localrule extract_globem:
-    input: /m/cs/work/luongn1/globem/INS-W_1/FeatureData/screen.csv, /m/cs/work/luongn1/globem/INS-W_2/FeatureData/screen.csv, /m/cs/work/luongn1/globem/INS-W_3/FeatureData/screen.csv, /m/cs/work/luongn1/globem/INS-W_4/FeatureData/screen.csv, /m/cs/work/luongn1/globem/pid_mappings.csv
-    output: data/interim/globem/screen_4epochs.csv
-    jobid: 12
-    reason: Params have changed since last execution
-    wildcards: sensor=screen
+[Fri Aug 15 23:59:12 2025]
+localrule signature:
+    input: out/clusters/dtu/gmm_cluster.csv
+    output: out/signature/dtu/signature_ranked_cosine.csv, out/signature/dtu/signature_d_self_ranked_cosine.csv, out/signature/dtu/signature_d_ref_ranked_cosine.csv
+    jobid: 34
+    reason: Code has changed since last execution
+    wildcards: study=dtu, rank=ranked, dist=cosine
     resources: tmpdir=/tmp
 
-[Fri Aug 15 00:16:30 2025]
-localrule extract_globem:
-    input: /m/cs/work/luongn1/globem/INS-W_1/FeatureData/steps.csv, /m/cs/work/luongn1/globem/INS-W_2/FeatureData/steps.csv, /m/cs/work/luongn1/globem/INS-W_3/FeatureData/steps.csv, /m/cs/work/luongn1/globem/INS-W_4/FeatureData/steps.csv, /m/cs/work/luongn1/globem/pid_mappings.csv
-    output: data/interim/globem/steps_4epochs.csv
-    jobid: 13
-    reason: Params have changed since last execution
-    wildcards: sensor=steps
+[Fri Aug 15 23:59:12 2025]
+localrule signature:
+    input: out/clusters/dtu/gmm_cluster.csv
+    output: out/signature/dtu/signature_unranked_jsd.csv, out/signature/dtu/signature_d_self_unranked_jsd.csv, out/signature/dtu/signature_d_ref_unranked_jsd.csv
+    jobid: 35
+    reason: Code has changed since last execution
+    wildcards: study=dtu, rank=unranked, dist=jsd
     resources: tmpdir=/tmp
 
 Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
@@ -66,609 +61,537 @@ Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
 Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
 Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
 Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
-2025-08-15 00:16:45,522 - INFO - All required features are present in the data.
-2025-08-15 00:16:45,522 - INFO - Features identified for filling missing call data: []
-2025-08-15 00:16:45,522 - INFO - Initial data shape before filtering: (253260, 142)
-2025-08-15 00:16:45,581 - INFO - Feature 'activity_night' has 84948 NaN observations
-2025-08-15 00:16:45,581 - INFO - Feature 'activity_morning' has 84948 NaN observations
-2025-08-15 00:16:45,581 - INFO - Feature 'activity_afternoon' has 84948 NaN observations
-2025-08-15 00:16:45,581 - INFO - Feature 'activity_evening' has 84948 NaN observations
-2025-08-15 00:16:45,581 - INFO - Feature 'activity_allday' has 84948 NaN observations
-2025-08-15 00:16:45,581 - INFO - Feature 'screen_night' has 30604 NaN observations
-2025-08-15 00:16:45,581 - INFO - Feature 'screen_morning' has 30604 NaN observations
-2025-08-15 00:16:45,582 - INFO - Feature 'screen_afternoon' has 30604 NaN observations
-2025-08-15 00:16:45,582 - INFO - Feature 'screen_evening' has 30604 NaN observations
-2025-08-15 00:16:45,582 - INFO - Feature 'screen_allday' has 30604 NaN observations
-2025-08-15 00:16:45,582 - INFO - Feature 'sleep_onset' has 44953 NaN observations
-2025-08-15 00:16:45,582 - INFO - Feature 'sleep_offset' has 44953 NaN observations
-2025-08-15 00:16:45,582 - INFO - Feature 'sleep_duration' has 44953 NaN observations
-2025-08-15 00:16:45,688 - INFO - Data shape after removing NaNs based on features: (155044, 142)
-2025-08-15 00:16:45,748 - INFO - Data shape after removing zero activity: (107380, 142)
-2025-08-15 00:16:45,803 - INFO - Data shape after removing zero screen use: (106673, 142)
-2025-08-15 00:16:45,859 - INFO - Data shape after removing negative sleep duration: (106606, 142)
-2025-08-15 00:16:45,860 - INFO - Final data shape before saving to CSV: (106606, 142)
-/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/preprocess/globem/base.py:51: DtypeWarning: Columns (808,809,810,811,812,813,814) have mixed types. Specify dtype option on import or set low_memory=False.
-  df = pd.read_csv(fn, index_col=0)
-/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/preprocess/globem/base.py:51: DtypeWarning: Columns (808,809,810,811,812,813,814,820,834) have mixed types. Specify dtype option on import or set low_memory=False.
-  df = pd.read_csv(fn, index_col=0)
-/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/preprocess/globem/base.py:68: SettingWithCopyWarning: 
-A value is trying to be set on a copy of a slice from a DataFrame.
-Try using .loc[row_indexer,col_indexer] = value instead
-
-See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
-  df[columns] = df[columns].fillna(0)
-/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/preprocess/globem/base.py:51: DtypeWarning: Columns (52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,178,179,180,181,182,183,184,185,186,187,188,189,190,191,192,193,194,195,196,197,198,199,200,201,202,203,204,205,304,305,306,307,308,309,310,311,312,313,314,315,316,317,318,319,320,321,322,323,324,325,326,327,328,329,330,331,430,431,432,433,434,435,436,437,438,439,440,441,442,443,444,445,446,447,448,449,450,451,452,453,454,455,456,457,556,557,558,559,560,561,562,563,564,565,566,567,568,569,570,571,572,573,574,575,576,577,578,579,580,581,582,583,682,683,684,685,686,687,688,689,690,691,692,693,694,695,696,697,698,699,700,701,702,703,704,705,706,707,708,709,808,809,810,811,812,813,814,815,816,817,818,819,820,821,822,823,824,825,826,827,828,829,830,831,832,833,834,835,934,935,936,937,938,939,940,941,942,943,944,945,946,947,948,949,950,951,952,953,954,955,956,957,958,959,960,961,1060,1061,1062,1063,1064,1065,1066,1067,1068,1069,1070,1071,1072,1073,1074,1075,1076,1077,1078,1079,1080,1081,1082,1083,1084,1085,1086,1087) have mixed types. Specify dtype option on import or set low_memory=False.
-  df = pd.read_csv(fn, index_col=0)
-[Fri Aug 15 00:16:59 2025]
-Finished job 13.
-1 of 23 steps (4%) done
+2025-08-15 23:59:17,997 - INFO - Loading data...
+2025-08-15 23:59:17,998 - INFO - Loading data...
+2025-08-15 23:59:18,029 - INFO - Loading data...
+2025-08-15 23:59:18,048 - INFO - Loading data...
+2025-08-15 23:59:21,502 - INFO - Filtering data by threshold...
+2025-08-15 23:59:21,696 - INFO - Filtering data by threshold...
+2025-08-15 23:59:21,817 - INFO - Splitting data into chunks...
+2025-08-15 23:59:21,843 - INFO - Filtering data by threshold...
+2025-08-15 23:59:21,954 - INFO - Splitting data into chunks...
+2025-08-15 23:59:22,067 - INFO - Splitting data into chunks...
+2025-08-15 23:59:22,081 - INFO - Calculating user signatures...
+/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmp8tadyt7r.signature.py:71: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
+  df.groupby(["user", "split", "Cluster"]).size().reset_index(name="count")
+/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmp8tadyt7r.signature.py:74: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
+  user_signature["percentage"] = user_signature.groupby(["user", "split"])[
+2025-08-15 23:59:22,194 - INFO - Calculating user signatures...
+/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmp2pdyqtii.signature.py:71: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
+  df.groupby(["user", "split", "Cluster"]).size().reset_index(name="count")
+2025-08-15 23:59:22,240 - INFO - Filtering data by threshold...
+/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmp2pdyqtii.signature.py:74: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
+  user_signature["percentage"] = user_signature.groupby(["user", "split"])[
+2025-08-15 23:59:22,264 - INFO - Calculating user signatures...
+/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmp1ql7gbdf.signature.py:71: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
+  df.groupby(["user", "split", "Cluster"]).size().reset_index(name="count")
+/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmp1ql7gbdf.signature.py:74: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
+  user_signature["percentage"] = user_signature.groupby(["user", "split"])[
+2025-08-15 23:59:22,351 - INFO - Splitting data into chunks...
+2025-08-15 23:59:22,465 - INFO - Calculating user signatures...
+/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmp7vpgly3o.signature.py:71: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
+  df.groupby(["user", "split", "Cluster"]).size().reset_index(name="count")
+/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmp7vpgly3o.signature.py:74: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
+  user_signature["percentage"] = user_signature.groupby(["user", "split"])[
+/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmp2pdyqtii.signature.py:93: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
+  user_signature.groupby(["user", "split"]).cumcount() + 1
+/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmp2pdyqtii.signature.py:96: FutureWarning: The default value of observed=False is deprecated and will change to observed=True in a future version of pandas. Specify observed=False to silence this warning and retain the current behavior
+  user_signature = user_signature.pivot_table(
+2025-08-15 23:59:23,273 - INFO - Calculating self-distances...
+/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmp7vpgly3o.signature.py:93: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
+  user_signature.groupby(["user", "split"]).cumcount() + 1
+/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmp7vpgly3o.signature.py:96: FutureWarning: The default value of observed=False is deprecated and will change to observed=True in a future version of pandas. Specify observed=False to silence this warning and retain the current behavior
+  user_signature = user_signature.pivot_table(
+2025-08-15 23:59:23,347 - INFO - Calculating self-distances...
+/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmp1ql7gbdf.signature.py:100: FutureWarning: The default value of observed=False is deprecated and will change to observed=True in a future version of pandas. Specify observed=False to silence this warning and retain the current behavior
+  user_signature = user_signature.pivot_table(
+2025-08-15 23:59:23,717 - INFO - Calculating self-distances...
+2025-08-15 23:59:23,737 - INFO - Calculating reference distances...
+/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmp8tadyt7r.signature.py:100: FutureWarning: The default value of observed=False is deprecated and will change to observed=True in a future version of pandas. Specify observed=False to silence this warning and retain the current behavior
+  user_signature = user_signature.pivot_table(
+2025-08-15 23:59:23,915 - INFO - Calculating self-distances...
+2025-08-15 23:59:24,093 - INFO - Calculating reference distances...
+2025-08-15 23:59:24,145 - INFO - Calculating reference distances...
+2025-08-15 23:59:24,311 - INFO - Calculating reference distances...
+2025-08-16 00:02:06,557 - INFO - Saving results...
+2025-08-16 00:02:07,099 - INFO - Processing complete.
+2025-08-16 00:02:07,327 - INFO - Saving results...
+[Sat Aug 16 00:02:07 2025]
+Finished job 33.
+1 of 17 steps (6%) done
 Select jobs to execute...
 Execute 1 jobs...
 
-[Fri Aug 15 00:16:59 2025]
-localrule extract_globem:
-    input: /m/cs/work/luongn1/globem/INS-W_1/FeatureData/call.csv, /m/cs/work/luongn1/globem/INS-W_2/FeatureData/call.csv, /m/cs/work/luongn1/globem/INS-W_3/FeatureData/call.csv, /m/cs/work/luongn1/globem/INS-W_4/FeatureData/call.csv, /m/cs/work/luongn1/globem/pid_mappings.csv
-    output: data/interim/globem/call_4epochs.csv
-    jobid: 14
-    reason: Params have changed since last execution
-    wildcards: sensor=call
+[Sat Aug 16 00:02:07 2025]
+localrule signature:
+    input: out/clusters/tesserae/gmm_cluster.csv
+    output: out/signature/tesserae/signature_ranked_cosine.csv, out/signature/tesserae/signature_d_self_ranked_cosine.csv, out/signature/tesserae/signature_d_ref_ranked_cosine.csv
+    jobid: 22
+    reason: Code has changed since last execution
+    wildcards: study=tesserae, rank=ranked, dist=cosine
     resources: tmpdir=/tmp
 
 Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
-/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/preprocess/globem/base.py:162: SettingWithCopyWarning: 
-A value is trying to be set on a copy of a slice from a DataFrame.
-Try using .loc[row_indexer,col_indexer] = value instead
-
-See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
-  df[f"{col}:within_norm"] = df.groupby(self.groupby_cols)[col].transform(
-/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/preprocess/globem/base.py:162: SettingWithCopyWarning: 
-A value is trying to be set on a copy of a slice from a DataFrame.
-Try using .loc[row_indexer,col_indexer] = value instead
-
-See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
-  df[f"{col}:within_norm"] = df.groupby(self.groupby_cols)[col].transform(
-Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
-[Fri Aug 15 00:17:01 2025]
-Finished job 15.
-2 of 23 steps (9%) done
+2025-08-16 00:02:07,866 - INFO - Processing complete.
+[Sat Aug 16 00:02:08 2025]
+Finished job 35.
+2 of 17 steps (12%) done
 Select jobs to execute...
 Execute 1 jobs...
 
-[Fri Aug 15 00:17:01 2025]
-localrule cluster:
-    input: data/processed/momo/all_features_clean.csv
-    output: out/clusters/momo/gmm_cluster.csv, out/clusters/momo/gmm_cluster_centroids.csv, out/clusters/momo/gmm_cluster_covariances.csv
-    jobid: 8
-    reason: Params have changed since last execution
-    wildcards: study=momo, algo=gmm
+[Sat Aug 16 00:02:08 2025]
+localrule signature:
+    input: out/clusters/tesserae/gmm_cluster.csv
+    output: out/signature/tesserae/signature_ranked_jsd.csv, out/signature/tesserae/signature_d_self_ranked_jsd.csv, out/signature/tesserae/signature_d_ref_ranked_jsd.csv
+    jobid: 21
+    reason: Code has changed since last execution
+    wildcards: study=tesserae, rank=ranked, dist=jsd
     resources: tmpdir=/tmp
 
-Activating conda environment: .snakemake/conda/ab5233add898528c77eec06aa91604d6_
-/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/preprocess/globem/base.py:51: DtypeWarning: Columns (71,78,197,204,304,305,306,307,308,309,310,311,312,313,314,315,316,317,318,319,320,321,322,323,324,325,326,327,328,329,330,331,430,431,432,433,434,435,436,437,438,439,440,441,442,443,444,445,446,447,448,449,450,451,452,453,454,455,456,457,556,557,558,559,560,561,562,563,564,565,566,567,568,569,570,571,572,573,574,575,576,577,578,579,580,581,582,583,682,683,684,685,686,687,688,689,690,691,692,693,694,695,696,697,698,699,700,701,702,703,704,705,706,707,708,709,808,809,810,811,812,813,814,815,816,817,818,819,820,821,822,823,824,825,826,827,828,829,830,831,832,833,834,835,934,935,936,937,938,939,940,941,942,943,944,945,946,947,948,949,950,951,952,953,954,955,956,957,958,959,960,961,1060,1061,1062,1063,1064,1065,1066,1067,1068,1069,1070,1071,1072,1073,1074,1075,1076,1077,1078,1079,1080,1081,1082,1083,1084,1085,1086,1087) have mixed types. Specify dtype option on import or set low_memory=False.
-  df = pd.read_csv(fn, index_col=0)
-[Fri Aug 15 00:17:02 2025]
-Finished job 2.
-3 of 23 steps (13%) done
+Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
+2025-08-16 00:02:08,632 - INFO - Saving results...
+2025-08-16 00:02:09,330 - INFO - Processing complete.
+[Sat Aug 16 00:02:09 2025]
+Finished job 34.
+3 of 17 steps (18%) done
 Select jobs to execute...
 Execute 1 jobs...
 
-[Fri Aug 15 00:17:02 2025]
-localrule cluster:
-    input: data/processed/tesserae/all_features_clean.csv
-    output: out/clusters/tesserae/gmm_cluster.csv, out/clusters/tesserae/gmm_cluster_centroids.csv, out/clusters/tesserae/gmm_cluster_covariances.csv
-    jobid: 1
-    reason: Input files updated by another job: data/processed/tesserae/all_features_clean.csv
-    wildcards: study=tesserae, algo=gmm
+[Sat Aug 16 00:02:09 2025]
+localrule signature:
+    input: out/clusters/tesserae/gmm_cluster.csv
+    output: out/signature/tesserae/signature_unranked_cosine.csv, out/signature/tesserae/signature_d_self_unranked_cosine.csv, out/signature/tesserae/signature_d_ref_unranked_cosine.csv
+    jobid: 24
+    reason: Code has changed since last execution
+    wildcards: study=tesserae, rank=unranked, dist=cosine
     resources: tmpdir=/tmp
 
-Activating conda environment: .snakemake/conda/ab5233add898528c77eec06aa91604d6_
-/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/preprocess/globem/base.py:162: SettingWithCopyWarning: 
-A value is trying to be set on a copy of a slice from a DataFrame.
-Try using .loc[row_indexer,col_indexer] = value instead
-
-See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
-  df[f"{col}:within_norm"] = df.groupby(self.groupby_cols)[col].transform(
-/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/preprocess/globem/base.py:162: SettingWithCopyWarning: 
-A value is trying to be set on a copy of a slice from a DataFrame.
-Try using .loc[row_indexer,col_indexer] = value instead
-
-See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
-  df[f"{col}:within_norm"] = df.groupby(self.groupby_cols)[col].transform(
-/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/preprocess/globem/base.py:162: SettingWithCopyWarning: 
-A value is trying to be set on a copy of a slice from a DataFrame.
-Try using .loc[row_indexer,col_indexer] = value instead
-
-See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
-  df[f"{col}:within_norm"] = df.groupby(self.groupby_cols)[col].transform(
-Activating conda environment: .snakemake/conda/ab5233add898528c77eec06aa91604d6_
-/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/preprocess/globem/base.py:162: SettingWithCopyWarning: 
-A value is trying to be set on a copy of a slice from a DataFrame.
-Try using .loc[row_indexer,col_indexer] = value instead
-
-See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
-  df[f"{col}:within_norm"] = df.groupby(self.groupby_cols)[col].transform(
-/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/preprocess/globem/base.py:162: SettingWithCopyWarning: 
-A value is trying to be set on a copy of a slice from a DataFrame.
-Try using .loc[row_indexer,col_indexer] = value instead
-
-See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
-  df[f"{col}:within_norm"] = df.groupby(self.groupby_cols)[col].transform(
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmp7mznw4wc.screen.py:48: SettingWithCopyWarning: 
-A value is trying to be set on a copy of a slice from a DataFrame.
-Try using .loc[row_indexer,col_indexer] = value instead
-
-See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
-  df[columns] = df[columns].fillna(0)
-Activating conda environment: .snakemake/conda/ab5233add898528c77eec06aa91604d6_
-[Fri Aug 15 00:17:06 2025]
-Finished job 12.
-4 of 23 steps (17%) done
-/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/preprocess/globem/base.py:51: DtypeWarning: Columns (556,557,565) have mixed types. Specify dtype option on import or set low_memory=False.
-  df = pd.read_csv(fn, index_col=0)
-/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/preprocess/globem/base.py:51: DtypeWarning: Columns (478,577) have mixed types. Specify dtype option on import or set low_memory=False.
-  df = pd.read_csv(fn, index_col=0)
-/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/preprocess/globem/base.py:51: DtypeWarning: Columns (556,557,577) have mixed types. Specify dtype option on import or set low_memory=False.
-  df = pd.read_csv(fn, index_col=0)
-/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/preprocess/globem/base.py:51: DtypeWarning: Columns (565) have mixed types. Specify dtype option on import or set low_memory=False.
-  df = pd.read_csv(fn, index_col=0)
-[Fri Aug 15 00:17:14 2025]
-Finished job 14.
-5 of 23 steps (22%) done
+Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
+2025-08-16 00:02:09,875 - INFO - Saving results...
+Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
+2025-08-16 00:02:10,220 - INFO - Processing complete.
+[Sat Aug 16 00:02:10 2025]
+Finished job 36.
+4 of 17 steps (24%) done
 Select jobs to execute...
 Execute 1 jobs...
 
-[Fri Aug 15 00:17:14 2025]
-localrule rename_and_concatenate:
-    input: data/interim/globem/screen_4epochs.csv, data/interim/globem/steps_4epochs.csv, data/interim/globem/call_4epochs.csv, data/interim/globem/sleep_4epochs.csv
-    output: data/processed/globem/all_features.csv
-    jobid: 11
-    reason: Input files updated by another job: data/interim/globem/steps_4epochs.csv, data/interim/globem/screen_4epochs.csv, data/interim/globem/sleep_4epochs.csv, data/interim/globem/call_4epochs.csv
-    wildcards: study=globem
+[Sat Aug 16 00:02:10 2025]
+localrule signature:
+    input: out/clusters/tesserae/gmm_cluster.csv
+    output: out/signature/tesserae/signature_unranked_jsd.csv, out/signature/tesserae/signature_d_self_unranked_jsd.csv, out/signature/tesserae/signature_d_ref_unranked_jsd.csv
+    jobid: 23
+    reason: Code has changed since last execution
+    wildcards: study=tesserae, rank=unranked, dist=jsd
     resources: tmpdir=/tmp
 
 Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
 Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
-[Fri Aug 15 00:17:21 2025]
-Finished job 8.
-6 of 23 steps (26%) done
+Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
+Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
+2025-08-16 00:02:13,664 - INFO - Loading data...
+2025-08-16 00:02:14,193 - INFO - Loading data...
+2025-08-16 00:02:15,956 - INFO - Loading data...
+2025-08-16 00:02:16,179 - INFO - Loading data...
+2025-08-16 00:02:16,419 - INFO - Filtering data by threshold...
+2025-08-16 00:02:16,623 - INFO - Splitting data into chunks...
+2025-08-16 00:02:16,836 - INFO - Calculating user signatures...
+/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpxpkirk4g.signature.py:71: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
+  df.groupby(["user", "split", "Cluster"]).size().reset_index(name="count")
+/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpxpkirk4g.signature.py:74: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
+  user_signature["percentage"] = user_signature.groupby(["user", "split"])[
+2025-08-16 00:02:17,210 - INFO - Filtering data by threshold...
+/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpxpkirk4g.signature.py:93: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
+  user_signature.groupby(["user", "split"]).cumcount() + 1
+/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpxpkirk4g.signature.py:96: FutureWarning: The default value of observed=False is deprecated and will change to observed=True in a future version of pandas. Specify observed=False to silence this warning and retain the current behavior
+  user_signature = user_signature.pivot_table(
+2025-08-16 00:02:17,350 - INFO - Calculating self-distances...
+2025-08-16 00:02:17,412 - INFO - Splitting data into chunks...
+2025-08-16 00:02:17,579 - INFO - Calculating reference distances...
+2025-08-16 00:02:17,623 - INFO - Calculating user signatures...
+/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmppmb1t__u.signature.py:71: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
+  df.groupby(["user", "split", "Cluster"]).size().reset_index(name="count")
+/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmppmb1t__u.signature.py:74: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
+  user_signature["percentage"] = user_signature.groupby(["user", "split"])[
+/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmppmb1t__u.signature.py:93: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
+  user_signature.groupby(["user", "split"]).cumcount() + 1
+/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmppmb1t__u.signature.py:96: FutureWarning: The default value of observed=False is deprecated and will change to observed=True in a future version of pandas. Specify observed=False to silence this warning and retain the current behavior
+  user_signature = user_signature.pivot_table(
+2025-08-16 00:02:18,103 - INFO - Calculating self-distances...
+2025-08-16 00:02:18,298 - INFO - Calculating reference distances...
+2025-08-16 00:02:19,040 - INFO - Filtering data by threshold...
+2025-08-16 00:02:19,170 - INFO - Filtering data by threshold...
+2025-08-16 00:02:19,244 - INFO - Splitting data into chunks...
+2025-08-16 00:02:19,368 - INFO - Splitting data into chunks...
+2025-08-16 00:02:19,472 - INFO - Calculating user signatures...
+/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpu8ahsrdb.signature.py:71: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
+  df.groupby(["user", "split", "Cluster"]).size().reset_index(name="count")
+/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpu8ahsrdb.signature.py:74: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
+  user_signature["percentage"] = user_signature.groupby(["user", "split"])[
+2025-08-16 00:02:19,581 - INFO - Calculating user signatures...
+/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmp1db7vl95.signature.py:71: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
+  df.groupby(["user", "split", "Cluster"]).size().reset_index(name="count")
+/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmp1db7vl95.signature.py:74: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
+  user_signature["percentage"] = user_signature.groupby(["user", "split"])[
+/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpu8ahsrdb.signature.py:100: FutureWarning: The default value of observed=False is deprecated and will change to observed=True in a future version of pandas. Specify observed=False to silence this warning and retain the current behavior
+  user_signature = user_signature.pivot_table(
+2025-08-16 00:02:19,948 - INFO - Calculating self-distances...
+/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmp1db7vl95.signature.py:100: FutureWarning: The default value of observed=False is deprecated and will change to observed=True in a future version of pandas. Specify observed=False to silence this warning and retain the current behavior
+  user_signature = user_signature.pivot_table(
+2025-08-16 00:02:20,052 - INFO - Calculating self-distances...
+2025-08-16 00:02:20,171 - INFO - Calculating reference distances...
+2025-08-16 00:02:20,252 - INFO - Calculating reference distances...
+2025-08-16 00:02:42,058 - INFO - Saving results...
+2025-08-16 00:02:42,215 - INFO - Processing complete.
+[Sat Aug 16 00:02:42 2025]
+Finished job 21.
+5 of 17 steps (29%) done
 Select jobs to execute...
-Execute 2 jobs...
+Execute 1 jobs...
 
-[Fri Aug 15 00:17:21 2025]
+[Sat Aug 16 00:02:42 2025]
+localrule signature:
+    input: out/clusters/momo/gmm_cluster.csv
+    output: out/signature/momo/signature_unranked_cosine.csv, out/signature/momo/signature_d_self_unranked_cosine.csv, out/signature/momo/signature_d_ref_unranked_cosine.csv
+    jobid: 28
+    reason: Code has changed since last execution
+    wildcards: study=momo, rank=unranked, dist=cosine
+    resources: tmpdir=/tmp
+
+Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
+2025-08-16 00:02:42,586 - INFO - Saving results...
+2025-08-16 00:02:42,730 - INFO - Processing complete.
+2025-08-16 00:02:42,843 - INFO - Saving results...
+2025-08-16 00:02:42,948 - INFO - Processing complete.
+[Sat Aug 16 00:02:43 2025]
+Finished job 24.
+6 of 17 steps (35%) done
+Select jobs to execute...
+Execute 1 jobs...
+
+[Sat Aug 16 00:02:43 2025]
 localrule signature:
     input: out/clusters/momo/gmm_cluster.csv
     output: out/signature/momo/signature_ranked_jsd.csv, out/signature/momo/signature_d_self_ranked_jsd.csv, out/signature/momo/signature_d_ref_ranked_jsd.csv
     jobid: 25
-    reason: Input files updated by another job: out/clusters/momo/gmm_cluster.csv
+    reason: Code has changed since last execution
     wildcards: study=momo, rank=ranked, dist=jsd
     resources: tmpdir=/tmp
 
 Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
+2025-08-16 00:02:43,152 - INFO - Saving results...
+[Sat Aug 16 00:02:43 2025]
+Finished job 22.
+7 of 17 steps (41%) done
+Select jobs to execute...
+Execute 1 jobs...
 
-[Fri Aug 15 00:17:21 2025]
+[Sat Aug 16 00:02:43 2025]
+localrule signature:
+    input: out/clusters/momo/gmm_cluster.csv
+    output: out/signature/momo/signature_unranked_jsd.csv, out/signature/momo/signature_d_self_unranked_jsd.csv, out/signature/momo/signature_d_ref_unranked_jsd.csv
+    jobid: 27
+    reason: Code has changed since last execution
+    wildcards: study=momo, rank=unranked, dist=jsd
+    resources: tmpdir=/tmp
+
+Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
+2025-08-16 00:02:43,231 - INFO - Processing complete.
+[Sat Aug 16 00:02:43 2025]
+Finished job 23.
+8 of 17 steps (47%) done
+Select jobs to execute...
+Execute 1 jobs...
+
+[Sat Aug 16 00:02:43 2025]
 localrule signature:
     input: out/clusters/momo/gmm_cluster.csv
     output: out/signature/momo/signature_ranked_cosine.csv, out/signature/momo/signature_d_self_ranked_cosine.csv, out/signature/momo/signature_d_ref_ranked_cosine.csv
     jobid: 26
-    reason: Input files updated by another job: out/clusters/momo/gmm_cluster.csv
+    reason: Code has changed since last execution
     wildcards: study=momo, rank=ranked, dist=cosine
     resources: tmpdir=/tmp
 
 Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
 Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
 Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
-[Fri Aug 15 00:17:24 2025]
-Finished job 11.
-7 of 23 steps (30%) done
-Select jobs to execute...
-Execute 1 jobs...
-
-[Fri Aug 15 00:17:24 2025]
-localrule signature:
-    input: out/clusters/momo/gmm_cluster.csv
-    output: out/signature/momo/signature_unranked_jsd.csv, out/signature/momo/signature_d_self_unranked_jsd.csv, out/signature/momo/signature_d_ref_unranked_jsd.csv
-    jobid: 27
-    reason: Input files updated by another job: out/clusters/momo/gmm_cluster.csv
-    wildcards: study=momo, rank=unranked, dist=jsd
-    resources: tmpdir=/tmp
-
 Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
 Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
-2025-08-15 00:17:27,511 - INFO - Loading data...
-2025-08-15 00:17:27,512 - INFO - Loading data...
-2025-08-15 00:17:28,870 - INFO - Filtering data by threshold...
-2025-08-15 00:17:28,907 - INFO - Filtering data by threshold...
-2025-08-15 00:17:29,046 - INFO - Splitting data into chunks...
-2025-08-15 00:17:29,052 - INFO - Splitting data into chunks...
-2025-08-15 00:17:29,135 - INFO - Calculating user signatures...
-2025-08-15 00:17:29,141 - INFO - Calculating user signatures...
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpk2vd9qm2.signature.py:72: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
+2025-08-16 00:02:48,192 - INFO - Loading data...
+2025-08-16 00:02:48,639 - INFO - Loading data...
+2025-08-16 00:02:49,119 - INFO - Loading data...
+2025-08-16 00:02:49,226 - INFO - Filtering data by threshold...
+2025-08-16 00:02:49,256 - INFO - Splitting data into chunks...
+2025-08-16 00:02:49,279 - INFO - Calculating user signatures...
+/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpcvv38s7_.signature.py:71: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
   df.groupby(["user", "split", "Cluster"]).size().reset_index(name="count")
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmph0snpv8u.signature.py:72: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
-  df.groupby(["user", "split", "Cluster"]).size().reset_index(name="count")
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmph0snpv8u.signature.py:75: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
+/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpcvv38s7_.signature.py:74: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
   user_signature["percentage"] = user_signature.groupby(["user", "split"])[
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpk2vd9qm2.signature.py:75: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
-  user_signature["percentage"] = user_signature.groupby(["user", "split"])[
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpk2vd9qm2.signature.py:94: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
-  user_signature.groupby(["user", "split"]).cumcount() + 1
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpk2vd9qm2.signature.py:97: FutureWarning: The default value of observed=False is deprecated and will change to observed=True in a future version of pandas. Specify observed=False to silence this warning and retain the current behavior
+/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpcvv38s7_.signature.py:100: FutureWarning: The default value of observed=False is deprecated and will change to observed=True in a future version of pandas. Specify observed=False to silence this warning and retain the current behavior
   user_signature = user_signature.pivot_table(
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmph0snpv8u.signature.py:94: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
-  user_signature.groupby(["user", "split"]).cumcount() + 1
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmph0snpv8u.signature.py:97: FutureWarning: The default value of observed=False is deprecated and will change to observed=True in a future version of pandas. Specify observed=False to silence this warning and retain the current behavior
-  user_signature = user_signature.pivot_table(
-2025-08-15 00:17:29,295 - INFO - Calculating self-distances...
-2025-08-15 00:17:29,298 - INFO - Calculating self-distances...
-2025-08-15 00:17:29,322 - INFO - Calculating reference distances...
-2025-08-15 00:17:29,323 - INFO - Calculating reference distances...
-2025-08-15 00:17:29,613 - INFO - Saving results...
-2025-08-15 00:17:29,614 - INFO - Saving results...
-2025-08-15 00:17:29,629 - INFO - Processing complete.
-2025-08-15 00:17:29,652 - INFO - Processing complete.
-[Fri Aug 15 00:17:29 2025]
-Finished job 26.
-8 of 23 steps (35%) done
-Select jobs to execute...
-Execute 1 jobs...
-
-[Fri Aug 15 00:17:29 2025]
-localrule signature:
-    input: out/clusters/momo/gmm_cluster.csv
-    output: out/signature/momo/signature_unranked_cosine.csv, out/signature/momo/signature_d_self_unranked_cosine.csv, out/signature/momo/signature_d_ref_unranked_cosine.csv
-    jobid: 28
-    reason: Input files updated by another job: out/clusters/momo/gmm_cluster.csv
-    wildcards: study=momo, rank=unranked, dist=cosine
-    resources: tmpdir=/tmp
-
-Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
-[Fri Aug 15 00:17:29 2025]
-Finished job 25.
-9 of 23 steps (39%) done
-Select jobs to execute...
-Execute 1 jobs...
-
-[Fri Aug 15 00:17:29 2025]
-localrule clean_features:
-    input: data/processed/globem/all_features.csv
-    output: data/processed/globem/all_features_clean.csv
-    jobid: 10
-    reason: Input files updated by another job: data/processed/globem/all_features.csv
-    wildcards: study=globem
-    resources: tmpdir=/tmp
-
-Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
-2025-08-15 00:17:30,515 - INFO - Loading data...
-2025-08-15 00:17:32,475 - INFO - Filtering data by threshold...
-2025-08-15 00:17:32,538 - INFO - Splitting data into chunks...
-Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
-2025-08-15 00:17:32,586 - INFO - Calculating user signatures...
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpwc5sxvzj.signature.py:72: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
-  df.groupby(["user", "split", "Cluster"]).size().reset_index(name="count")
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpwc5sxvzj.signature.py:75: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
-  user_signature["percentage"] = user_signature.groupby(["user", "split"])[
-Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpwc5sxvzj.signature.py:101: FutureWarning: The default value of observed=False is deprecated and will change to observed=True in a future version of pandas. Specify observed=False to silence this warning and retain the current behavior
-  user_signature = user_signature.pivot_table(
-2025-08-15 00:17:32,648 - INFO - Calculating self-distances...
-2025-08-15 00:17:32,664 - INFO - Calculating reference distances...
-2025-08-15 00:17:32,868 - INFO - Saving results...
-2025-08-15 00:17:32,896 - INFO - Processing complete.
-[Fri Aug 15 00:17:33 2025]
-Finished job 27.
-10 of 23 steps (43%) done
-2025-08-15 00:17:35,448 - INFO - Loading data...
-2025-08-15 00:17:35,512 - INFO - All required features are present in the data.
-2025-08-15 00:17:35,513 - INFO - Features identified for filling missing call data: []
-2025-08-15 00:17:35,513 - INFO - Initial data shape before filtering: (69602, 55)
-2025-08-15 00:17:35,517 - INFO - Feature 'activity_night' has 0 NaN observations
-2025-08-15 00:17:35,517 - INFO - Feature 'activity_morning' has 26789 NaN observations
-2025-08-15 00:17:35,517 - INFO - Feature 'activity_afternoon' has 26788 NaN observations
-2025-08-15 00:17:35,517 - INFO - Feature 'activity_evening' has 26787 NaN observations
-2025-08-15 00:17:35,517 - INFO - Feature 'activity_allday' has 26783 NaN observations
-2025-08-15 00:17:35,517 - INFO - Feature 'screen_night' has 0 NaN observations
-2025-08-15 00:17:35,517 - INFO - Feature 'screen_morning' has 20546 NaN observations
-2025-08-15 00:17:35,517 - INFO - Feature 'screen_afternoon' has 18165 NaN observations
-2025-08-15 00:17:35,517 - INFO - Feature 'screen_evening' has 18619 NaN observations
-2025-08-15 00:17:35,517 - INFO - Feature 'screen_allday' has 17504 NaN observations
-2025-08-15 00:17:35,517 - INFO - Feature 'sleep_onset' has 31523 NaN observations
-2025-08-15 00:17:35,517 - INFO - Feature 'sleep_offset' has 31585 NaN observations
-2025-08-15 00:17:35,517 - INFO - Feature 'sleep_duration' has 31523 NaN observations
-2025-08-15 00:17:35,529 - INFO - Data shape after removing NaNs based on features: (31909, 55)
-[Fri Aug 15 00:17:35 2025]
-Finished job 1.
-11 of 23 steps (48%) done
-Select jobs to execute...
-Execute 2 jobs...
-
-[Fri Aug 15 00:17:35 2025]
-localrule signature:
-    input: out/clusters/tesserae/gmm_cluster.csv
-    output: out/signature/tesserae/signature_ranked_jsd.csv, out/signature/tesserae/signature_d_self_ranked_jsd.csv, out/signature/tesserae/signature_d_ref_ranked_jsd.csv
-    jobid: 21
-    reason: Input files updated by another job: out/clusters/tesserae/gmm_cluster.csv
-    wildcards: study=tesserae, rank=ranked, dist=jsd
-    resources: tmpdir=/tmp
-
-Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
-2025-08-15 00:17:35,544 - INFO - Data shape after removing zero activity: (31909, 55)
-
-[Fri Aug 15 00:17:35 2025]
-localrule signature:
-    input: out/clusters/tesserae/gmm_cluster.csv
-    output: out/signature/tesserae/signature_ranked_cosine.csv, out/signature/tesserae/signature_d_self_ranked_cosine.csv, out/signature/tesserae/signature_d_ref_ranked_cosine.csv
-    jobid: 22
-    reason: Input files updated by another job: out/clusters/tesserae/gmm_cluster.csv
-    wildcards: study=tesserae, rank=ranked, dist=cosine
-    resources: tmpdir=/tmp
-
-Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
-2025-08-15 00:17:35,557 - INFO - Data shape after removing zero screen use: (31909, 55)
-2025-08-15 00:17:35,561 - INFO - Data shape after removing negative sleep duration: (31909, 55)
-2025-08-15 00:17:35,563 - INFO - Final data shape before saving to CSV: (31909, 55)
-2025-08-15 00:17:36,495 - INFO - Filtering data by threshold...
-2025-08-15 00:17:36,526 - INFO - Splitting data into chunks...
-2025-08-15 00:17:36,550 - INFO - Calculating user signatures...
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpxaqh4a7p.signature.py:72: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
-  df.groupby(["user", "split", "Cluster"]).size().reset_index(name="count")
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpxaqh4a7p.signature.py:75: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
-  user_signature["percentage"] = user_signature.groupby(["user", "split"])[
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpxaqh4a7p.signature.py:101: FutureWarning: The default value of observed=False is deprecated and will change to observed=True in a future version of pandas. Specify observed=False to silence this warning and retain the current behavior
-  user_signature = user_signature.pivot_table(
-2025-08-15 00:17:36,611 - INFO - Calculating self-distances...
-2025-08-15 00:17:36,640 - INFO - Calculating reference distances...
-2025-08-15 00:17:36,915 - INFO - Saving results...
-2025-08-15 00:17:36,947 - INFO - Processing complete.
-[Fri Aug 15 00:17:37 2025]
+2025-08-16 00:02:49,322 - INFO - Calculating self-distances...
+2025-08-16 00:02:49,335 - INFO - Calculating reference distances...
+2025-08-16 00:02:49,551 - INFO - Loading data...
+2025-08-16 00:02:49,713 - INFO - Saving results...
+2025-08-16 00:02:49,740 - INFO - Processing complete.
+2025-08-16 00:02:49,813 - INFO - Filtering data by threshold...
+2025-08-16 00:02:49,899 - INFO - Splitting data into chunks...
+[Sat Aug 16 00:02:49 2025]
 Finished job 28.
-12 of 23 steps (52%) done
+9 of 17 steps (53%) done
 Select jobs to execute...
 Execute 1 jobs...
 
-[Fri Aug 15 00:17:37 2025]
-localrule signature:
-    input: out/clusters/tesserae/gmm_cluster.csv
-    output: out/signature/tesserae/signature_unranked_jsd.csv, out/signature/tesserae/signature_d_self_unranked_jsd.csv, out/signature/tesserae/signature_d_ref_unranked_jsd.csv
-    jobid: 23
-    reason: Input files updated by another job: out/clusters/tesserae/gmm_cluster.csv
-    wildcards: study=tesserae, rank=unranked, dist=jsd
-    resources: tmpdir=/tmp
-
-Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
-[Fri Aug 15 00:17:37 2025]
-Finished job 10.
-13 of 23 steps (57%) done
-Select jobs to execute...
-Execute 1 jobs...
-
-[Fri Aug 15 00:17:37 2025]
-localrule signature:
-    input: out/clusters/tesserae/gmm_cluster.csv
-    output: out/signature/tesserae/signature_unranked_cosine.csv, out/signature/tesserae/signature_d_self_unranked_cosine.csv, out/signature/tesserae/signature_d_ref_unranked_cosine.csv
-    jobid: 24
-    reason: Input files updated by another job: out/clusters/tesserae/gmm_cluster.csv
-    wildcards: study=tesserae, rank=unranked, dist=cosine
-    resources: tmpdir=/tmp
-
-Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
-Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
-Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
-Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
-Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
-2025-08-15 00:17:40,376 - INFO - Loading data...
-2025-08-15 00:17:40,429 - INFO - Loading data...
-2025-08-15 00:17:42,113 - INFO - Loading data...
-2025-08-15 00:17:42,326 - INFO - Loading data...
-2025-08-15 00:17:42,836 - INFO - Filtering data by threshold...
-2025-08-15 00:17:43,043 - INFO - Splitting data into chunks...
-2025-08-15 00:17:43,250 - INFO - Calculating user signatures...
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpa_ru8w1c.signature.py:72: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
-  df.groupby(["user", "split", "Cluster"]).size().reset_index(name="count")
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpa_ru8w1c.signature.py:75: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
-  user_signature["percentage"] = user_signature.groupby(["user", "split"])[
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpa_ru8w1c.signature.py:94: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
-  user_signature.groupby(["user", "split"]).cumcount() + 1
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpa_ru8w1c.signature.py:97: FutureWarning: The default value of observed=False is deprecated and will change to observed=True in a future version of pandas. Specify observed=False to silence this warning and retain the current behavior
-  user_signature = user_signature.pivot_table(
-2025-08-15 00:17:43,601 - INFO - Filtering data by threshold...
-2025-08-15 00:17:43,604 - INFO - Calculating self-distances...
-2025-08-15 00:17:43,762 - INFO - Calculating reference distances...
-2025-08-15 00:17:43,791 - INFO - Splitting data into chunks...
-2025-08-15 00:17:44,018 - INFO - Calculating user signatures...
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpnasoq662.signature.py:72: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
-  df.groupby(["user", "split", "Cluster"]).size().reset_index(name="count")
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpnasoq662.signature.py:75: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
-  user_signature["percentage"] = user_signature.groupby(["user", "split"])[
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpnasoq662.signature.py:94: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
-  user_signature.groupby(["user", "split"]).cumcount() + 1
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpnasoq662.signature.py:97: FutureWarning: The default value of observed=False is deprecated and will change to observed=True in a future version of pandas. Specify observed=False to silence this warning and retain the current behavior
-  user_signature = user_signature.pivot_table(
-2025-08-15 00:17:44,368 - INFO - Calculating self-distances...
-2025-08-15 00:17:44,522 - INFO - Calculating reference distances...
-2025-08-15 00:17:45,141 - INFO - Filtering data by threshold...
-2025-08-15 00:17:45,335 - INFO - Splitting data into chunks...
-2025-08-15 00:17:45,337 - INFO - Filtering data by threshold...
-2025-08-15 00:17:45,540 - INFO - Calculating user signatures...
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmph68hn00v.signature.py:72: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
-  df.groupby(["user", "split", "Cluster"]).size().reset_index(name="count")
-2025-08-15 00:17:45,532 - INFO - Splitting data into chunks...
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmph68hn00v.signature.py:75: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
-  user_signature["percentage"] = user_signature.groupby(["user", "split"])[
-2025-08-15 00:17:45,762 - INFO - Calculating user signatures...
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpkw3a50kk.signature.py:72: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
-  df.groupby(["user", "split", "Cluster"]).size().reset_index(name="count")
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpkw3a50kk.signature.py:75: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
-  user_signature["percentage"] = user_signature.groupby(["user", "split"])[
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmph68hn00v.signature.py:101: FutureWarning: The default value of observed=False is deprecated and will change to observed=True in a future version of pandas. Specify observed=False to silence this warning and retain the current behavior
-  user_signature = user_signature.pivot_table(
-2025-08-15 00:17:45,876 - INFO - Calculating self-distances...
-2025-08-15 00:17:46,031 - INFO - Calculating reference distances...
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpkw3a50kk.signature.py:101: FutureWarning: The default value of observed=False is deprecated and will change to observed=True in a future version of pandas. Specify observed=False to silence this warning and retain the current behavior
-  user_signature = user_signature.pivot_table(
-2025-08-15 00:17:46,097 - INFO - Calculating self-distances...
-2025-08-15 00:17:46,253 - INFO - Calculating reference distances...
-2025-08-15 00:17:59,598 - INFO - Saving results...
-2025-08-15 00:17:59,707 - INFO - Processing complete.
-[Fri Aug 15 00:17:59 2025]
-Finished job 22.
-14 of 23 steps (61%) done
-Select jobs to execute...
-Execute 1 jobs...
-
-[Fri Aug 15 00:17:59 2025]
-localrule cluster:
-    input: data/processed/globem/all_features_clean.csv
-    output: out/clusters/globem/gmm_cluster.csv, out/clusters/globem/gmm_cluster_centroids.csv, out/clusters/globem/gmm_cluster_covariances.csv
-    jobid: 9
-    reason: Input files updated by another job: data/processed/globem/all_features_clean.csv
-    wildcards: study=globem, algo=gmm
-    resources: tmpdir=/tmp
-
-Activating conda environment: .snakemake/conda/ab5233add898528c77eec06aa91604d6_
-2025-08-15 00:18:00,752 - INFO - Saving results...
-2025-08-15 00:18:00,855 - INFO - Processing complete.
-[Fri Aug 15 00:18:01 2025]
-Finished job 21.
-15 of 23 steps (65%) done
-2025-08-15 00:18:01,381 - INFO - Saving results...
-2025-08-15 00:18:01,475 - INFO - Processing complete.
-[Fri Aug 15 00:18:01 2025]
-Finished job 24.
-16 of 23 steps (70%) done
-Activating conda environment: .snakemake/conda/ab5233add898528c77eec06aa91604d6_
-2025-08-15 00:18:01,799 - INFO - Saving results...
-2025-08-15 00:18:01,846 - INFO - Processing complete.
-[Fri Aug 15 00:18:01 2025]
-Finished job 23.
-17 of 23 steps (74%) done
-[Fri Aug 15 00:18:08 2025]
-Finished job 9.
-18 of 23 steps (78%) done
-Select jobs to execute...
-Execute 4 jobs...
-
-[Fri Aug 15 00:18:08 2025]
-localrule signature:
-    input: out/clusters/globem/gmm_cluster.csv
-    output: out/signature/globem/signature_ranked_cosine.csv, out/signature/globem/signature_d_self_ranked_cosine.csv, out/signature/globem/signature_d_ref_ranked_cosine.csv
-    jobid: 30
-    reason: Input files updated by another job: out/clusters/globem/gmm_cluster.csv
-    wildcards: study=globem, rank=ranked, dist=cosine
-    resources: tmpdir=/tmp
-
-Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
-
-[Fri Aug 15 00:18:08 2025]
-localrule signature:
-    input: out/clusters/globem/gmm_cluster.csv
-    output: out/signature/globem/signature_unranked_jsd.csv, out/signature/globem/signature_d_self_unranked_jsd.csv, out/signature/globem/signature_d_ref_unranked_jsd.csv
-    jobid: 31
-    reason: Input files updated by another job: out/clusters/globem/gmm_cluster.csv
-    wildcards: study=globem, rank=unranked, dist=jsd
-    resources: tmpdir=/tmp
-
-Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
-
-[Fri Aug 15 00:18:08 2025]
+[Sat Aug 16 00:02:49 2025]
 localrule signature:
     input: out/clusters/globem/gmm_cluster.csv
     output: out/signature/globem/signature_unranked_cosine.csv, out/signature/globem/signature_d_self_unranked_cosine.csv, out/signature/globem/signature_d_ref_unranked_cosine.csv
     jobid: 32
-    reason: Input files updated by another job: out/clusters/globem/gmm_cluster.csv
+    reason: Code has changed since last execution
     wildcards: study=globem, rank=unranked, dist=cosine
     resources: tmpdir=/tmp
 
 Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
+2025-08-16 00:02:49,950 - INFO - Calculating user signatures...
+/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmp7yx_dwl3.signature.py:71: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
+  df.groupby(["user", "split", "Cluster"]).size().reset_index(name="count")
+/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmp7yx_dwl3.signature.py:74: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
+  user_signature["percentage"] = user_signature.groupby(["user", "split"])[
+/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmp7yx_dwl3.signature.py:93: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
+  user_signature.groupby(["user", "split"]).cumcount() + 1
+/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmp7yx_dwl3.signature.py:96: FutureWarning: The default value of observed=False is deprecated and will change to observed=True in a future version of pandas. Specify observed=False to silence this warning and retain the current behavior
+  user_signature = user_signature.pivot_table(
+2025-08-16 00:02:50,045 - INFO - Calculating self-distances...
+2025-08-16 00:02:50,068 - INFO - Calculating reference distances...
+2025-08-16 00:02:50,444 - INFO - Saving results...
+2025-08-16 00:02:50,470 - INFO - Processing complete.
+2025-08-16 00:02:50,508 - INFO - Filtering data by threshold...
+2025-08-16 00:02:50,563 - INFO - Splitting data into chunks...
+2025-08-16 00:02:50,586 - INFO - Calculating user signatures...
+/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmp3f3peojp.signature.py:71: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
+  df.groupby(["user", "split", "Cluster"]).size().reset_index(name="count")
+/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmp3f3peojp.signature.py:74: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
+  user_signature["percentage"] = user_signature.groupby(["user", "split"])[
+/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmp3f3peojp.signature.py:100: FutureWarning: The default value of observed=False is deprecated and will change to observed=True in a future version of pandas. Specify observed=False to silence this warning and retain the current behavior
+  user_signature = user_signature.pivot_table(
+2025-08-16 00:02:50,630 - INFO - Calculating self-distances...
+2025-08-16 00:02:50,643 - INFO - Calculating reference distances...
+[Sat Aug 16 00:02:50 2025]
+Finished job 25.
+10 of 17 steps (59%) done
+Select jobs to execute...
+Execute 1 jobs...
 
-[Fri Aug 15 00:18:08 2025]
+[Sat Aug 16 00:02:50 2025]
 localrule signature:
     input: out/clusters/globem/gmm_cluster.csv
     output: out/signature/globem/signature_ranked_jsd.csv, out/signature/globem/signature_d_self_ranked_jsd.csv, out/signature/globem/signature_d_ref_ranked_jsd.csv
     jobid: 29
-    reason: Input files updated by another job: out/clusters/globem/gmm_cluster.csv
+    reason: Code has changed since last execution
     wildcards: study=globem, rank=ranked, dist=jsd
     resources: tmpdir=/tmp
 
 Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
-Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
-Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
-Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
-Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
-2025-08-15 00:18:12,817 - INFO - Loading data...
-2025-08-15 00:18:13,031 - INFO - Loading data...
-2025-08-15 00:18:13,146 - INFO - Loading data...
-2025-08-15 00:18:13,267 - INFO - Loading data...
-2025-08-15 00:18:13,271 - INFO - Processing waves: ['INS-W_1', 'INS-W_2'] with 33 users
-2025-08-15 00:18:13,271 - INFO - Calculating user signatures...
-2025-08-15 00:18:13,354 - INFO - Calculating self-distances...
-2025-08-15 00:18:13,381 - INFO - Calculating reference distances...
-2025-08-15 00:18:13,473 - INFO - Processing waves: ['INS-W_1', 'INS-W_2'] with 33 users
-2025-08-15 00:18:13,474 - INFO - Calculating user signatures...
-2025-08-15 00:18:13,543 - INFO - Calculating self-distances...
-2025-08-15 00:18:13,570 - INFO - Calculating reference distances...
-2025-08-15 00:18:13,580 - INFO - Processing waves: ['INS-W_1', 'INS-W_2'] with 33 users
-2025-08-15 00:18:13,580 - INFO - Calculating user signatures...
-2025-08-15 00:18:13,637 - INFO - Calculating self-distances...
-2025-08-15 00:18:13,676 - INFO - Calculating reference distances...
-2025-08-15 00:18:13,707 - INFO - Processing waves: ['INS-W_1', 'INS-W_2'] with 33 users
-2025-08-15 00:18:13,708 - INFO - Calculating user signatures...
-2025-08-15 00:18:13,774 - INFO - Calculating self-distances...
-2025-08-15 00:18:13,801 - INFO - Calculating reference distances...
-2025-08-15 00:18:13,974 - INFO - Processing waves: ['INS-W_2', 'INS-W_3'] with 75 users
-2025-08-15 00:18:13,975 - INFO - Calculating user signatures...
-2025-08-15 00:18:14,076 - INFO - Calculating self-distances...
-2025-08-15 00:18:14,129 - INFO - Calculating reference distances...
-2025-08-15 00:18:14,156 - INFO - Processing waves: ['INS-W_2', 'INS-W_3'] with 75 users
-2025-08-15 00:18:14,156 - INFO - Calculating user signatures...
-2025-08-15 00:18:14,260 - INFO - Calculating self-distances...
-2025-08-15 00:18:14,294 - INFO - Processing waves: ['INS-W_2', 'INS-W_3'] with 75 users
-2025-08-15 00:18:14,295 - INFO - Calculating user signatures...
-2025-08-15 00:18:14,316 - INFO - Calculating reference distances...
-2025-08-15 00:18:14,376 - INFO - Processing waves: ['INS-W_2', 'INS-W_3'] with 75 users
-2025-08-15 00:18:14,376 - INFO - Calculating user signatures...
-2025-08-15 00:18:14,399 - INFO - Calculating self-distances...
-2025-08-15 00:18:14,453 - INFO - Calculating reference distances...
-2025-08-15 00:18:14,463 - INFO - Calculating self-distances...
-2025-08-15 00:18:14,523 - INFO - Calculating reference distances...
-2025-08-15 00:18:16,989 - INFO - Processing waves: ['INS-W_3', 'INS-W_4'] with 84 users
-2025-08-15 00:18:16,989 - INFO - Calculating user signatures...
-2025-08-15 00:18:17,093 - INFO - Calculating self-distances...
-2025-08-15 00:18:17,146 - INFO - Processing waves: ['INS-W_3', 'INS-W_4'] with 84 users
-2025-08-15 00:18:17,146 - INFO - Calculating user signatures...
-2025-08-15 00:18:17,163 - INFO - Calculating reference distances...
-2025-08-15 00:18:17,257 - INFO - Processing waves: ['INS-W_3', 'INS-W_4'] with 84 users
-2025-08-15 00:18:17,257 - INFO - Calculating user signatures...
-2025-08-15 00:18:17,265 - INFO - Calculating self-distances...
-2025-08-15 00:18:17,323 - INFO - Calculating reference distances...
-2025-08-15 00:18:17,366 - INFO - Calculating self-distances...
-2025-08-15 00:18:17,385 - INFO - Processing waves: ['INS-W_3', 'INS-W_4'] with 84 users
-2025-08-15 00:18:17,385 - INFO - Calculating user signatures...
-2025-08-15 00:18:17,423 - INFO - Calculating reference distances...
-2025-08-15 00:18:17,491 - INFO - Calculating self-distances...
-2025-08-15 00:18:17,548 - INFO - Calculating reference distances...
-[Fri Aug 15 00:18:20 2025]
-Finished job 31.
-19 of 23 steps (83%) done
-[Fri Aug 15 00:18:21 2025]
-Finished job 32.
-20 of 23 steps (87%) done
-[Fri Aug 15 00:18:21 2025]
-Finished job 30.
-21 of 23 steps (91%) done
-[Fri Aug 15 00:18:21 2025]
-Finished job 29.
-22 of 23 steps (96%) done
+2025-08-16 00:02:50,783 - INFO - Saving results...
+2025-08-16 00:02:50,808 - INFO - Processing complete.
+[Sat Aug 16 00:02:50 2025]
+Finished job 27.
+11 of 17 steps (65%) done
 Select jobs to execute...
 Execute 1 jobs...
 
-[Fri Aug 15 00:18:21 2025]
-localrule all:
-    input: out/clusters/tesserae/gmm_cluster.csv, out/clusters/momo/gmm_cluster.csv, out/clusters/globem/gmm_cluster.csv, out/clusters/dtu/gmm_cluster.csv, out/clusters/tesserae/gmm_cluster_centroids.csv, out/clusters/momo/gmm_cluster_centroids.csv, out/clusters/globem/gmm_cluster_centroids.csv, out/clusters/dtu/gmm_cluster_centroids.csv, out/signature/tesserae/signature_ranked_jsd.csv, out/signature/tesserae/signature_ranked_cosine.csv, out/signature/tesserae/signature_unranked_jsd.csv, out/signature/tesserae/signature_unranked_cosine.csv, out/signature/momo/signature_ranked_jsd.csv, out/signature/momo/signature_ranked_cosine.csv, out/signature/momo/signature_unranked_jsd.csv, out/signature/momo/signature_unranked_cosine.csv, out/signature/globem/signature_ranked_jsd.csv, out/signature/globem/signature_ranked_cosine.csv, out/signature/globem/signature_unranked_jsd.csv, out/signature/globem/signature_unranked_cosine.csv, out/signature/dtu/signature_ranked_jsd.csv, out/signature/dtu/signature_ranked_cosine.csv, out/signature/dtu/signature_unranked_jsd.csv, out/signature/dtu/signature_unranked_cosine.csv, out/signature/tesserae/signature_d_self_ranked_jsd.csv, out/signature/tesserae/signature_d_self_ranked_cosine.csv, out/signature/tesserae/signature_d_self_unranked_jsd.csv, out/signature/tesserae/signature_d_self_unranked_cosine.csv, out/signature/momo/signature_d_self_ranked_jsd.csv, out/signature/momo/signature_d_self_ranked_cosine.csv, out/signature/momo/signature_d_self_unranked_jsd.csv, out/signature/momo/signature_d_self_unranked_cosine.csv, out/signature/globem/signature_d_self_ranked_jsd.csv, out/signature/globem/signature_d_self_ranked_cosine.csv, out/signature/globem/signature_d_self_unranked_jsd.csv, out/signature/globem/signature_d_self_unranked_cosine.csv, out/signature/dtu/signature_d_self_ranked_jsd.csv, out/signature/dtu/signature_d_self_ranked_cosine.csv, out/signature/dtu/signature_d_self_unranked_jsd.csv, out/signature/dtu/signature_d_self_unranked_cosine.csv, out/signature/tesserae/signature_d_ref_ranked_jsd.csv, out/signature/tesserae/signature_d_ref_ranked_cosine.csv, out/signature/tesserae/signature_d_ref_unranked_jsd.csv, out/signature/tesserae/signature_d_ref_unranked_cosine.csv, out/signature/momo/signature_d_ref_ranked_jsd.csv, out/signature/momo/signature_d_ref_ranked_cosine.csv, out/signature/momo/signature_d_ref_unranked_jsd.csv, out/signature/momo/signature_d_ref_unranked_cosine.csv, out/signature/globem/signature_d_ref_ranked_jsd.csv, out/signature/globem/signature_d_ref_ranked_cosine.csv, out/signature/globem/signature_d_ref_unranked_jsd.csv, out/signature/globem/signature_d_ref_unranked_cosine.csv, out/signature/dtu/signature_d_ref_ranked_jsd.csv, out/signature/dtu/signature_d_ref_ranked_cosine.csv, out/signature/dtu/signature_d_ref_unranked_jsd.csv, out/signature/dtu/signature_d_ref_unranked_cosine.csv
-    jobid: 0
-    reason: Input files updated by another job: out/clusters/tesserae/gmm_cluster_centroids.csv, out/signature/tesserae/signature_d_ref_ranked_cosine.csv, out/signature/momo/signature_ranked_jsd.csv, out/signature/momo/signature_d_ref_unranked_jsd.csv, out/signature/globem/signature_d_ref_ranked_cosine.csv, out/clusters/momo/gmm_cluster.csv, out/signature/momo/signature_d_ref_ranked_cosine.csv, out/signature/tesserae/signature_d_self_unranked_cosine.csv, out/signature/globem/signature_d_ref_unranked_cosine.csv, out/signature/momo/signature_d_self_unranked_jsd.csv, out/signature/tesserae/signature_unranked_jsd.csv, out/signature/tesserae/signature_unranked_cosine.csv, out/signature/globem/signature_ranked_cosine.csv, out/signature/globem/signature_d_self_ranked_cosine.csv, out/signature/momo/signature_unranked_jsd.csv, out/clusters/globem/gmm_cluster.csv, out/clusters/momo/gmm_cluster_centroids.csv, out/signature/tesserae/signature_d_ref_ranked_jsd.csv, out/signature/globem/signature_d_self_unranked_jsd.csv, out/signature/tesserae/signature_d_ref_unranked_jsd.csv, out/signature/momo/signature_d_self_unranked_cosine.csv, out/clusters/tesserae/gmm_cluster.csv, out/signature/momo/signature_ranked_cosine.csv, out/signature/momo/signature_d_ref_unranked_cosine.csv, out/signature/tesserae/signature_d_self_unranked_jsd.csv, out/signature/tesserae/signature_ranked_jsd.csv, out/signature/globem/signature_ranked_jsd.csv, out/signature/globem/signature_unranked_jsd.csv, out/signature/momo/signature_unranked_cosine.csv, out/signature/tesserae/signature_ranked_cosine.csv, out/signature/globem/signature_unranked_cosine.csv, out/signature/momo/signature_d_self_ranked_cosine.csv, out/signature/momo/signature_d_self_ranked_jsd.csv, out/signature/globem/signature_d_ref_unranked_jsd.csv, out/signature/globem/signature_d_self_unranked_cosine.csv, out/signature/momo/signature_d_ref_ranked_jsd.csv, out/signature/globem/signature_d_ref_ranked_jsd.csv, out/signature/tesserae/signature_d_ref_unranked_cosine.csv, out/signature/globem/signature_d_self_ranked_jsd.csv, out/signature/tesserae/signature_d_self_ranked_jsd.csv, out/clusters/globem/gmm_cluster_centroids.csv, out/signature/tesserae/signature_d_self_ranked_cosine.csv
+[Sat Aug 16 00:02:50 2025]
+localrule signature:
+    input: out/clusters/globem/gmm_cluster.csv
+    output: out/signature/globem/signature_ranked_cosine.csv, out/signature/globem/signature_d_self_ranked_cosine.csv, out/signature/globem/signature_d_ref_ranked_cosine.csv
+    jobid: 30
+    reason: Code has changed since last execution
+    wildcards: study=globem, rank=ranked, dist=cosine
     resources: tmpdir=/tmp
 
-[Fri Aug 15 00:18:21 2025]
+Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
+2025-08-16 00:02:51,054 - INFO - Filtering data by threshold...
+2025-08-16 00:02:51,103 - INFO - Splitting data into chunks...
+2025-08-16 00:02:51,126 - INFO - Calculating user signatures...
+/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmphjer7mo5.signature.py:71: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
+  df.groupby(["user", "split", "Cluster"]).size().reset_index(name="count")
+/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmphjer7mo5.signature.py:74: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
+  user_signature["percentage"] = user_signature.groupby(["user", "split"])[
+/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmphjer7mo5.signature.py:93: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
+  user_signature.groupby(["user", "split"]).cumcount() + 1
+/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmphjer7mo5.signature.py:96: FutureWarning: The default value of observed=False is deprecated and will change to observed=True in a future version of pandas. Specify observed=False to silence this warning and retain the current behavior
+  user_signature = user_signature.pivot_table(
+2025-08-16 00:02:51,174 - INFO - Calculating self-distances...
+2025-08-16 00:02:51,188 - INFO - Calculating reference distances...
+2025-08-16 00:02:51,333 - INFO - Saving results...
+2025-08-16 00:02:51,349 - INFO - Processing complete.
+[Sat Aug 16 00:02:51 2025]
+Finished job 26.
+12 of 17 steps (71%) done
+Select jobs to execute...
+Execute 1 jobs...
+
+[Sat Aug 16 00:02:51 2025]
+localrule signature:
+    input: out/clusters/globem/gmm_cluster.csv
+    output: out/signature/globem/signature_unranked_jsd.csv, out/signature/globem/signature_d_self_unranked_jsd.csv, out/signature/globem/signature_d_ref_unranked_jsd.csv
+    jobid: 31
+    reason: Code has changed since last execution
+    wildcards: study=globem, rank=unranked, dist=jsd
+    resources: tmpdir=/tmp
+
+Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
+Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
+Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
+Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
+Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
+2025-08-16 00:02:55,697 - INFO - Loading data...
+2025-08-16 00:02:56,192 - INFO - Processing waves: ['INS-W_1', 'INS-W_2'] with 40 users
+/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmp8vk__t5t.signature.py:248: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  filtered_clusters_df['split'] = filtered_clusters_df['wave']
+2025-08-16 00:02:56,193 - INFO - Calculating user signatures...
+2025-08-16 00:02:56,298 - INFO - Calculating self-distances...
+2025-08-16 00:02:56,354 - INFO - Calculating reference distances...
+2025-08-16 00:02:56,361 - INFO - Loading data...
+2025-08-16 00:02:56,838 - INFO - Loading data...
+2025-08-16 00:02:56,915 - INFO - Processing waves: ['INS-W_1', 'INS-W_2'] with 40 users
+/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpyq8iu89x.signature.py:248: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  filtered_clusters_df['split'] = filtered_clusters_df['wave']
+2025-08-16 00:02:56,916 - INFO - Calculating user signatures...
+2025-08-16 00:02:57,073 - INFO - Calculating self-distances...
+2025-08-16 00:02:57,096 - INFO - Calculating reference distances...
+2025-08-16 00:02:57,344 - INFO - Processing waves: ['INS-W_1', 'INS-W_2'] with 40 users
+/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpa5lj894l.signature.py:248: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  filtered_clusters_df['split'] = filtered_clusters_df['wave']
+2025-08-16 00:02:57,344 - INFO - Calculating user signatures...
+2025-08-16 00:02:57,390 - INFO - Calculating self-distances...
+2025-08-16 00:02:57,416 - INFO - Calculating reference distances...
+2025-08-16 00:02:57,734 - INFO - Processing waves: ['INS-W_2', 'INS-W_3'] with 78 users
+/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmp8vk__t5t.signature.py:248: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  filtered_clusters_df['split'] = filtered_clusters_df['wave']
+2025-08-16 00:02:57,735 - INFO - Calculating user signatures...
+2025-08-16 00:02:57,755 - INFO - Loading data...
+2025-08-16 00:02:57,802 - INFO - Calculating self-distances...
+2025-08-16 00:02:57,841 - INFO - Calculating reference distances...
+2025-08-16 00:02:58,086 - INFO - Processing waves: ['INS-W_1', 'INS-W_2'] with 40 users
+/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmph8j0i3fd.signature.py:248: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  filtered_clusters_df['split'] = filtered_clusters_df['wave']
+2025-08-16 00:02:58,087 - INFO - Calculating user signatures...
+2025-08-16 00:02:58,221 - INFO - Calculating self-distances...
+2025-08-16 00:02:58,247 - INFO - Calculating reference distances...
+2025-08-16 00:02:58,321 - INFO - Processing waves: ['INS-W_2', 'INS-W_3'] with 78 users
+/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpa5lj894l.signature.py:248: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  filtered_clusters_df['split'] = filtered_clusters_df['wave']
+2025-08-16 00:02:58,335 - INFO - Calculating user signatures...
+2025-08-16 00:02:58,472 - INFO - Calculating self-distances...
+2025-08-16 00:02:58,505 - INFO - Processing waves: ['INS-W_2', 'INS-W_3'] with 78 users
+/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpyq8iu89x.signature.py:248: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  filtered_clusters_df['split'] = filtered_clusters_df['wave']
+2025-08-16 00:02:58,505 - INFO - Calculating user signatures...
+2025-08-16 00:02:58,554 - INFO - Calculating reference distances...
+2025-08-16 00:02:58,644 - INFO - Calculating self-distances...
+2025-08-16 00:02:58,722 - INFO - Calculating reference distances...
+2025-08-16 00:02:59,447 - INFO - Processing waves: ['INS-W_2', 'INS-W_3'] with 78 users
+/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmph8j0i3fd.signature.py:248: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  filtered_clusters_df['split'] = filtered_clusters_df['wave']
+2025-08-16 00:02:59,448 - INFO - Calculating user signatures...
+2025-08-16 00:02:59,597 - INFO - Calculating self-distances...
+2025-08-16 00:02:59,676 - INFO - Calculating reference distances...
+2025-08-16 00:03:02,761 - INFO - Processing waves: ['INS-W_3', 'INS-W_4'] with 90 users
+/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmp8vk__t5t.signature.py:248: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  filtered_clusters_df['split'] = filtered_clusters_df['wave']
+2025-08-16 00:03:02,775 - INFO - Calculating user signatures...
+2025-08-16 00:03:02,934 - INFO - Calculating self-distances...
+2025-08-16 00:03:03,020 - INFO - Calculating reference distances...
+2025-08-16 00:03:03,061 - INFO - Processing waves: ['INS-W_3', 'INS-W_4'] with 90 users
+/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpa5lj894l.signature.py:248: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  filtered_clusters_df['split'] = filtered_clusters_df['wave']
+2025-08-16 00:03:03,062 - INFO - Calculating user signatures...
+2025-08-16 00:03:03,224 - INFO - Calculating self-distances...
+2025-08-16 00:03:03,289 - INFO - Processing waves: ['INS-W_3', 'INS-W_4'] with 90 users
+/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpyq8iu89x.signature.py:248: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  filtered_clusters_df['split'] = filtered_clusters_df['wave']
+2025-08-16 00:03:03,290 - INFO - Calculating user signatures...
+2025-08-16 00:03:03,319 - INFO - Calculating reference distances...
+2025-08-16 00:03:03,464 - INFO - Calculating self-distances...
+2025-08-16 00:03:03,548 - INFO - Calculating reference distances...
+2025-08-16 00:03:04,299 - INFO - Processing waves: ['INS-W_3', 'INS-W_4'] with 90 users
+/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmph8j0i3fd.signature.py:248: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  filtered_clusters_df['split'] = filtered_clusters_df['wave']
+2025-08-16 00:03:04,300 - INFO - Calculating user signatures...
+2025-08-16 00:03:04,458 - INFO - Calculating self-distances...
+2025-08-16 00:03:04,557 - INFO - Calculating reference distances...
+[Sat Aug 16 00:03:09 2025]
+Finished job 30.
+13 of 17 steps (76%) done
+[Sat Aug 16 00:03:09 2025]
+Finished job 32.
+14 of 17 steps (82%) done
+[Sat Aug 16 00:03:09 2025]
+Finished job 29.
+15 of 17 steps (88%) done
+[Sat Aug 16 00:03:10 2025]
+Finished job 31.
+16 of 17 steps (94%) done
+Select jobs to execute...
+Execute 1 jobs...
+
+[Sat Aug 16 00:03:10 2025]
+localrule all:
+    input: out/clusters/tesserae/gmm_cluster.csv, out/clusters/momo/gmm_cluster.csv, out/clusters/globem/gmm_cluster.csv, out/clusters/dtu/gmm_cluster.csv, out/clusters/tesserae/gmm_cluster_centroids.csv, out/clusters/momo/gmm_cluster_centroids.csv, out/clusters/globem/gmm_cluster_centroids.csv, out/clusters/dtu/gmm_cluster_centroids.csv, out/signature/tesserae/signature_ranked_jsd.csv, out/signature/tesserae/signature_ranked_cosine.csv, out/signature/tesserae/signature_unranked_jsd.csv, out/signature/tesserae/signature_unranked_cosine.csv, out/signature/momo/signature_ranked_jsd.csv, out/signature/momo/signature_ranked_cosine.csv, out/signature/momo/signature_unranked_jsd.csv, out/signature/momo/signature_unranked_cosine.csv, out/signature/globem/signature_ranked_jsd.csv, out/signature/globem/signature_ranked_cosine.csv, out/signature/globem/signature_unranked_jsd.csv, out/signature/globem/signature_unranked_cosine.csv, out/signature/dtu/signature_ranked_jsd.csv, out/signature/dtu/signature_ranked_cosine.csv, out/signature/dtu/signature_unranked_jsd.csv, out/signature/dtu/signature_unranked_cosine.csv, out/signature/tesserae/signature_d_self_ranked_jsd.csv, out/signature/tesserae/signature_d_self_ranked_cosine.csv, out/signature/tesserae/signature_d_self_unranked_jsd.csv, out/signature/tesserae/signature_d_self_unranked_cosine.csv, out/signature/momo/signature_d_self_ranked_jsd.csv, out/signature/momo/signature_d_self_ranked_cosine.csv, out/signature/momo/signature_d_self_unranked_jsd.csv, out/signature/momo/signature_d_self_unranked_cosine.csv, out/signature/globem/signature_d_self_ranked_jsd.csv, out/signature/globem/signature_d_self_ranked_cosine.csv, out/signature/globem/signature_d_self_unranked_jsd.csv, out/signature/globem/signature_d_self_unranked_cosine.csv, out/signature/dtu/signature_d_self_ranked_jsd.csv, out/signature/dtu/signature_d_self_ranked_cosine.csv, out/signature/dtu/signature_d_self_unranked_jsd.csv, out/signature/dtu/signature_d_self_unranked_cosine.csv, out/signature/tesserae/signature_d_ref_ranked_jsd.csv, out/signature/tesserae/signature_d_ref_ranked_cosine.csv, out/signature/tesserae/signature_d_ref_unranked_jsd.csv, out/signature/tesserae/signature_d_ref_unranked_cosine.csv, out/signature/momo/signature_d_ref_ranked_jsd.csv, out/signature/momo/signature_d_ref_ranked_cosine.csv, out/signature/momo/signature_d_ref_unranked_jsd.csv, out/signature/momo/signature_d_ref_unranked_cosine.csv, out/signature/globem/signature_d_ref_ranked_jsd.csv, out/signature/globem/signature_d_ref_ranked_cosine.csv, out/signature/globem/signature_d_ref_unranked_jsd.csv, out/signature/globem/signature_d_ref_unranked_cosine.csv, out/signature/dtu/signature_d_ref_ranked_jsd.csv, out/signature/dtu/signature_d_ref_ranked_cosine.csv, out/signature/dtu/signature_d_ref_unranked_jsd.csv, out/signature/dtu/signature_d_ref_unranked_cosine.csv, out/transition_signature/tesserae/transition_signature_jsd.csv, out/transition_signature/tesserae/transition_signature_cosine.csv, out/transition_signature/momo/transition_signature_jsd.csv, out/transition_signature/momo/transition_signature_cosine.csv, out/transition_signature/globem/transition_signature_jsd.csv, out/transition_signature/globem/transition_signature_cosine.csv, out/transition_signature/dtu/transition_signature_jsd.csv, out/transition_signature/dtu/transition_signature_cosine.csv, out/transition_signature/tesserae/transition_signature_d_self_jsd.csv, out/transition_signature/tesserae/transition_signature_d_self_cosine.csv, out/transition_signature/momo/transition_signature_d_self_jsd.csv, out/transition_signature/momo/transition_signature_d_self_cosine.csv, out/transition_signature/globem/transition_signature_d_self_jsd.csv, out/transition_signature/globem/transition_signature_d_self_cosine.csv, out/transition_signature/dtu/transition_signature_d_self_jsd.csv, out/transition_signature/dtu/transition_signature_d_self_cosine.csv, out/transition_signature/tesserae/transition_signature_d_ref_jsd.csv, out/transition_signature/tesserae/transition_signature_d_ref_cosine.csv, out/transition_signature/momo/transition_signature_d_ref_jsd.csv, out/transition_signature/momo/transition_signature_d_ref_cosine.csv, out/transition_signature/globem/transition_signature_d_ref_jsd.csv, out/transition_signature/globem/transition_signature_d_ref_cosine.csv, out/transition_signature/dtu/transition_signature_d_ref_jsd.csv, out/transition_signature/dtu/transition_signature_d_ref_cosine.csv
+    jobid: 0
+    reason: Input files updated by another job: out/signature/dtu/signature_d_ref_ranked_cosine.csv, out/signature/momo/signature_d_ref_unranked_cosine.csv, out/signature/tesserae/signature_d_ref_ranked_jsd.csv, out/signature/dtu/signature_d_self_ranked_jsd.csv, out/signature/momo/signature_d_self_unranked_cosine.csv, out/signature/tesserae/signature_d_self_ranked_cosine.csv, out/signature/globem/signature_unranked_jsd.csv, out/signature/globem/signature_ranked_cosine.csv, out/signature/tesserae/signature_ranked_jsd.csv, out/signature/tesserae/signature_d_self_unranked_jsd.csv, out/signature/tesserae/signature_d_self_ranked_jsd.csv, out/signature/globem/signature_d_ref_unranked_jsd.csv, out/signature/momo/signature_ranked_jsd.csv, out/signature/momo/signature_ranked_cosine.csv, out/signature/momo/signature_d_ref_ranked_jsd.csv, out/signature/tesserae/signature_d_ref_ranked_cosine.csv, out/signature/dtu/signature_ranked_cosine.csv, out/signature/dtu/signature_unranked_jsd.csv, out/signature/tesserae/signature_unranked_jsd.csv, out/signature/momo/signature_d_ref_unranked_jsd.csv, out/signature/tesserae/signature_d_ref_unranked_jsd.csv, out/signature/tesserae/signature_d_self_unranked_cosine.csv, out/signature/globem/signature_d_self_ranked_jsd.csv, out/signature/dtu/signature_ranked_jsd.csv, out/signature/globem/signature_unranked_cosine.csv, out/signature/momo/signature_d_self_ranked_jsd.csv, out/signature/momo/signature_d_ref_ranked_cosine.csv, out/signature/momo/signature_d_self_unranked_jsd.csv, out/signature/globem/signature_d_ref_unranked_cosine.csv, out/signature/dtu/signature_d_ref_unranked_jsd.csv, out/signature/tesserae/signature_unranked_cosine.csv, out/signature/globem/signature_d_self_unranked_cosine.csv, out/signature/dtu/signature_d_self_unranked_cosine.csv, out/signature/dtu/signature_d_self_unranked_jsd.csv, out/signature/globem/signature_d_ref_ranked_cosine.csv, out/signature/dtu/signature_unranked_cosine.csv, out/signature/dtu/signature_d_self_ranked_cosine.csv, out/signature/momo/signature_d_self_ranked_cosine.csv, out/signature/dtu/signature_d_ref_ranked_jsd.csv, out/signature/momo/signature_unranked_cosine.csv, out/signature/dtu/signature_d_ref_unranked_cosine.csv, out/signature/momo/signature_unranked_jsd.csv, out/signature/tesserae/signature_ranked_cosine.csv, out/signature/globem/signature_d_self_unranked_jsd.csv, out/signature/globem/signature_ranked_jsd.csv, out/signature/tesserae/signature_d_ref_unranked_cosine.csv, out/signature/globem/signature_d_ref_ranked_jsd.csv, out/signature/globem/signature_d_self_ranked_cosine.csv
+    resources: tmpdir=/tmp
+
+[Sat Aug 16 00:03:10 2025]
 Finished job 0.
-23 of 23 steps (100%) done
-Complete log: .snakemake/log/2025-08-15T001626.781171.snakemake.log
+17 of 17 steps (100%) done
+Complete log: .snakemake/log/2025-08-15T235908.281620.snakemake.log
