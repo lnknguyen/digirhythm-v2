@@ -14,13 +14,15 @@ def main(input_fns, output_fns, params):
     # Load data
     data = pd.read_csv(input_fns[0])
     features = params.features
+
     run_selection = params.run_selection
     algo = snakemake.wildcards.algo
+    optimal_cluster = int(snakemake.wildcards.cluster_num)
 
     cluster_settings = params.cluster_settings
 
     if algo == "gmm":
-        model = GMMClustering(data, features, cluster_settings)
+        model = GMMClustering(data, features, optimal_cluster, cluster_settings)
         model.init_model(n_components=2)
     else:
         logging.error("Algo no available", stack_info=True)

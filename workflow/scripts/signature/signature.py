@@ -240,13 +240,12 @@ def main(input_fns, output_fns, params):
 
             logging.info(f"Processing waves: {target} with {len(users_in_waves)} users")
 
-            # Assign wave to 'split', as split 
+            # Assign wave to 'split', as split
             # column will be used to compute signature
-            filtered_clusters_df['split'] = filtered_clusters_df['wave']
-            
+            filtered_clusters_df["split"] = filtered_clusters_df["wave"]
+
             logging.info("Calculating user signatures...")
             signature_df = signature(filtered_clusters_df, ranked)
-            
 
             logging.info("Calculating self-distances...")
             d_self_df = d_self(signature_df, splits=target, method=dist_func)

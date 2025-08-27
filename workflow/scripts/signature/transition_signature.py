@@ -11,6 +11,7 @@ import logging
 
 # ------- Distance Functions -------
 
+
 def dist_func(p, q, method="jsd", eps=1e-12):
     # Convert to numpy arrays
     p = np.asarray(p, dtype=float)
@@ -78,7 +79,6 @@ def transition_matrix(
     cluster_col="Cluster",
     states=None,
     normalize=True,
-    
 ):
 
     df = df[[user_col, date_col, cluster_col]].copy()
@@ -304,12 +304,12 @@ def main(input_fns, output_fns, params):
         logging.info("Calculating transition matrix...")
         for (user, split), g in data.groupby(["user", "split"], sort=False):
             mat, _ = transition_matrix(
-                    g,
-                    user_col="user",
-                    date_col="date",
-                    cluster_col="Cluster",
-                    states=states,
-                )
+                g,
+                user_col="user",
+                date_col="date",
+                cluster_col="Cluster",
+                states=states,
+            )
             all_mats[user][split] = mat
 
         logging.info("Calculating self-distances...")

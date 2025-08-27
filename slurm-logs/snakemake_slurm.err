@@ -5,593 +5,612 @@ Assuming unrestricted shared filesystem usage.
 Building DAG of jobs...
 Your conda installation is not configured to use strict channel priorities. This is however crucial for having robust and correct environments (for details, see https://conda-forge.org/docs/user/tipsandtricks.html). Please consider to configure strict priorities by executing 'conda config --set channel_priority strict'.
 Using shell: /usr/bin/bash
-Provided cores: 4
+Provided cores: 16
 Rules claiming more threads will be scaled down.
 Job stats:
-job          count
----------  -------
-all              1
-signature       16
-total           17
+job        count
+-------  -------
+all            1
+cluster       24
+total         25
 
 Select jobs to execute...
-Execute 4 jobs...
+Execute 16 jobs...
 
-[Fri Aug 15 23:59:12 2025]
-localrule signature:
-    input: out/clusters/dtu/gmm_cluster.csv
-    output: out/signature/dtu/signature_unranked_cosine.csv, out/signature/dtu/signature_d_self_unranked_cosine.csv, out/signature/dtu/signature_d_ref_unranked_cosine.csv
-    jobid: 36
-    reason: Code has changed since last execution
-    wildcards: study=dtu, rank=unranked, dist=cosine
+[Wed Aug 27 16:16:31 2025]
+localrule cluster:
+    input: data/processed/dtu/all_features_clean.csv
+    output: out/clusters/dtu/6/gmm_cluster.csv, out/clusters/dtu/6/gmm_cluster_centroids.csv, out/clusters/dtu/6/gmm_cluster_covariances.csv
+    jobid: 16
+    reason: Missing output files: out/clusters/dtu/6/gmm_cluster.csv, out/clusters/dtu/6/gmm_cluster_centroids.csv
+    wildcards: study=dtu, cluster_num=6, algo=gmm
     resources: tmpdir=/tmp
 
-[Fri Aug 15 23:59:12 2025]
-localrule signature:
-    input: out/clusters/dtu/gmm_cluster.csv
-    output: out/signature/dtu/signature_ranked_jsd.csv, out/signature/dtu/signature_d_self_ranked_jsd.csv, out/signature/dtu/signature_d_ref_ranked_jsd.csv
-    jobid: 33
-    reason: Code has changed since last execution
-    wildcards: study=dtu, rank=ranked, dist=jsd
-    resources: tmpdir=/tmp
-
-[Fri Aug 15 23:59:12 2025]
-localrule signature:
-    input: out/clusters/dtu/gmm_cluster.csv
-    output: out/signature/dtu/signature_ranked_cosine.csv, out/signature/dtu/signature_d_self_ranked_cosine.csv, out/signature/dtu/signature_d_ref_ranked_cosine.csv
-    jobid: 34
-    reason: Code has changed since last execution
-    wildcards: study=dtu, rank=ranked, dist=cosine
-    resources: tmpdir=/tmp
-
-[Fri Aug 15 23:59:12 2025]
-localrule signature:
-    input: out/clusters/dtu/gmm_cluster.csv
-    output: out/signature/dtu/signature_unranked_jsd.csv, out/signature/dtu/signature_d_self_unranked_jsd.csv, out/signature/dtu/signature_d_ref_unranked_jsd.csv
-    jobid: 35
-    reason: Code has changed since last execution
-    wildcards: study=dtu, rank=unranked, dist=jsd
-    resources: tmpdir=/tmp
-
-Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
-Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
-Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
-Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
-Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
-Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
-Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
-Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
-2025-08-15 23:59:17,997 - INFO - Loading data...
-2025-08-15 23:59:17,998 - INFO - Loading data...
-2025-08-15 23:59:18,029 - INFO - Loading data...
-2025-08-15 23:59:18,048 - INFO - Loading data...
-2025-08-15 23:59:21,502 - INFO - Filtering data by threshold...
-2025-08-15 23:59:21,696 - INFO - Filtering data by threshold...
-2025-08-15 23:59:21,817 - INFO - Splitting data into chunks...
-2025-08-15 23:59:21,843 - INFO - Filtering data by threshold...
-2025-08-15 23:59:21,954 - INFO - Splitting data into chunks...
-2025-08-15 23:59:22,067 - INFO - Splitting data into chunks...
-2025-08-15 23:59:22,081 - INFO - Calculating user signatures...
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmp8tadyt7r.signature.py:71: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
-  df.groupby(["user", "split", "Cluster"]).size().reset_index(name="count")
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmp8tadyt7r.signature.py:74: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
-  user_signature["percentage"] = user_signature.groupby(["user", "split"])[
-2025-08-15 23:59:22,194 - INFO - Calculating user signatures...
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmp2pdyqtii.signature.py:71: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
-  df.groupby(["user", "split", "Cluster"]).size().reset_index(name="count")
-2025-08-15 23:59:22,240 - INFO - Filtering data by threshold...
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmp2pdyqtii.signature.py:74: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
-  user_signature["percentage"] = user_signature.groupby(["user", "split"])[
-2025-08-15 23:59:22,264 - INFO - Calculating user signatures...
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmp1ql7gbdf.signature.py:71: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
-  df.groupby(["user", "split", "Cluster"]).size().reset_index(name="count")
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmp1ql7gbdf.signature.py:74: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
-  user_signature["percentage"] = user_signature.groupby(["user", "split"])[
-2025-08-15 23:59:22,351 - INFO - Splitting data into chunks...
-2025-08-15 23:59:22,465 - INFO - Calculating user signatures...
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmp7vpgly3o.signature.py:71: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
-  df.groupby(["user", "split", "Cluster"]).size().reset_index(name="count")
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmp7vpgly3o.signature.py:74: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
-  user_signature["percentage"] = user_signature.groupby(["user", "split"])[
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmp2pdyqtii.signature.py:93: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
-  user_signature.groupby(["user", "split"]).cumcount() + 1
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmp2pdyqtii.signature.py:96: FutureWarning: The default value of observed=False is deprecated and will change to observed=True in a future version of pandas. Specify observed=False to silence this warning and retain the current behavior
-  user_signature = user_signature.pivot_table(
-2025-08-15 23:59:23,273 - INFO - Calculating self-distances...
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmp7vpgly3o.signature.py:93: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
-  user_signature.groupby(["user", "split"]).cumcount() + 1
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmp7vpgly3o.signature.py:96: FutureWarning: The default value of observed=False is deprecated and will change to observed=True in a future version of pandas. Specify observed=False to silence this warning and retain the current behavior
-  user_signature = user_signature.pivot_table(
-2025-08-15 23:59:23,347 - INFO - Calculating self-distances...
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmp1ql7gbdf.signature.py:100: FutureWarning: The default value of observed=False is deprecated and will change to observed=True in a future version of pandas. Specify observed=False to silence this warning and retain the current behavior
-  user_signature = user_signature.pivot_table(
-2025-08-15 23:59:23,717 - INFO - Calculating self-distances...
-2025-08-15 23:59:23,737 - INFO - Calculating reference distances...
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmp8tadyt7r.signature.py:100: FutureWarning: The default value of observed=False is deprecated and will change to observed=True in a future version of pandas. Specify observed=False to silence this warning and retain the current behavior
-  user_signature = user_signature.pivot_table(
-2025-08-15 23:59:23,915 - INFO - Calculating self-distances...
-2025-08-15 23:59:24,093 - INFO - Calculating reference distances...
-2025-08-15 23:59:24,145 - INFO - Calculating reference distances...
-2025-08-15 23:59:24,311 - INFO - Calculating reference distances...
-2025-08-16 00:02:06,557 - INFO - Saving results...
-2025-08-16 00:02:07,099 - INFO - Processing complete.
-2025-08-16 00:02:07,327 - INFO - Saving results...
-[Sat Aug 16 00:02:07 2025]
-Finished job 33.
-1 of 17 steps (6%) done
-Select jobs to execute...
-Execute 1 jobs...
-
-[Sat Aug 16 00:02:07 2025]
-localrule signature:
-    input: out/clusters/tesserae/gmm_cluster.csv
-    output: out/signature/tesserae/signature_ranked_cosine.csv, out/signature/tesserae/signature_d_self_ranked_cosine.csv, out/signature/tesserae/signature_d_ref_ranked_cosine.csv
-    jobid: 22
-    reason: Code has changed since last execution
-    wildcards: study=tesserae, rank=ranked, dist=cosine
-    resources: tmpdir=/tmp
-
-Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
-2025-08-16 00:02:07,866 - INFO - Processing complete.
-[Sat Aug 16 00:02:08 2025]
-Finished job 35.
-2 of 17 steps (12%) done
-Select jobs to execute...
-Execute 1 jobs...
-
-[Sat Aug 16 00:02:08 2025]
-localrule signature:
-    input: out/clusters/tesserae/gmm_cluster.csv
-    output: out/signature/tesserae/signature_ranked_jsd.csv, out/signature/tesserae/signature_d_self_ranked_jsd.csv, out/signature/tesserae/signature_d_ref_ranked_jsd.csv
-    jobid: 21
-    reason: Code has changed since last execution
-    wildcards: study=tesserae, rank=ranked, dist=jsd
-    resources: tmpdir=/tmp
-
-Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
-2025-08-16 00:02:08,632 - INFO - Saving results...
-2025-08-16 00:02:09,330 - INFO - Processing complete.
-[Sat Aug 16 00:02:09 2025]
-Finished job 34.
-3 of 17 steps (18%) done
-Select jobs to execute...
-Execute 1 jobs...
-
-[Sat Aug 16 00:02:09 2025]
-localrule signature:
-    input: out/clusters/tesserae/gmm_cluster.csv
-    output: out/signature/tesserae/signature_unranked_cosine.csv, out/signature/tesserae/signature_d_self_unranked_cosine.csv, out/signature/tesserae/signature_d_ref_unranked_cosine.csv
-    jobid: 24
-    reason: Code has changed since last execution
-    wildcards: study=tesserae, rank=unranked, dist=cosine
-    resources: tmpdir=/tmp
-
-Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
-2025-08-16 00:02:09,875 - INFO - Saving results...
-Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
-2025-08-16 00:02:10,220 - INFO - Processing complete.
-[Sat Aug 16 00:02:10 2025]
-Finished job 36.
-4 of 17 steps (24%) done
-Select jobs to execute...
-Execute 1 jobs...
-
-[Sat Aug 16 00:02:10 2025]
-localrule signature:
-    input: out/clusters/tesserae/gmm_cluster.csv
-    output: out/signature/tesserae/signature_unranked_jsd.csv, out/signature/tesserae/signature_d_self_unranked_jsd.csv, out/signature/tesserae/signature_d_ref_unranked_jsd.csv
-    jobid: 23
-    reason: Code has changed since last execution
-    wildcards: study=tesserae, rank=unranked, dist=jsd
-    resources: tmpdir=/tmp
-
-Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
-Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
-Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
-Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
-2025-08-16 00:02:13,664 - INFO - Loading data...
-2025-08-16 00:02:14,193 - INFO - Loading data...
-2025-08-16 00:02:15,956 - INFO - Loading data...
-2025-08-16 00:02:16,179 - INFO - Loading data...
-2025-08-16 00:02:16,419 - INFO - Filtering data by threshold...
-2025-08-16 00:02:16,623 - INFO - Splitting data into chunks...
-2025-08-16 00:02:16,836 - INFO - Calculating user signatures...
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpxpkirk4g.signature.py:71: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
-  df.groupby(["user", "split", "Cluster"]).size().reset_index(name="count")
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpxpkirk4g.signature.py:74: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
-  user_signature["percentage"] = user_signature.groupby(["user", "split"])[
-2025-08-16 00:02:17,210 - INFO - Filtering data by threshold...
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpxpkirk4g.signature.py:93: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
-  user_signature.groupby(["user", "split"]).cumcount() + 1
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpxpkirk4g.signature.py:96: FutureWarning: The default value of observed=False is deprecated and will change to observed=True in a future version of pandas. Specify observed=False to silence this warning and retain the current behavior
-  user_signature = user_signature.pivot_table(
-2025-08-16 00:02:17,350 - INFO - Calculating self-distances...
-2025-08-16 00:02:17,412 - INFO - Splitting data into chunks...
-2025-08-16 00:02:17,579 - INFO - Calculating reference distances...
-2025-08-16 00:02:17,623 - INFO - Calculating user signatures...
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmppmb1t__u.signature.py:71: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
-  df.groupby(["user", "split", "Cluster"]).size().reset_index(name="count")
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmppmb1t__u.signature.py:74: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
-  user_signature["percentage"] = user_signature.groupby(["user", "split"])[
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmppmb1t__u.signature.py:93: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
-  user_signature.groupby(["user", "split"]).cumcount() + 1
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmppmb1t__u.signature.py:96: FutureWarning: The default value of observed=False is deprecated and will change to observed=True in a future version of pandas. Specify observed=False to silence this warning and retain the current behavior
-  user_signature = user_signature.pivot_table(
-2025-08-16 00:02:18,103 - INFO - Calculating self-distances...
-2025-08-16 00:02:18,298 - INFO - Calculating reference distances...
-2025-08-16 00:02:19,040 - INFO - Filtering data by threshold...
-2025-08-16 00:02:19,170 - INFO - Filtering data by threshold...
-2025-08-16 00:02:19,244 - INFO - Splitting data into chunks...
-2025-08-16 00:02:19,368 - INFO - Splitting data into chunks...
-2025-08-16 00:02:19,472 - INFO - Calculating user signatures...
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpu8ahsrdb.signature.py:71: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
-  df.groupby(["user", "split", "Cluster"]).size().reset_index(name="count")
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpu8ahsrdb.signature.py:74: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
-  user_signature["percentage"] = user_signature.groupby(["user", "split"])[
-2025-08-16 00:02:19,581 - INFO - Calculating user signatures...
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmp1db7vl95.signature.py:71: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
-  df.groupby(["user", "split", "Cluster"]).size().reset_index(name="count")
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmp1db7vl95.signature.py:74: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
-  user_signature["percentage"] = user_signature.groupby(["user", "split"])[
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpu8ahsrdb.signature.py:100: FutureWarning: The default value of observed=False is deprecated and will change to observed=True in a future version of pandas. Specify observed=False to silence this warning and retain the current behavior
-  user_signature = user_signature.pivot_table(
-2025-08-16 00:02:19,948 - INFO - Calculating self-distances...
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmp1db7vl95.signature.py:100: FutureWarning: The default value of observed=False is deprecated and will change to observed=True in a future version of pandas. Specify observed=False to silence this warning and retain the current behavior
-  user_signature = user_signature.pivot_table(
-2025-08-16 00:02:20,052 - INFO - Calculating self-distances...
-2025-08-16 00:02:20,171 - INFO - Calculating reference distances...
-2025-08-16 00:02:20,252 - INFO - Calculating reference distances...
-2025-08-16 00:02:42,058 - INFO - Saving results...
-2025-08-16 00:02:42,215 - INFO - Processing complete.
-[Sat Aug 16 00:02:42 2025]
-Finished job 21.
-5 of 17 steps (29%) done
-Select jobs to execute...
-Execute 1 jobs...
-
-[Sat Aug 16 00:02:42 2025]
-localrule signature:
-    input: out/clusters/momo/gmm_cluster.csv
-    output: out/signature/momo/signature_unranked_cosine.csv, out/signature/momo/signature_d_self_unranked_cosine.csv, out/signature/momo/signature_d_ref_unranked_cosine.csv
-    jobid: 28
-    reason: Code has changed since last execution
-    wildcards: study=momo, rank=unranked, dist=cosine
-    resources: tmpdir=/tmp
-
-Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
-2025-08-16 00:02:42,586 - INFO - Saving results...
-2025-08-16 00:02:42,730 - INFO - Processing complete.
-2025-08-16 00:02:42,843 - INFO - Saving results...
-2025-08-16 00:02:42,948 - INFO - Processing complete.
-[Sat Aug 16 00:02:43 2025]
-Finished job 24.
-6 of 17 steps (35%) done
-Select jobs to execute...
-Execute 1 jobs...
-
-[Sat Aug 16 00:02:43 2025]
-localrule signature:
-    input: out/clusters/momo/gmm_cluster.csv
-    output: out/signature/momo/signature_ranked_jsd.csv, out/signature/momo/signature_d_self_ranked_jsd.csv, out/signature/momo/signature_d_ref_ranked_jsd.csv
-    jobid: 25
-    reason: Code has changed since last execution
-    wildcards: study=momo, rank=ranked, dist=jsd
-    resources: tmpdir=/tmp
-
-Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
-2025-08-16 00:02:43,152 - INFO - Saving results...
-[Sat Aug 16 00:02:43 2025]
-Finished job 22.
-7 of 17 steps (41%) done
-Select jobs to execute...
-Execute 1 jobs...
-
-[Sat Aug 16 00:02:43 2025]
-localrule signature:
-    input: out/clusters/momo/gmm_cluster.csv
-    output: out/signature/momo/signature_unranked_jsd.csv, out/signature/momo/signature_d_self_unranked_jsd.csv, out/signature/momo/signature_d_ref_unranked_jsd.csv
-    jobid: 27
-    reason: Code has changed since last execution
-    wildcards: study=momo, rank=unranked, dist=jsd
-    resources: tmpdir=/tmp
-
-Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
-2025-08-16 00:02:43,231 - INFO - Processing complete.
-[Sat Aug 16 00:02:43 2025]
-Finished job 23.
-8 of 17 steps (47%) done
-Select jobs to execute...
-Execute 1 jobs...
-
-[Sat Aug 16 00:02:43 2025]
-localrule signature:
-    input: out/clusters/momo/gmm_cluster.csv
-    output: out/signature/momo/signature_ranked_cosine.csv, out/signature/momo/signature_d_self_ranked_cosine.csv, out/signature/momo/signature_d_ref_ranked_cosine.csv
-    jobid: 26
-    reason: Code has changed since last execution
-    wildcards: study=momo, rank=ranked, dist=cosine
-    resources: tmpdir=/tmp
-
-Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
-Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
-Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
-Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
-Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
-2025-08-16 00:02:48,192 - INFO - Loading data...
-2025-08-16 00:02:48,639 - INFO - Loading data...
-2025-08-16 00:02:49,119 - INFO - Loading data...
-2025-08-16 00:02:49,226 - INFO - Filtering data by threshold...
-2025-08-16 00:02:49,256 - INFO - Splitting data into chunks...
-2025-08-16 00:02:49,279 - INFO - Calculating user signatures...
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpcvv38s7_.signature.py:71: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
-  df.groupby(["user", "split", "Cluster"]).size().reset_index(name="count")
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpcvv38s7_.signature.py:74: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
-  user_signature["percentage"] = user_signature.groupby(["user", "split"])[
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpcvv38s7_.signature.py:100: FutureWarning: The default value of observed=False is deprecated and will change to observed=True in a future version of pandas. Specify observed=False to silence this warning and retain the current behavior
-  user_signature = user_signature.pivot_table(
-2025-08-16 00:02:49,322 - INFO - Calculating self-distances...
-2025-08-16 00:02:49,335 - INFO - Calculating reference distances...
-2025-08-16 00:02:49,551 - INFO - Loading data...
-2025-08-16 00:02:49,713 - INFO - Saving results...
-2025-08-16 00:02:49,740 - INFO - Processing complete.
-2025-08-16 00:02:49,813 - INFO - Filtering data by threshold...
-2025-08-16 00:02:49,899 - INFO - Splitting data into chunks...
-[Sat Aug 16 00:02:49 2025]
-Finished job 28.
-9 of 17 steps (53%) done
-Select jobs to execute...
-Execute 1 jobs...
-
-[Sat Aug 16 00:02:49 2025]
-localrule signature:
-    input: out/clusters/globem/gmm_cluster.csv
-    output: out/signature/globem/signature_unranked_cosine.csv, out/signature/globem/signature_d_self_unranked_cosine.csv, out/signature/globem/signature_d_ref_unranked_cosine.csv
+[Wed Aug 27 16:16:31 2025]
+localrule cluster:
+    input: data/processed/dtu/all_features_clean.csv
+    output: out/clusters/dtu/9/gmm_cluster.csv, out/clusters/dtu/9/gmm_cluster_centroids.csv, out/clusters/dtu/9/gmm_cluster_covariances.csv
     jobid: 32
-    reason: Code has changed since last execution
-    wildcards: study=globem, rank=unranked, dist=cosine
+    reason: Missing output files: out/clusters/dtu/9/gmm_cluster_centroids.csv, out/clusters/dtu/9/gmm_cluster.csv
+    wildcards: study=dtu, cluster_num=9, algo=gmm
     resources: tmpdir=/tmp
 
-Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
-2025-08-16 00:02:49,950 - INFO - Calculating user signatures...
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmp7yx_dwl3.signature.py:71: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
-  df.groupby(["user", "split", "Cluster"]).size().reset_index(name="count")
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmp7yx_dwl3.signature.py:74: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
-  user_signature["percentage"] = user_signature.groupby(["user", "split"])[
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmp7yx_dwl3.signature.py:93: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
-  user_signature.groupby(["user", "split"]).cumcount() + 1
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmp7yx_dwl3.signature.py:96: FutureWarning: The default value of observed=False is deprecated and will change to observed=True in a future version of pandas. Specify observed=False to silence this warning and retain the current behavior
-  user_signature = user_signature.pivot_table(
-2025-08-16 00:02:50,045 - INFO - Calculating self-distances...
-2025-08-16 00:02:50,068 - INFO - Calculating reference distances...
-2025-08-16 00:02:50,444 - INFO - Saving results...
-2025-08-16 00:02:50,470 - INFO - Processing complete.
-2025-08-16 00:02:50,508 - INFO - Filtering data by threshold...
-2025-08-16 00:02:50,563 - INFO - Splitting data into chunks...
-2025-08-16 00:02:50,586 - INFO - Calculating user signatures...
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmp3f3peojp.signature.py:71: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
-  df.groupby(["user", "split", "Cluster"]).size().reset_index(name="count")
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmp3f3peojp.signature.py:74: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
-  user_signature["percentage"] = user_signature.groupby(["user", "split"])[
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmp3f3peojp.signature.py:100: FutureWarning: The default value of observed=False is deprecated and will change to observed=True in a future version of pandas. Specify observed=False to silence this warning and retain the current behavior
-  user_signature = user_signature.pivot_table(
-2025-08-16 00:02:50,630 - INFO - Calculating self-distances...
-2025-08-16 00:02:50,643 - INFO - Calculating reference distances...
-[Sat Aug 16 00:02:50 2025]
-Finished job 25.
-10 of 17 steps (59%) done
-Select jobs to execute...
-Execute 1 jobs...
+[Wed Aug 27 16:16:31 2025]
+localrule cluster:
+    input: data/processed/tesserae/all_features_clean.csv
+    output: out/clusters/tesserae/11/gmm_cluster.csv, out/clusters/tesserae/11/gmm_cluster_centroids.csv, out/clusters/tesserae/11/gmm_cluster_covariances.csv
+    jobid: 37
+    reason: Missing output files: out/clusters/tesserae/11/gmm_cluster_centroids.csv, out/clusters/tesserae/11/gmm_cluster.csv
+    wildcards: study=tesserae, cluster_num=11, algo=gmm
+    resources: tmpdir=/tmp
 
-[Sat Aug 16 00:02:50 2025]
-localrule signature:
-    input: out/clusters/globem/gmm_cluster.csv
-    output: out/signature/globem/signature_ranked_jsd.csv, out/signature/globem/signature_d_self_ranked_jsd.csv, out/signature/globem/signature_d_ref_ranked_jsd.csv
+[Wed Aug 27 16:16:31 2025]
+localrule cluster:
+    input: data/processed/momo/all_features_clean.csv
+    output: out/clusters/momo/8/gmm_cluster.csv, out/clusters/momo/8/gmm_cluster_centroids.csv, out/clusters/momo/8/gmm_cluster_covariances.csv
+    jobid: 26
+    reason: Missing output files: out/clusters/momo/8/gmm_cluster_centroids.csv, out/clusters/momo/8/gmm_cluster.csv
+    wildcards: study=momo, cluster_num=8, algo=gmm
+    resources: tmpdir=/tmp
+
+[Wed Aug 27 16:16:31 2025]
+localrule cluster:
+    input: data/processed/dtu/all_features_clean.csv
+    output: out/clusters/dtu/10/gmm_cluster.csv, out/clusters/dtu/10/gmm_cluster_centroids.csv, out/clusters/dtu/10/gmm_cluster_covariances.csv
+    jobid: 36
+    reason: Missing output files: out/clusters/dtu/10/gmm_cluster_centroids.csv, out/clusters/dtu/10/gmm_cluster.csv
+    wildcards: study=dtu, cluster_num=10, algo=gmm
+    resources: tmpdir=/tmp
+
+[Wed Aug 27 16:16:31 2025]
+localrule cluster:
+    input: data/processed/momo/all_features_clean.csv
+    output: out/clusters/momo/6/gmm_cluster.csv, out/clusters/momo/6/gmm_cluster_centroids.csv, out/clusters/momo/6/gmm_cluster_covariances.csv
+    jobid: 8
+    reason: Missing output files: out/clusters/momo/6/gmm_cluster.csv, out/clusters/momo/6/gmm_cluster_centroids.csv
+    wildcards: study=momo, cluster_num=6, algo=gmm
+    resources: tmpdir=/tmp
+
+[Wed Aug 27 16:16:31 2025]
+localrule cluster:
+    input: data/processed/dtu/all_features_clean.csv
+    output: out/clusters/dtu/11/gmm_cluster.csv, out/clusters/dtu/11/gmm_cluster_centroids.csv, out/clusters/dtu/11/gmm_cluster_covariances.csv
+    jobid: 40
+    reason: Missing output files: out/clusters/dtu/11/gmm_cluster_centroids.csv, out/clusters/dtu/11/gmm_cluster.csv
+    wildcards: study=dtu, cluster_num=11, algo=gmm
+    resources: tmpdir=/tmp
+
+[Wed Aug 27 16:16:31 2025]
+localrule cluster:
+    input: data/processed/dtu/all_features_clean.csv
+    output: out/clusters/dtu/7/gmm_cluster.csv, out/clusters/dtu/7/gmm_cluster_centroids.csv, out/clusters/dtu/7/gmm_cluster_covariances.csv
+    jobid: 24
+    reason: Missing output files: out/clusters/dtu/7/gmm_cluster.csv, out/clusters/dtu/7/gmm_cluster_centroids.csv
+    wildcards: study=dtu, cluster_num=7, algo=gmm
+    resources: tmpdir=/tmp
+
+[Wed Aug 27 16:16:32 2025]
+localrule cluster:
+    input: data/processed/tesserae/all_features_clean.csv
+    output: out/clusters/tesserae/8/gmm_cluster.csv, out/clusters/tesserae/8/gmm_cluster_centroids.csv, out/clusters/tesserae/8/gmm_cluster_covariances.csv
+    jobid: 25
+    reason: Missing output files: out/clusters/tesserae/8/gmm_cluster_centroids.csv, out/clusters/tesserae/8/gmm_cluster.csv
+    wildcards: study=tesserae, cluster_num=8, algo=gmm
+    resources: tmpdir=/tmp
+
+[Wed Aug 27 16:16:32 2025]
+localrule cluster:
+    input: data/processed/tesserae/all_features_clean.csv
+    output: out/clusters/tesserae/6/gmm_cluster.csv, out/clusters/tesserae/6/gmm_cluster_centroids.csv, out/clusters/tesserae/6/gmm_cluster_covariances.csv
+    jobid: 1
+    reason: Missing output files: out/clusters/tesserae/6/gmm_cluster.csv, out/clusters/tesserae/6/gmm_cluster_centroids.csv
+    wildcards: study=tesserae, cluster_num=6, algo=gmm
+    resources: tmpdir=/tmp
+
+[Wed Aug 27 16:16:32 2025]
+localrule cluster:
+    input: data/processed/momo/all_features_clean.csv
+    output: out/clusters/momo/7/gmm_cluster.csv, out/clusters/momo/7/gmm_cluster_centroids.csv, out/clusters/momo/7/gmm_cluster_covariances.csv
+    jobid: 22
+    reason: Missing output files: out/clusters/momo/7/gmm_cluster.csv, out/clusters/momo/7/gmm_cluster_centroids.csv
+    wildcards: study=momo, cluster_num=7, algo=gmm
+    resources: tmpdir=/tmp
+
+[Wed Aug 27 16:16:32 2025]
+localrule cluster:
+    input: data/processed/tesserae/all_features_clean.csv
+    output: out/clusters/tesserae/9/gmm_cluster.csv, out/clusters/tesserae/9/gmm_cluster_centroids.csv, out/clusters/tesserae/9/gmm_cluster_covariances.csv
     jobid: 29
-    reason: Code has changed since last execution
-    wildcards: study=globem, rank=ranked, dist=jsd
+    reason: Missing output files: out/clusters/tesserae/9/gmm_cluster.csv, out/clusters/tesserae/9/gmm_cluster_centroids.csv
+    wildcards: study=tesserae, cluster_num=9, algo=gmm
     resources: tmpdir=/tmp
 
-Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
-2025-08-16 00:02:50,783 - INFO - Saving results...
-2025-08-16 00:02:50,808 - INFO - Processing complete.
-[Sat Aug 16 00:02:50 2025]
-Finished job 27.
-11 of 17 steps (65%) done
-Select jobs to execute...
-Execute 1 jobs...
-
-[Sat Aug 16 00:02:50 2025]
-localrule signature:
-    input: out/clusters/globem/gmm_cluster.csv
-    output: out/signature/globem/signature_ranked_cosine.csv, out/signature/globem/signature_d_self_ranked_cosine.csv, out/signature/globem/signature_d_ref_ranked_cosine.csv
-    jobid: 30
-    reason: Code has changed since last execution
-    wildcards: study=globem, rank=ranked, dist=cosine
+[Wed Aug 27 16:16:32 2025]
+localrule cluster:
+    input: data/processed/tesserae/all_features_clean.csv
+    output: out/clusters/tesserae/7/gmm_cluster.csv, out/clusters/tesserae/7/gmm_cluster_centroids.csv, out/clusters/tesserae/7/gmm_cluster_covariances.csv
+    jobid: 21
+    reason: Missing output files: out/clusters/tesserae/7/gmm_cluster.csv, out/clusters/tesserae/7/gmm_cluster_centroids.csv
+    wildcards: study=tesserae, cluster_num=7, algo=gmm
     resources: tmpdir=/tmp
 
-Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
-2025-08-16 00:02:51,054 - INFO - Filtering data by threshold...
-2025-08-16 00:02:51,103 - INFO - Splitting data into chunks...
-2025-08-16 00:02:51,126 - INFO - Calculating user signatures...
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmphjer7mo5.signature.py:71: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
-  df.groupby(["user", "split", "Cluster"]).size().reset_index(name="count")
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmphjer7mo5.signature.py:74: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
-  user_signature["percentage"] = user_signature.groupby(["user", "split"])[
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmphjer7mo5.signature.py:93: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
-  user_signature.groupby(["user", "split"]).cumcount() + 1
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmphjer7mo5.signature.py:96: FutureWarning: The default value of observed=False is deprecated and will change to observed=True in a future version of pandas. Specify observed=False to silence this warning and retain the current behavior
-  user_signature = user_signature.pivot_table(
-2025-08-16 00:02:51,174 - INFO - Calculating self-distances...
-2025-08-16 00:02:51,188 - INFO - Calculating reference distances...
-2025-08-16 00:02:51,333 - INFO - Saving results...
-2025-08-16 00:02:51,349 - INFO - Processing complete.
-[Sat Aug 16 00:02:51 2025]
-Finished job 26.
-12 of 17 steps (71%) done
-Select jobs to execute...
-Execute 1 jobs...
-
-[Sat Aug 16 00:02:51 2025]
-localrule signature:
-    input: out/clusters/globem/gmm_cluster.csv
-    output: out/signature/globem/signature_unranked_jsd.csv, out/signature/globem/signature_d_self_unranked_jsd.csv, out/signature/globem/signature_d_ref_unranked_jsd.csv
-    jobid: 31
-    reason: Code has changed since last execution
-    wildcards: study=globem, rank=unranked, dist=jsd
+[Wed Aug 27 16:16:32 2025]
+localrule cluster:
+    input: data/processed/dtu/all_features_clean.csv
+    output: out/clusters/dtu/8/gmm_cluster.csv, out/clusters/dtu/8/gmm_cluster_centroids.csv, out/clusters/dtu/8/gmm_cluster_covariances.csv
+    jobid: 28
+    reason: Missing output files: out/clusters/dtu/8/gmm_cluster.csv, out/clusters/dtu/8/gmm_cluster_centroids.csv
+    wildcards: study=dtu, cluster_num=8, algo=gmm
     resources: tmpdir=/tmp
 
-Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
-Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
-Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
-Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
-Activating conda environment: .snakemake/conda/72e6074358eff52e7b6a2a521babd7e1_
-2025-08-16 00:02:55,697 - INFO - Loading data...
-2025-08-16 00:02:56,192 - INFO - Processing waves: ['INS-W_1', 'INS-W_2'] with 40 users
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmp8vk__t5t.signature.py:248: SettingWithCopyWarning: 
-A value is trying to be set on a copy of a slice from a DataFrame.
-Try using .loc[row_indexer,col_indexer] = value instead
-
-See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
-  filtered_clusters_df['split'] = filtered_clusters_df['wave']
-2025-08-16 00:02:56,193 - INFO - Calculating user signatures...
-2025-08-16 00:02:56,298 - INFO - Calculating self-distances...
-2025-08-16 00:02:56,354 - INFO - Calculating reference distances...
-2025-08-16 00:02:56,361 - INFO - Loading data...
-2025-08-16 00:02:56,838 - INFO - Loading data...
-2025-08-16 00:02:56,915 - INFO - Processing waves: ['INS-W_1', 'INS-W_2'] with 40 users
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpyq8iu89x.signature.py:248: SettingWithCopyWarning: 
-A value is trying to be set on a copy of a slice from a DataFrame.
-Try using .loc[row_indexer,col_indexer] = value instead
-
-See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
-  filtered_clusters_df['split'] = filtered_clusters_df['wave']
-2025-08-16 00:02:56,916 - INFO - Calculating user signatures...
-2025-08-16 00:02:57,073 - INFO - Calculating self-distances...
-2025-08-16 00:02:57,096 - INFO - Calculating reference distances...
-2025-08-16 00:02:57,344 - INFO - Processing waves: ['INS-W_1', 'INS-W_2'] with 40 users
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpa5lj894l.signature.py:248: SettingWithCopyWarning: 
-A value is trying to be set on a copy of a slice from a DataFrame.
-Try using .loc[row_indexer,col_indexer] = value instead
-
-See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
-  filtered_clusters_df['split'] = filtered_clusters_df['wave']
-2025-08-16 00:02:57,344 - INFO - Calculating user signatures...
-2025-08-16 00:02:57,390 - INFO - Calculating self-distances...
-2025-08-16 00:02:57,416 - INFO - Calculating reference distances...
-2025-08-16 00:02:57,734 - INFO - Processing waves: ['INS-W_2', 'INS-W_3'] with 78 users
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmp8vk__t5t.signature.py:248: SettingWithCopyWarning: 
-A value is trying to be set on a copy of a slice from a DataFrame.
-Try using .loc[row_indexer,col_indexer] = value instead
-
-See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
-  filtered_clusters_df['split'] = filtered_clusters_df['wave']
-2025-08-16 00:02:57,735 - INFO - Calculating user signatures...
-2025-08-16 00:02:57,755 - INFO - Loading data...
-2025-08-16 00:02:57,802 - INFO - Calculating self-distances...
-2025-08-16 00:02:57,841 - INFO - Calculating reference distances...
-2025-08-16 00:02:58,086 - INFO - Processing waves: ['INS-W_1', 'INS-W_2'] with 40 users
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmph8j0i3fd.signature.py:248: SettingWithCopyWarning: 
-A value is trying to be set on a copy of a slice from a DataFrame.
-Try using .loc[row_indexer,col_indexer] = value instead
-
-See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
-  filtered_clusters_df['split'] = filtered_clusters_df['wave']
-2025-08-16 00:02:58,087 - INFO - Calculating user signatures...
-2025-08-16 00:02:58,221 - INFO - Calculating self-distances...
-2025-08-16 00:02:58,247 - INFO - Calculating reference distances...
-2025-08-16 00:02:58,321 - INFO - Processing waves: ['INS-W_2', 'INS-W_3'] with 78 users
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpa5lj894l.signature.py:248: SettingWithCopyWarning: 
-A value is trying to be set on a copy of a slice from a DataFrame.
-Try using .loc[row_indexer,col_indexer] = value instead
-
-See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
-  filtered_clusters_df['split'] = filtered_clusters_df['wave']
-2025-08-16 00:02:58,335 - INFO - Calculating user signatures...
-2025-08-16 00:02:58,472 - INFO - Calculating self-distances...
-2025-08-16 00:02:58,505 - INFO - Processing waves: ['INS-W_2', 'INS-W_3'] with 78 users
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpyq8iu89x.signature.py:248: SettingWithCopyWarning: 
-A value is trying to be set on a copy of a slice from a DataFrame.
-Try using .loc[row_indexer,col_indexer] = value instead
-
-See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
-  filtered_clusters_df['split'] = filtered_clusters_df['wave']
-2025-08-16 00:02:58,505 - INFO - Calculating user signatures...
-2025-08-16 00:02:58,554 - INFO - Calculating reference distances...
-2025-08-16 00:02:58,644 - INFO - Calculating self-distances...
-2025-08-16 00:02:58,722 - INFO - Calculating reference distances...
-2025-08-16 00:02:59,447 - INFO - Processing waves: ['INS-W_2', 'INS-W_3'] with 78 users
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmph8j0i3fd.signature.py:248: SettingWithCopyWarning: 
-A value is trying to be set on a copy of a slice from a DataFrame.
-Try using .loc[row_indexer,col_indexer] = value instead
-
-See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
-  filtered_clusters_df['split'] = filtered_clusters_df['wave']
-2025-08-16 00:02:59,448 - INFO - Calculating user signatures...
-2025-08-16 00:02:59,597 - INFO - Calculating self-distances...
-2025-08-16 00:02:59,676 - INFO - Calculating reference distances...
-2025-08-16 00:03:02,761 - INFO - Processing waves: ['INS-W_3', 'INS-W_4'] with 90 users
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmp8vk__t5t.signature.py:248: SettingWithCopyWarning: 
-A value is trying to be set on a copy of a slice from a DataFrame.
-Try using .loc[row_indexer,col_indexer] = value instead
-
-See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
-  filtered_clusters_df['split'] = filtered_clusters_df['wave']
-2025-08-16 00:03:02,775 - INFO - Calculating user signatures...
-2025-08-16 00:03:02,934 - INFO - Calculating self-distances...
-2025-08-16 00:03:03,020 - INFO - Calculating reference distances...
-2025-08-16 00:03:03,061 - INFO - Processing waves: ['INS-W_3', 'INS-W_4'] with 90 users
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpa5lj894l.signature.py:248: SettingWithCopyWarning: 
-A value is trying to be set on a copy of a slice from a DataFrame.
-Try using .loc[row_indexer,col_indexer] = value instead
-
-See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
-  filtered_clusters_df['split'] = filtered_clusters_df['wave']
-2025-08-16 00:03:03,062 - INFO - Calculating user signatures...
-2025-08-16 00:03:03,224 - INFO - Calculating self-distances...
-2025-08-16 00:03:03,289 - INFO - Processing waves: ['INS-W_3', 'INS-W_4'] with 90 users
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpyq8iu89x.signature.py:248: SettingWithCopyWarning: 
-A value is trying to be set on a copy of a slice from a DataFrame.
-Try using .loc[row_indexer,col_indexer] = value instead
-
-See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
-  filtered_clusters_df['split'] = filtered_clusters_df['wave']
-2025-08-16 00:03:03,290 - INFO - Calculating user signatures...
-2025-08-16 00:03:03,319 - INFO - Calculating reference distances...
-2025-08-16 00:03:03,464 - INFO - Calculating self-distances...
-2025-08-16 00:03:03,548 - INFO - Calculating reference distances...
-2025-08-16 00:03:04,299 - INFO - Processing waves: ['INS-W_3', 'INS-W_4'] with 90 users
-/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmph8j0i3fd.signature.py:248: SettingWithCopyWarning: 
-A value is trying to be set on a copy of a slice from a DataFrame.
-Try using .loc[row_indexer,col_indexer] = value instead
-
-See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
-  filtered_clusters_df['split'] = filtered_clusters_df['wave']
-2025-08-16 00:03:04,300 - INFO - Calculating user signatures...
-2025-08-16 00:03:04,458 - INFO - Calculating self-distances...
-2025-08-16 00:03:04,557 - INFO - Calculating reference distances...
-[Sat Aug 16 00:03:09 2025]
-Finished job 30.
-13 of 17 steps (76%) done
-[Sat Aug 16 00:03:09 2025]
-Finished job 32.
-14 of 17 steps (82%) done
-[Sat Aug 16 00:03:09 2025]
-Finished job 29.
-15 of 17 steps (88%) done
-[Sat Aug 16 00:03:10 2025]
-Finished job 31.
-16 of 17 steps (94%) done
-Select jobs to execute...
-Execute 1 jobs...
-
-[Sat Aug 16 00:03:10 2025]
-localrule all:
-    input: out/clusters/tesserae/gmm_cluster.csv, out/clusters/momo/gmm_cluster.csv, out/clusters/globem/gmm_cluster.csv, out/clusters/dtu/gmm_cluster.csv, out/clusters/tesserae/gmm_cluster_centroids.csv, out/clusters/momo/gmm_cluster_centroids.csv, out/clusters/globem/gmm_cluster_centroids.csv, out/clusters/dtu/gmm_cluster_centroids.csv, out/signature/tesserae/signature_ranked_jsd.csv, out/signature/tesserae/signature_ranked_cosine.csv, out/signature/tesserae/signature_unranked_jsd.csv, out/signature/tesserae/signature_unranked_cosine.csv, out/signature/momo/signature_ranked_jsd.csv, out/signature/momo/signature_ranked_cosine.csv, out/signature/momo/signature_unranked_jsd.csv, out/signature/momo/signature_unranked_cosine.csv, out/signature/globem/signature_ranked_jsd.csv, out/signature/globem/signature_ranked_cosine.csv, out/signature/globem/signature_unranked_jsd.csv, out/signature/globem/signature_unranked_cosine.csv, out/signature/dtu/signature_ranked_jsd.csv, out/signature/dtu/signature_ranked_cosine.csv, out/signature/dtu/signature_unranked_jsd.csv, out/signature/dtu/signature_unranked_cosine.csv, out/signature/tesserae/signature_d_self_ranked_jsd.csv, out/signature/tesserae/signature_d_self_ranked_cosine.csv, out/signature/tesserae/signature_d_self_unranked_jsd.csv, out/signature/tesserae/signature_d_self_unranked_cosine.csv, out/signature/momo/signature_d_self_ranked_jsd.csv, out/signature/momo/signature_d_self_ranked_cosine.csv, out/signature/momo/signature_d_self_unranked_jsd.csv, out/signature/momo/signature_d_self_unranked_cosine.csv, out/signature/globem/signature_d_self_ranked_jsd.csv, out/signature/globem/signature_d_self_ranked_cosine.csv, out/signature/globem/signature_d_self_unranked_jsd.csv, out/signature/globem/signature_d_self_unranked_cosine.csv, out/signature/dtu/signature_d_self_ranked_jsd.csv, out/signature/dtu/signature_d_self_ranked_cosine.csv, out/signature/dtu/signature_d_self_unranked_jsd.csv, out/signature/dtu/signature_d_self_unranked_cosine.csv, out/signature/tesserae/signature_d_ref_ranked_jsd.csv, out/signature/tesserae/signature_d_ref_ranked_cosine.csv, out/signature/tesserae/signature_d_ref_unranked_jsd.csv, out/signature/tesserae/signature_d_ref_unranked_cosine.csv, out/signature/momo/signature_d_ref_ranked_jsd.csv, out/signature/momo/signature_d_ref_ranked_cosine.csv, out/signature/momo/signature_d_ref_unranked_jsd.csv, out/signature/momo/signature_d_ref_unranked_cosine.csv, out/signature/globem/signature_d_ref_ranked_jsd.csv, out/signature/globem/signature_d_ref_ranked_cosine.csv, out/signature/globem/signature_d_ref_unranked_jsd.csv, out/signature/globem/signature_d_ref_unranked_cosine.csv, out/signature/dtu/signature_d_ref_ranked_jsd.csv, out/signature/dtu/signature_d_ref_ranked_cosine.csv, out/signature/dtu/signature_d_ref_unranked_jsd.csv, out/signature/dtu/signature_d_ref_unranked_cosine.csv, out/transition_signature/tesserae/transition_signature_jsd.csv, out/transition_signature/tesserae/transition_signature_cosine.csv, out/transition_signature/momo/transition_signature_jsd.csv, out/transition_signature/momo/transition_signature_cosine.csv, out/transition_signature/globem/transition_signature_jsd.csv, out/transition_signature/globem/transition_signature_cosine.csv, out/transition_signature/dtu/transition_signature_jsd.csv, out/transition_signature/dtu/transition_signature_cosine.csv, out/transition_signature/tesserae/transition_signature_d_self_jsd.csv, out/transition_signature/tesserae/transition_signature_d_self_cosine.csv, out/transition_signature/momo/transition_signature_d_self_jsd.csv, out/transition_signature/momo/transition_signature_d_self_cosine.csv, out/transition_signature/globem/transition_signature_d_self_jsd.csv, out/transition_signature/globem/transition_signature_d_self_cosine.csv, out/transition_signature/dtu/transition_signature_d_self_jsd.csv, out/transition_signature/dtu/transition_signature_d_self_cosine.csv, out/transition_signature/tesserae/transition_signature_d_ref_jsd.csv, out/transition_signature/tesserae/transition_signature_d_ref_cosine.csv, out/transition_signature/momo/transition_signature_d_ref_jsd.csv, out/transition_signature/momo/transition_signature_d_ref_cosine.csv, out/transition_signature/globem/transition_signature_d_ref_jsd.csv, out/transition_signature/globem/transition_signature_d_ref_cosine.csv, out/transition_signature/dtu/transition_signature_d_ref_jsd.csv, out/transition_signature/dtu/transition_signature_d_ref_cosine.csv
-    jobid: 0
-    reason: Input files updated by another job: out/signature/dtu/signature_d_ref_ranked_cosine.csv, out/signature/momo/signature_d_ref_unranked_cosine.csv, out/signature/tesserae/signature_d_ref_ranked_jsd.csv, out/signature/dtu/signature_d_self_ranked_jsd.csv, out/signature/momo/signature_d_self_unranked_cosine.csv, out/signature/tesserae/signature_d_self_ranked_cosine.csv, out/signature/globem/signature_unranked_jsd.csv, out/signature/globem/signature_ranked_cosine.csv, out/signature/tesserae/signature_ranked_jsd.csv, out/signature/tesserae/signature_d_self_unranked_jsd.csv, out/signature/tesserae/signature_d_self_ranked_jsd.csv, out/signature/globem/signature_d_ref_unranked_jsd.csv, out/signature/momo/signature_ranked_jsd.csv, out/signature/momo/signature_ranked_cosine.csv, out/signature/momo/signature_d_ref_ranked_jsd.csv, out/signature/tesserae/signature_d_ref_ranked_cosine.csv, out/signature/dtu/signature_ranked_cosine.csv, out/signature/dtu/signature_unranked_jsd.csv, out/signature/tesserae/signature_unranked_jsd.csv, out/signature/momo/signature_d_ref_unranked_jsd.csv, out/signature/tesserae/signature_d_ref_unranked_jsd.csv, out/signature/tesserae/signature_d_self_unranked_cosine.csv, out/signature/globem/signature_d_self_ranked_jsd.csv, out/signature/dtu/signature_ranked_jsd.csv, out/signature/globem/signature_unranked_cosine.csv, out/signature/momo/signature_d_self_ranked_jsd.csv, out/signature/momo/signature_d_ref_ranked_cosine.csv, out/signature/momo/signature_d_self_unranked_jsd.csv, out/signature/globem/signature_d_ref_unranked_cosine.csv, out/signature/dtu/signature_d_ref_unranked_jsd.csv, out/signature/tesserae/signature_unranked_cosine.csv, out/signature/globem/signature_d_self_unranked_cosine.csv, out/signature/dtu/signature_d_self_unranked_cosine.csv, out/signature/dtu/signature_d_self_unranked_jsd.csv, out/signature/globem/signature_d_ref_ranked_cosine.csv, out/signature/dtu/signature_unranked_cosine.csv, out/signature/dtu/signature_d_self_ranked_cosine.csv, out/signature/momo/signature_d_self_ranked_cosine.csv, out/signature/dtu/signature_d_ref_ranked_jsd.csv, out/signature/momo/signature_unranked_cosine.csv, out/signature/dtu/signature_d_ref_unranked_cosine.csv, out/signature/momo/signature_unranked_jsd.csv, out/signature/tesserae/signature_ranked_cosine.csv, out/signature/globem/signature_d_self_unranked_jsd.csv, out/signature/globem/signature_ranked_jsd.csv, out/signature/tesserae/signature_d_ref_unranked_cosine.csv, out/signature/globem/signature_d_ref_ranked_jsd.csv, out/signature/globem/signature_d_self_ranked_cosine.csv
+[Wed Aug 27 16:16:32 2025]
+localrule cluster:
+    input: data/processed/tesserae/all_features_clean.csv
+    output: out/clusters/tesserae/10/gmm_cluster.csv, out/clusters/tesserae/10/gmm_cluster_centroids.csv, out/clusters/tesserae/10/gmm_cluster_covariances.csv
+    jobid: 33
+    reason: Missing output files: out/clusters/tesserae/10/gmm_cluster.csv, out/clusters/tesserae/10/gmm_cluster_centroids.csv
+    wildcards: study=tesserae, cluster_num=10, algo=gmm
     resources: tmpdir=/tmp
 
-[Sat Aug 16 00:03:10 2025]
-Finished job 0.
-17 of 17 steps (100%) done
-Complete log: .snakemake/log/2025-08-15T235908.281620.snakemake.log
+[Wed Aug 27 16:16:32 2025]
+localrule cluster:
+    input: data/processed/momo/all_features_clean.csv
+    output: out/clusters/momo/11/gmm_cluster.csv, out/clusters/momo/11/gmm_cluster_centroids.csv, out/clusters/momo/11/gmm_cluster_covariances.csv
+    jobid: 38
+    reason: Missing output files: out/clusters/momo/11/gmm_cluster_centroids.csv, out/clusters/momo/11/gmm_cluster.csv
+    wildcards: study=momo, cluster_num=11, algo=gmm
+    resources: tmpdir=/tmp
+
+Activating conda environment: .snakemake/conda/ab5233add898528c77eec06aa91604d6_
+Activating conda environment: .snakemake/conda/ab5233add898528c77eec06aa91604d6_
+Activating conda environment: .snakemake/conda/ab5233add898528c77eec06aa91604d6_
+Activating conda environment: .snakemake/conda/ab5233add898528c77eec06aa91604d6_
+Activating conda environment: .snakemake/conda/ab5233add898528c77eec06aa91604d6_
+Activating conda environment: .snakemake/conda/ab5233add898528c77eec06aa91604d6_
+Activating conda environment: .snakemake/conda/ab5233add898528c77eec06aa91604d6_
+Activating conda environment: .snakemake/conda/ab5233add898528c77eec06aa91604d6_
+Activating conda environment: .snakemake/conda/ab5233add898528c77eec06aa91604d6_
+Activating conda environment: .snakemake/conda/ab5233add898528c77eec06aa91604d6_
+Activating conda environment: .snakemake/conda/ab5233add898528c77eec06aa91604d6_
+Activating conda environment: .snakemake/conda/ab5233add898528c77eec06aa91604d6_
+Activating conda environment: .snakemake/conda/ab5233add898528c77eec06aa91604d6_
+Activating conda environment: .snakemake/conda/ab5233add898528c77eec06aa91604d6_
+Activating conda environment: .snakemake/conda/ab5233add898528c77eec06aa91604d6_
+Activating conda environment: .snakemake/conda/ab5233add898528c77eec06aa91604d6_
+Activating conda environment: .snakemake/conda/ab5233add898528c77eec06aa91604d6_
+Activating conda environment: .snakemake/conda/ab5233add898528c77eec06aa91604d6_
+Activating conda environment: .snakemake/conda/ab5233add898528c77eec06aa91604d6_
+Activating conda environment: .snakemake/conda/ab5233add898528c77eec06aa91604d6_
+Activating conda environment: .snakemake/conda/ab5233add898528c77eec06aa91604d6_
+Activating conda environment: .snakemake/conda/ab5233add898528c77eec06aa91604d6_
+Activating conda environment: .snakemake/conda/ab5233add898528c77eec06aa91604d6_
+Activating conda environment: .snakemake/conda/ab5233add898528c77eec06aa91604d6_
+Activating conda environment: .snakemake/conda/ab5233add898528c77eec06aa91604d6_
+Activating conda environment: .snakemake/conda/ab5233add898528c77eec06aa91604d6_
+Activating conda environment: .snakemake/conda/ab5233add898528c77eec06aa91604d6_
+Activating conda environment: .snakemake/conda/ab5233add898528c77eec06aa91604d6_
+Activating conda environment: .snakemake/conda/ab5233add898528c77eec06aa91604d6_
+Activating conda environment: .snakemake/conda/ab5233add898528c77eec06aa91604d6_
+Activating conda environment: .snakemake/conda/ab5233add898528c77eec06aa91604d6_
+Activating conda environment: .snakemake/conda/ab5233add898528c77eec06aa91604d6_
+Traceback (most recent call last):
+  File "/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpojcyyb1c.run.py", line 46, in <module>
+    main(snakemake.input, snakemake.output, snakemake.params)
+  File "/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpojcyyb1c.run.py", line 35, in main
+    labels, centroids, covariances, model_selection_scores = model.run_pipeline()
+  File "/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/clusters/base.py", line 354, in run_pipeline
+    labels = self.fit_predict(self.model, X)
+  File "/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/clusters/base.py", line 198, in fit_predict
+    labels = model.fit_predict(X)
+  File "/home/luongn1/.local/lib/python3.9/site-packages/sklearn/base.py", line 1344, in wrapper
+Traceback (most recent call last):
+  File "/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmp26xlmtsp.run.py", line 46, in <module>
+    main(snakemake.input, snakemake.output, snakemake.params)
+  File "/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmp26xlmtsp.run.py", line 35, in main
+    labels, centroids, covariances, model_selection_scores = model.run_pipeline()
+  File "/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/clusters/base.py", line 354, in run_pipeline
+    labels = self.fit_predict(self.model, X)
+  File "/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/clusters/base.py", line 198, in fit_predict
+    labels = model.fit_predict(X)
+  File "/home/luongn1/.local/lib/python3.9/site-packages/sklearn/base.py", line 1344, in wrapper
+Traceback (most recent call last):
+  File "/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpixf2z1wj.run.py", line 46, in <module>
+    main(snakemake.input, snakemake.output, snakemake.params)
+  File "/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpixf2z1wj.run.py", line 35, in main
+    labels, centroids, covariances, model_selection_scores = model.run_pipeline()
+  File "/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/clusters/base.py", line 354, in run_pipeline
+    labels = self.fit_predict(self.model, X)
+  File "/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/clusters/base.py", line 198, in fit_predict
+    labels = model.fit_predict(X)
+  File "/home/luongn1/.local/lib/python3.9/site-packages/sklearn/base.py", line 1344, in wrapper
+Traceback (most recent call last):
+  File "/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmp87fpwdu7.run.py", line 46, in <module>
+    main(snakemake.input, snakemake.output, snakemake.params)
+  File "/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmp87fpwdu7.run.py", line 35, in main
+    labels, centroids, covariances, model_selection_scores = model.run_pipeline()
+  File "/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/clusters/base.py", line 354, in run_pipeline
+    labels = self.fit_predict(self.model, X)
+  File "/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/clusters/base.py", line 198, in fit_predict
+    labels = model.fit_predict(X)
+  File "/home/luongn1/.local/lib/python3.9/site-packages/sklearn/base.py", line 1344, in wrapper
+    estimator._validate_params()
+  File "/home/luongn1/.local/lib/python3.9/site-packages/sklearn/base.py", line 666, in _validate_params
+    estimator._validate_params()
+  File "/home/luongn1/.local/lib/python3.9/site-packages/sklearn/base.py", line 666, in _validate_params
+    validate_parameter_constraints(
+  File "/home/luongn1/.local/lib/python3.9/site-packages/sklearn/utils/_param_validation.py", line 95, in validate_parameter_constraints
+    validate_parameter_constraints(
+  File "/home/luongn1/.local/lib/python3.9/site-packages/sklearn/utils/_param_validation.py", line 95, in validate_parameter_constraints
+    estimator._validate_params()
+  File "/home/luongn1/.local/lib/python3.9/site-packages/sklearn/base.py", line 666, in _validate_params
+    validate_parameter_constraints(
+  File "/home/luongn1/.local/lib/python3.9/site-packages/sklearn/utils/_param_validation.py", line 95, in validate_parameter_constraints
+    raise InvalidParameterError(
+sklearn.utils._param_validation.InvalidParameterError: The 'n_components' parameter of GaussianMixture must be an int in the range [1, inf). Got '6' instead.
+    raise InvalidParameterError(
+sklearn.utils._param_validation.InvalidParameterError: The 'n_components' parameter of GaussianMixture must be an int in the range [1, inf). Got '7' instead.
+    raise InvalidParameterError(
+sklearn.utils._param_validation.InvalidParameterError: The 'n_components' parameter of GaussianMixture must be an int in the range [1, inf). Got '8' instead.
+    estimator._validate_params()
+  File "/home/luongn1/.local/lib/python3.9/site-packages/sklearn/base.py", line 666, in _validate_params
+    validate_parameter_constraints(
+  File "/home/luongn1/.local/lib/python3.9/site-packages/sklearn/utils/_param_validation.py", line 95, in validate_parameter_constraints
+    raise InvalidParameterError(
+sklearn.utils._param_validation.InvalidParameterError: The 'n_components' parameter of GaussianMixture must be an int in the range [1, inf). Got '11' instead.
+RuleException:
+CalledProcessError in file /scratch/work/luongn1/digirhythm-v2/workflow/rules/cluster.smk, line 46:
+Command 'source /appl/scibuilder-mamba/aalto-rhel9/prod/software/mamba/2025.1/f67be15/bin/activate '/scratch/work/luongn1/digirhythm-v2/.snakemake/conda/ab5233add898528c77eec06aa91604d6_'; set -euo pipefail;  python /scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmp26xlmtsp.run.py' returned non-zero exit status 1.
+[Wed Aug 27 16:17:10 2025]
+Error in rule cluster:
+    jobid: 26
+    input: data/processed/momo/all_features_clean.csv
+    output: out/clusters/momo/8/gmm_cluster.csv, out/clusters/momo/8/gmm_cluster_centroids.csv, out/clusters/momo/8/gmm_cluster_covariances.csv
+    conda-env: /scratch/work/luongn1/digirhythm-v2/.snakemake/conda/ab5233add898528c77eec06aa91604d6_
+
+RuleException:
+CalledProcessError in file /scratch/work/luongn1/digirhythm-v2/workflow/rules/cluster.smk, line 46:
+Command 'source /appl/scibuilder-mamba/aalto-rhel9/prod/software/mamba/2025.1/f67be15/bin/activate '/scratch/work/luongn1/digirhythm-v2/.snakemake/conda/ab5233add898528c77eec06aa91604d6_'; set -euo pipefail;  python /scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpixf2z1wj.run.py' returned non-zero exit status 1.
+[Wed Aug 27 16:17:10 2025]
+Error in rule cluster:
+    jobid: 22
+    input: data/processed/momo/all_features_clean.csv
+    output: out/clusters/momo/7/gmm_cluster.csv, out/clusters/momo/7/gmm_cluster_centroids.csv, out/clusters/momo/7/gmm_cluster_covariances.csv
+    conda-env: /scratch/work/luongn1/digirhythm-v2/.snakemake/conda/ab5233add898528c77eec06aa91604d6_
+
+RuleException:
+CalledProcessError in file /scratch/work/luongn1/digirhythm-v2/workflow/rules/cluster.smk, line 46:
+Command 'source /appl/scibuilder-mamba/aalto-rhel9/prod/software/mamba/2025.1/f67be15/bin/activate '/scratch/work/luongn1/digirhythm-v2/.snakemake/conda/ab5233add898528c77eec06aa91604d6_'; set -euo pipefail;  python /scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpojcyyb1c.run.py' returned non-zero exit status 1.
+[Wed Aug 27 16:17:10 2025]
+Error in rule cluster:
+    jobid: 8
+    input: data/processed/momo/all_features_clean.csv
+    output: out/clusters/momo/6/gmm_cluster.csv, out/clusters/momo/6/gmm_cluster_centroids.csv, out/clusters/momo/6/gmm_cluster_covariances.csv
+    conda-env: /scratch/work/luongn1/digirhythm-v2/.snakemake/conda/ab5233add898528c77eec06aa91604d6_
+
+RuleException:
+CalledProcessError in file /scratch/work/luongn1/digirhythm-v2/workflow/rules/cluster.smk, line 46:
+Command 'source /appl/scibuilder-mamba/aalto-rhel9/prod/software/mamba/2025.1/f67be15/bin/activate '/scratch/work/luongn1/digirhythm-v2/.snakemake/conda/ab5233add898528c77eec06aa91604d6_'; set -euo pipefail;  python /scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmp87fpwdu7.run.py' returned non-zero exit status 1.
+[Wed Aug 27 16:17:10 2025]
+Error in rule cluster:
+    jobid: 38
+    input: data/processed/momo/all_features_clean.csv
+    output: out/clusters/momo/11/gmm_cluster.csv, out/clusters/momo/11/gmm_cluster_centroids.csv, out/clusters/momo/11/gmm_cluster_covariances.csv
+    conda-env: /scratch/work/luongn1/digirhythm-v2/.snakemake/conda/ab5233add898528c77eec06aa91604d6_
+
+Traceback (most recent call last):
+  File "/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpmp7mtjo6.run.py", line 46, in <module>
+    main(snakemake.input, snakemake.output, snakemake.params)
+  File "/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpmp7mtjo6.run.py", line 35, in main
+    labels, centroids, covariances, model_selection_scores = model.run_pipeline()
+  File "/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/clusters/base.py", line 354, in run_pipeline
+    labels = self.fit_predict(self.model, X)
+  File "/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/clusters/base.py", line 198, in fit_predict
+    labels = model.fit_predict(X)
+  File "/home/luongn1/.local/lib/python3.9/site-packages/sklearn/base.py", line 1344, in wrapper
+    estimator._validate_params()
+  File "/home/luongn1/.local/lib/python3.9/site-packages/sklearn/base.py", line 666, in _validate_params
+    validate_parameter_constraints(
+  File "/home/luongn1/.local/lib/python3.9/site-packages/sklearn/utils/_param_validation.py", line 95, in validate_parameter_constraints
+    raise InvalidParameterError(
+sklearn.utils._param_validation.InvalidParameterError: The 'n_components' parameter of GaussianMixture must be an int in the range [1, inf). Got '9' instead.
+RuleException:
+CalledProcessError in file /scratch/work/luongn1/digirhythm-v2/workflow/rules/cluster.smk, line 46:
+Command 'source /appl/scibuilder-mamba/aalto-rhel9/prod/software/mamba/2025.1/f67be15/bin/activate '/scratch/work/luongn1/digirhythm-v2/.snakemake/conda/ab5233add898528c77eec06aa91604d6_'; set -euo pipefail;  python /scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpmp7mtjo6.run.py' returned non-zero exit status 1.
+[Wed Aug 27 16:17:16 2025]
+Error in rule cluster:
+    jobid: 32
+    input: data/processed/dtu/all_features_clean.csv
+    output: out/clusters/dtu/9/gmm_cluster.csv, out/clusters/dtu/9/gmm_cluster_centroids.csv, out/clusters/dtu/9/gmm_cluster_covariances.csv
+    conda-env: /scratch/work/luongn1/digirhythm-v2/.snakemake/conda/ab5233add898528c77eec06aa91604d6_
+
+Traceback (most recent call last):
+  File "/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpt6i7xy8p.run.py", line 46, in <module>
+    main(snakemake.input, snakemake.output, snakemake.params)
+  File "/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpt6i7xy8p.run.py", line 35, in main
+    labels, centroids, covariances, model_selection_scores = model.run_pipeline()
+  File "/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/clusters/base.py", line 354, in run_pipeline
+    labels = self.fit_predict(self.model, X)
+  File "/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/clusters/base.py", line 198, in fit_predict
+    labels = model.fit_predict(X)
+  File "/home/luongn1/.local/lib/python3.9/site-packages/sklearn/base.py", line 1344, in wrapper
+    estimator._validate_params()
+  File "/home/luongn1/.local/lib/python3.9/site-packages/sklearn/base.py", line 666, in _validate_params
+    validate_parameter_constraints(
+  File "/home/luongn1/.local/lib/python3.9/site-packages/sklearn/utils/_param_validation.py", line 95, in validate_parameter_constraints
+    raise InvalidParameterError(
+sklearn.utils._param_validation.InvalidParameterError: The 'n_components' parameter of GaussianMixture must be an int in the range [1, inf). Got '10' instead.
+Traceback (most recent call last):
+  File "/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpyo8h3m6l.run.py", line 46, in <module>
+    main(snakemake.input, snakemake.output, snakemake.params)
+  File "/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpyo8h3m6l.run.py", line 35, in main
+    labels, centroids, covariances, model_selection_scores = model.run_pipeline()
+  File "/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/clusters/base.py", line 354, in run_pipeline
+    labels = self.fit_predict(self.model, X)
+  File "/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/clusters/base.py", line 198, in fit_predict
+    labels = model.fit_predict(X)
+  File "/home/luongn1/.local/lib/python3.9/site-packages/sklearn/base.py", line 1344, in wrapper
+    estimator._validate_params()
+  File "/home/luongn1/.local/lib/python3.9/site-packages/sklearn/base.py", line 666, in _validate_params
+    validate_parameter_constraints(
+  File "/home/luongn1/.local/lib/python3.9/site-packages/sklearn/utils/_param_validation.py", line 95, in validate_parameter_constraints
+    raise InvalidParameterError(
+sklearn.utils._param_validation.InvalidParameterError: The 'n_components' parameter of GaussianMixture must be an int in the range [1, inf). Got '9' instead.
+RuleException:
+CalledProcessError in file /scratch/work/luongn1/digirhythm-v2/workflow/rules/cluster.smk, line 46:
+Command 'source /appl/scibuilder-mamba/aalto-rhel9/prod/software/mamba/2025.1/f67be15/bin/activate '/scratch/work/luongn1/digirhythm-v2/.snakemake/conda/ab5233add898528c77eec06aa91604d6_'; set -euo pipefail;  python /scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpt6i7xy8p.run.py' returned non-zero exit status 1.
+[Wed Aug 27 16:17:17 2025]
+Error in rule cluster:
+    jobid: 33
+    input: data/processed/tesserae/all_features_clean.csv
+    output: out/clusters/tesserae/10/gmm_cluster.csv, out/clusters/tesserae/10/gmm_cluster_centroids.csv, out/clusters/tesserae/10/gmm_cluster_covariances.csv
+    conda-env: /scratch/work/luongn1/digirhythm-v2/.snakemake/conda/ab5233add898528c77eec06aa91604d6_
+
+RuleException:
+CalledProcessError in file /scratch/work/luongn1/digirhythm-v2/workflow/rules/cluster.smk, line 46:
+Command 'source /appl/scibuilder-mamba/aalto-rhel9/prod/software/mamba/2025.1/f67be15/bin/activate '/scratch/work/luongn1/digirhythm-v2/.snakemake/conda/ab5233add898528c77eec06aa91604d6_'; set -euo pipefail;  python /scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpyo8h3m6l.run.py' returned non-zero exit status 1.
+[Wed Aug 27 16:17:17 2025]
+Error in rule cluster:
+    jobid: 29
+    input: data/processed/tesserae/all_features_clean.csv
+    output: out/clusters/tesserae/9/gmm_cluster.csv, out/clusters/tesserae/9/gmm_cluster_centroids.csv, out/clusters/tesserae/9/gmm_cluster_covariances.csv
+    conda-env: /scratch/work/luongn1/digirhythm-v2/.snakemake/conda/ab5233add898528c77eec06aa91604d6_
+
+Traceback (most recent call last):
+  File "/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmp9nlh_5fo.run.py", line 46, in <module>
+    main(snakemake.input, snakemake.output, snakemake.params)
+  File "/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmp9nlh_5fo.run.py", line 35, in main
+    labels, centroids, covariances, model_selection_scores = model.run_pipeline()
+  File "/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/clusters/base.py", line 354, in run_pipeline
+    labels = self.fit_predict(self.model, X)
+  File "/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/clusters/base.py", line 198, in fit_predict
+    labels = model.fit_predict(X)
+  File "/home/luongn1/.local/lib/python3.9/site-packages/sklearn/base.py", line 1344, in wrapper
+    estimator._validate_params()
+  File "/home/luongn1/.local/lib/python3.9/site-packages/sklearn/base.py", line 666, in _validate_params
+    validate_parameter_constraints(
+  File "/home/luongn1/.local/lib/python3.9/site-packages/sklearn/utils/_param_validation.py", line 95, in validate_parameter_constraints
+    raise InvalidParameterError(
+sklearn.utils._param_validation.InvalidParameterError: The 'n_components' parameter of GaussianMixture must be an int in the range [1, inf). Got '6' instead.
+RuleException:
+CalledProcessError in file /scratch/work/luongn1/digirhythm-v2/workflow/rules/cluster.smk, line 46:
+Command 'source /appl/scibuilder-mamba/aalto-rhel9/prod/software/mamba/2025.1/f67be15/bin/activate '/scratch/work/luongn1/digirhythm-v2/.snakemake/conda/ab5233add898528c77eec06aa91604d6_'; set -euo pipefail;  python /scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmp9nlh_5fo.run.py' returned non-zero exit status 1.
+[Wed Aug 27 16:17:19 2025]
+Error in rule cluster:
+    jobid: 1
+    input: data/processed/tesserae/all_features_clean.csv
+    output: out/clusters/tesserae/6/gmm_cluster.csv, out/clusters/tesserae/6/gmm_cluster_centroids.csv, out/clusters/tesserae/6/gmm_cluster_covariances.csv
+    conda-env: /scratch/work/luongn1/digirhythm-v2/.snakemake/conda/ab5233add898528c77eec06aa91604d6_
+
+Traceback (most recent call last):
+  File "/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmp_h3vnzv9.run.py", line 46, in <module>
+    main(snakemake.input, snakemake.output, snakemake.params)
+  File "/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmp_h3vnzv9.run.py", line 35, in main
+    labels, centroids, covariances, model_selection_scores = model.run_pipeline()
+  File "/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/clusters/base.py", line 354, in run_pipeline
+    labels = self.fit_predict(self.model, X)
+  File "/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/clusters/base.py", line 198, in fit_predict
+    labels = model.fit_predict(X)
+  File "/home/luongn1/.local/lib/python3.9/site-packages/sklearn/base.py", line 1344, in wrapper
+    estimator._validate_params()
+  File "/home/luongn1/.local/lib/python3.9/site-packages/sklearn/base.py", line 666, in _validate_params
+    validate_parameter_constraints(
+  File "/home/luongn1/.local/lib/python3.9/site-packages/sklearn/utils/_param_validation.py", line 95, in validate_parameter_constraints
+    raise InvalidParameterError(
+sklearn.utils._param_validation.InvalidParameterError: The 'n_components' parameter of GaussianMixture must be an int in the range [1, inf). Got '11' instead.
+RuleException:
+CalledProcessError in file /scratch/work/luongn1/digirhythm-v2/workflow/rules/cluster.smk, line 46:
+Command 'source /appl/scibuilder-mamba/aalto-rhel9/prod/software/mamba/2025.1/f67be15/bin/activate '/scratch/work/luongn1/digirhythm-v2/.snakemake/conda/ab5233add898528c77eec06aa91604d6_'; set -euo pipefail;  python /scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmp_h3vnzv9.run.py' returned non-zero exit status 1.
+[Wed Aug 27 16:17:22 2025]
+Error in rule cluster:
+    jobid: 37
+    input: data/processed/tesserae/all_features_clean.csv
+    output: out/clusters/tesserae/11/gmm_cluster.csv, out/clusters/tesserae/11/gmm_cluster_centroids.csv, out/clusters/tesserae/11/gmm_cluster_covariances.csv
+    conda-env: /scratch/work/luongn1/digirhythm-v2/.snakemake/conda/ab5233add898528c77eec06aa91604d6_
+
+Traceback (most recent call last):
+  File "/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpd9xuxp8i.run.py", line 46, in <module>
+    main(snakemake.input, snakemake.output, snakemake.params)
+  File "/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpd9xuxp8i.run.py", line 35, in main
+    labels, centroids, covariances, model_selection_scores = model.run_pipeline()
+  File "/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/clusters/base.py", line 354, in run_pipeline
+    labels = self.fit_predict(self.model, X)
+  File "/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/clusters/base.py", line 198, in fit_predict
+    labels = model.fit_predict(X)
+  File "/home/luongn1/.local/lib/python3.9/site-packages/sklearn/base.py", line 1344, in wrapper
+    estimator._validate_params()
+  File "/home/luongn1/.local/lib/python3.9/site-packages/sklearn/base.py", line 666, in _validate_params
+    validate_parameter_constraints(
+  File "/home/luongn1/.local/lib/python3.9/site-packages/sklearn/utils/_param_validation.py", line 95, in validate_parameter_constraints
+    raise InvalidParameterError(
+sklearn.utils._param_validation.InvalidParameterError: The 'n_components' parameter of GaussianMixture must be an int in the range [1, inf). Got '11' instead.
+RuleException:
+CalledProcessError in file /scratch/work/luongn1/digirhythm-v2/workflow/rules/cluster.smk, line 46:
+Command 'source /appl/scibuilder-mamba/aalto-rhel9/prod/software/mamba/2025.1/f67be15/bin/activate '/scratch/work/luongn1/digirhythm-v2/.snakemake/conda/ab5233add898528c77eec06aa91604d6_'; set -euo pipefail;  python /scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpd9xuxp8i.run.py' returned non-zero exit status 1.
+[Wed Aug 27 16:17:23 2025]
+Error in rule cluster:
+    jobid: 40
+    input: data/processed/dtu/all_features_clean.csv
+    output: out/clusters/dtu/11/gmm_cluster.csv, out/clusters/dtu/11/gmm_cluster_centroids.csv, out/clusters/dtu/11/gmm_cluster_covariances.csv
+    conda-env: /scratch/work/luongn1/digirhythm-v2/.snakemake/conda/ab5233add898528c77eec06aa91604d6_
+
+Traceback (most recent call last):
+  File "/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpjvpa1dlz.run.py", line 46, in <module>
+    main(snakemake.input, snakemake.output, snakemake.params)
+  File "/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpjvpa1dlz.run.py", line 35, in main
+    labels, centroids, covariances, model_selection_scores = model.run_pipeline()
+  File "/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/clusters/base.py", line 354, in run_pipeline
+    labels = self.fit_predict(self.model, X)
+  File "/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/clusters/base.py", line 198, in fit_predict
+    labels = model.fit_predict(X)
+  File "/home/luongn1/.local/lib/python3.9/site-packages/sklearn/base.py", line 1344, in wrapper
+    estimator._validate_params()
+  File "/home/luongn1/.local/lib/python3.9/site-packages/sklearn/base.py", line 666, in _validate_params
+    validate_parameter_constraints(
+  File "/home/luongn1/.local/lib/python3.9/site-packages/sklearn/utils/_param_validation.py", line 95, in validate_parameter_constraints
+    raise InvalidParameterError(
+sklearn.utils._param_validation.InvalidParameterError: The 'n_components' parameter of GaussianMixture must be an int in the range [1, inf). Got '8' instead.
+RuleException:
+CalledProcessError in file /scratch/work/luongn1/digirhythm-v2/workflow/rules/cluster.smk, line 46:
+Command 'source /appl/scibuilder-mamba/aalto-rhel9/prod/software/mamba/2025.1/f67be15/bin/activate '/scratch/work/luongn1/digirhythm-v2/.snakemake/conda/ab5233add898528c77eec06aa91604d6_'; set -euo pipefail;  python /scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpjvpa1dlz.run.py' returned non-zero exit status 1.
+[Wed Aug 27 16:17:24 2025]
+Error in rule cluster:
+    jobid: 25
+    input: data/processed/tesserae/all_features_clean.csv
+    output: out/clusters/tesserae/8/gmm_cluster.csv, out/clusters/tesserae/8/gmm_cluster_centroids.csv, out/clusters/tesserae/8/gmm_cluster_covariances.csv
+    conda-env: /scratch/work/luongn1/digirhythm-v2/.snakemake/conda/ab5233add898528c77eec06aa91604d6_
+
+Traceback (most recent call last):
+  File "/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpa307gyue.run.py", line 46, in <module>
+    main(snakemake.input, snakemake.output, snakemake.params)
+  File "/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpa307gyue.run.py", line 35, in main
+    labels, centroids, covariances, model_selection_scores = model.run_pipeline()
+  File "/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/clusters/base.py", line 354, in run_pipeline
+    labels = self.fit_predict(self.model, X)
+  File "/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/clusters/base.py", line 198, in fit_predict
+    labels = model.fit_predict(X)
+  File "/home/luongn1/.local/lib/python3.9/site-packages/sklearn/base.py", line 1344, in wrapper
+    estimator._validate_params()
+  File "/home/luongn1/.local/lib/python3.9/site-packages/sklearn/base.py", line 666, in _validate_params
+    validate_parameter_constraints(
+  File "/home/luongn1/.local/lib/python3.9/site-packages/sklearn/utils/_param_validation.py", line 95, in validate_parameter_constraints
+    raise InvalidParameterError(
+sklearn.utils._param_validation.InvalidParameterError: The 'n_components' parameter of GaussianMixture must be an int in the range [1, inf). Got '8' instead.
+RuleException:
+CalledProcessError in file /scratch/work/luongn1/digirhythm-v2/workflow/rules/cluster.smk, line 46:
+Command 'source /appl/scibuilder-mamba/aalto-rhel9/prod/software/mamba/2025.1/f67be15/bin/activate '/scratch/work/luongn1/digirhythm-v2/.snakemake/conda/ab5233add898528c77eec06aa91604d6_'; set -euo pipefail;  python /scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpa307gyue.run.py' returned non-zero exit status 1.
+[Wed Aug 27 16:17:25 2025]
+Error in rule cluster:
+    jobid: 28
+    input: data/processed/dtu/all_features_clean.csv
+    output: out/clusters/dtu/8/gmm_cluster.csv, out/clusters/dtu/8/gmm_cluster_centroids.csv, out/clusters/dtu/8/gmm_cluster_covariances.csv
+    conda-env: /scratch/work/luongn1/digirhythm-v2/.snakemake/conda/ab5233add898528c77eec06aa91604d6_
+
+Traceback (most recent call last):
+  File "/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpqweao72o.run.py", line 46, in <module>
+    main(snakemake.input, snakemake.output, snakemake.params)
+  File "/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpqweao72o.run.py", line 35, in main
+    labels, centroids, covariances, model_selection_scores = model.run_pipeline()
+  File "/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/clusters/base.py", line 354, in run_pipeline
+    labels = self.fit_predict(self.model, X)
+  File "/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/clusters/base.py", line 198, in fit_predict
+    labels = model.fit_predict(X)
+  File "/home/luongn1/.local/lib/python3.9/site-packages/sklearn/base.py", line 1344, in wrapper
+    estimator._validate_params()
+  File "/home/luongn1/.local/lib/python3.9/site-packages/sklearn/base.py", line 666, in _validate_params
+    validate_parameter_constraints(
+  File "/home/luongn1/.local/lib/python3.9/site-packages/sklearn/utils/_param_validation.py", line 95, in validate_parameter_constraints
+    raise InvalidParameterError(
+sklearn.utils._param_validation.InvalidParameterError: The 'n_components' parameter of GaussianMixture must be an int in the range [1, inf). Got '10' instead.
+Traceback (most recent call last):
+  File "/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpneb0m2yt.run.py", line 46, in <module>
+    main(snakemake.input, snakemake.output, snakemake.params)
+  File "/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpneb0m2yt.run.py", line 35, in main
+    labels, centroids, covariances, model_selection_scores = model.run_pipeline()
+  File "/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/clusters/base.py", line 354, in run_pipeline
+    labels = self.fit_predict(self.model, X)
+  File "/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/clusters/base.py", line 198, in fit_predict
+    labels = model.fit_predict(X)
+  File "/home/luongn1/.local/lib/python3.9/site-packages/sklearn/base.py", line 1344, in wrapper
+Traceback (most recent call last):
+  File "/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpauwvzoi3.run.py", line 46, in <module>
+    main(snakemake.input, snakemake.output, snakemake.params)
+  File "/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpauwvzoi3.run.py", line 35, in main
+    labels, centroids, covariances, model_selection_scores = model.run_pipeline()
+  File "/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/clusters/base.py", line 354, in run_pipeline
+    labels = self.fit_predict(self.model, X)
+  File "/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/clusters/base.py", line 198, in fit_predict
+    labels = model.fit_predict(X)
+  File "/home/luongn1/.local/lib/python3.9/site-packages/sklearn/base.py", line 1344, in wrapper
+    estimator._validate_params()
+  File "/home/luongn1/.local/lib/python3.9/site-packages/sklearn/base.py", line 666, in _validate_params
+    validate_parameter_constraints(
+  File "/home/luongn1/.local/lib/python3.9/site-packages/sklearn/utils/_param_validation.py", line 95, in validate_parameter_constraints
+    raise InvalidParameterError(
+sklearn.utils._param_validation.InvalidParameterError: The 'n_components' parameter of GaussianMixture must be an int in the range [1, inf). Got '6' instead.
+    estimator._validate_params()
+  File "/home/luongn1/.local/lib/python3.9/site-packages/sklearn/base.py", line 666, in _validate_params
+    validate_parameter_constraints(
+  File "/home/luongn1/.local/lib/python3.9/site-packages/sklearn/utils/_param_validation.py", line 95, in validate_parameter_constraints
+    raise InvalidParameterError(
+sklearn.utils._param_validation.InvalidParameterError: The 'n_components' parameter of GaussianMixture must be an int in the range [1, inf). Got '7' instead.
+RuleException:
+CalledProcessError in file /scratch/work/luongn1/digirhythm-v2/workflow/rules/cluster.smk, line 46:
+Command 'source /appl/scibuilder-mamba/aalto-rhel9/prod/software/mamba/2025.1/f67be15/bin/activate '/scratch/work/luongn1/digirhythm-v2/.snakemake/conda/ab5233add898528c77eec06aa91604d6_'; set -euo pipefail;  python /scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpqweao72o.run.py' returned non-zero exit status 1.
+[Wed Aug 27 16:17:26 2025]
+Error in rule cluster:
+    jobid: 36
+    input: data/processed/dtu/all_features_clean.csv
+    output: out/clusters/dtu/10/gmm_cluster.csv, out/clusters/dtu/10/gmm_cluster_centroids.csv, out/clusters/dtu/10/gmm_cluster_covariances.csv
+    conda-env: /scratch/work/luongn1/digirhythm-v2/.snakemake/conda/ab5233add898528c77eec06aa91604d6_
+
+RuleException:
+CalledProcessError in file /scratch/work/luongn1/digirhythm-v2/workflow/rules/cluster.smk, line 46:
+Command 'source /appl/scibuilder-mamba/aalto-rhel9/prod/software/mamba/2025.1/f67be15/bin/activate '/scratch/work/luongn1/digirhythm-v2/.snakemake/conda/ab5233add898528c77eec06aa91604d6_'; set -euo pipefail;  python /scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpneb0m2yt.run.py' returned non-zero exit status 1.
+[Wed Aug 27 16:17:26 2025]
+Error in rule cluster:
+    jobid: 16
+    input: data/processed/dtu/all_features_clean.csv
+    output: out/clusters/dtu/6/gmm_cluster.csv, out/clusters/dtu/6/gmm_cluster_centroids.csv, out/clusters/dtu/6/gmm_cluster_covariances.csv
+    conda-env: /scratch/work/luongn1/digirhythm-v2/.snakemake/conda/ab5233add898528c77eec06aa91604d6_
+
+RuleException:
+CalledProcessError in file /scratch/work/luongn1/digirhythm-v2/workflow/rules/cluster.smk, line 46:
+Command 'source /appl/scibuilder-mamba/aalto-rhel9/prod/software/mamba/2025.1/f67be15/bin/activate '/scratch/work/luongn1/digirhythm-v2/.snakemake/conda/ab5233add898528c77eec06aa91604d6_'; set -euo pipefail;  python /scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpauwvzoi3.run.py' returned non-zero exit status 1.
+[Wed Aug 27 16:17:26 2025]
+Error in rule cluster:
+    jobid: 24
+    input: data/processed/dtu/all_features_clean.csv
+    output: out/clusters/dtu/7/gmm_cluster.csv, out/clusters/dtu/7/gmm_cluster_centroids.csv, out/clusters/dtu/7/gmm_cluster_covariances.csv
+    conda-env: /scratch/work/luongn1/digirhythm-v2/.snakemake/conda/ab5233add898528c77eec06aa91604d6_
+
+Traceback (most recent call last):
+  File "/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpn5l2bdsf.run.py", line 46, in <module>
+    main(snakemake.input, snakemake.output, snakemake.params)
+  File "/scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpn5l2bdsf.run.py", line 35, in main
+    labels, centroids, covariances, model_selection_scores = model.run_pipeline()
+  File "/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/clusters/base.py", line 354, in run_pipeline
+    labels = self.fit_predict(self.model, X)
+  File "/scratch/work/luongn1/digirhythm-v2/workflow/rules/../scripts/clusters/base.py", line 198, in fit_predict
+    labels = model.fit_predict(X)
+  File "/home/luongn1/.local/lib/python3.9/site-packages/sklearn/base.py", line 1344, in wrapper
+    estimator._validate_params()
+  File "/home/luongn1/.local/lib/python3.9/site-packages/sklearn/base.py", line 666, in _validate_params
+    validate_parameter_constraints(
+  File "/home/luongn1/.local/lib/python3.9/site-packages/sklearn/utils/_param_validation.py", line 95, in validate_parameter_constraints
+    raise InvalidParameterError(
+sklearn.utils._param_validation.InvalidParameterError: The 'n_components' parameter of GaussianMixture must be an int in the range [1, inf). Got '7' instead.
+RuleException:
+CalledProcessError in file /scratch/work/luongn1/digirhythm-v2/workflow/rules/cluster.smk, line 46:
+Command 'source /appl/scibuilder-mamba/aalto-rhel9/prod/software/mamba/2025.1/f67be15/bin/activate '/scratch/work/luongn1/digirhythm-v2/.snakemake/conda/ab5233add898528c77eec06aa91604d6_'; set -euo pipefail;  python /scratch/work/luongn1/digirhythm-v2/.snakemake/scripts/tmpn5l2bdsf.run.py' returned non-zero exit status 1.
+[Wed Aug 27 16:17:27 2025]
+Error in rule cluster:
+    jobid: 21
+    input: data/processed/tesserae/all_features_clean.csv
+    output: out/clusters/tesserae/7/gmm_cluster.csv, out/clusters/tesserae/7/gmm_cluster_centroids.csv, out/clusters/tesserae/7/gmm_cluster_covariances.csv
+    conda-env: /scratch/work/luongn1/digirhythm-v2/.snakemake/conda/ab5233add898528c77eec06aa91604d6_
+
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: .snakemake/log/2025-08-27T161628.619193.snakemake.log
+WorkflowError:
+At least one job did not complete successfully.

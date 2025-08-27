@@ -11,6 +11,7 @@ class BaseClustering(ABC):
         self,
         df: pd.DataFrame,
         features: list,
+        optimal_cluster: int,
         cluster_settings: dict,
         random_state=2508,
     ):
@@ -28,7 +29,7 @@ class BaseClustering(ABC):
         """
         self.df = df.copy()
         self.features = features
-
+        self.optimal_n_components = optimal_cluster
         self.random_state = random_state
         self.model = None
 
@@ -48,9 +49,7 @@ class BaseClustering(ABC):
 
         # Optimal cluster settings
         self.run_model_selection = cluster_settings["run_model_selection"]
-        self.optimal_n_components = cluster_settings["optimal_gmm_settings"][
-            "n_components"
-        ]
+        # self.optimal_n_components = cluster_settings["optimal_gmm_settings"]["n_components"]
 
     @abstractmethod
     def init_model(self):
