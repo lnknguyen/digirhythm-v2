@@ -8,5 +8,5 @@
 
 module load mamba
 source activate env/
-snakemake --snakefile workflow/Snakefile  --use-conda --conda-frontend mamba --cores 16
-#snakemake --snakefile workflow/Snakefile --cores 2
+snakemake --snakefile workflow/Snakefile  --use-conda --conda-frontend mamba --cores 128
+

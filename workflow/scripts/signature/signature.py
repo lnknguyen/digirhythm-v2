@@ -43,7 +43,7 @@ def split_chunk(df: pd.DataFrame, window: int, id_col: str = "user") -> pd.DataF
     df = df.sort_values(by=[id_col, "date"])
     df["day_number"] = df.groupby(id_col).cumcount()
 
-    # Make 3 splits. 90 days each
+    # Make 3 splits.
     split_labels = ["split_1", "split_2", "split_3"]
 
     # Create a split column to annotate split
@@ -207,7 +207,8 @@ def main(input_fns, output_fns, params):
     ranked = True if params.ranked == "ranked" else False
     dist_func = params.dist_method
     study = snakemake.wildcards.study
-
+    threshold_days = int(snakemake.wildcards.window)
+    
     print(
         f"Ranked: {ranked}, Distance Method: {dist_func}, study: {snakemake.wildcards.study}"
     )
@@ -281,10 +282,10 @@ def main(input_fns, output_fns, params):
         combined_dref.to_csv(output_fns[2])
     else:
         logging.info("Filtering data by threshold...")
-        data = filter_by_threshold(data, params.threshold_days)
+        data = filter_by_threshold(data, threshold_days)
 
         logging.info("Splitting data into chunks...")
-        window = int(params.threshold_days / 3)
+        window = int(threshold_days / 3)
         data = split_chunk(data, window=window, id_col="user")
 
         logging.info("Calculating user signatures...")
