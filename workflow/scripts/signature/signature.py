@@ -243,101 +243,33 @@ def main(input_fns, output_fns, params):
         f"Ranked: {ranked}, Distance Method: {dist_func}, study: {snakemake.wildcards.study}"
     )
 
-    if study == "globem":
-        target_waves = [
-            ["INS-W_1", "INS-W_2"],
-            ["INS-W_2", "INS-W_3"],
-            ["INS-W_3", "INS-W_4"],
-        ]
+    logging.info("Filtering data by threshold...")
+    data = filter_by_threshold(data, threshold_days)
 
-        signatures, dselfs, drefs = {}, {}, {}
-        # Create dictionary keys
-        keys = ["_".join(t) for t in target_waves]
+    logging.info("Splitting data into chunks...")
 
-        for i, target in enumerate(target_waves):
+    # Define window size based on number of splits (2 or 3)
+    window_size = len(params.splits)
+    window = int(threshold_days / window_size)
 
-            # users present in all target waves
-            users_in_waves = (
-                data[data["wave"].isin(target)]
-                .drop_duplicates(["user", "wave"])
-                .groupby("user")["wave"]
-                .nunique()
-                .pipe(lambda s: s[s == len(target)].index)
-            )
+    # Split data by assigning a 'split' column to each day
+    data = split_chunk(data, window=window, id_col="user")
 
-            filtered_clusters_df = data[
-                (data.user.isin(users_in_waves)) & (data.wave.isin(target))
-            ]
+    logging.info("Calculating user signatures...")
+    user_signature = signature(data, ranked)
 
-            logging.info(f"Processing waves: {target} with {len(users_in_waves)} users")
+    logging.info("Calculating self-distances...")
+    d_self_df = d_self(user_signature, splits=params.splits, method=dist_func)
 
-            # Assign wave to 'split', as split
-            # column will be used to compute signature
-            filtered_clusters_df["split"] = filtered_clusters_df["wave"]
+    logging.info("Calculating reference distances...")
+    d_ref_df = d_ref(user_signature, splits=params.splits, method=dist_func)
 
-            logging.info("Calculating user signatures...")
-            signature_df = signature(filtered_clusters_df, ranked)
+    logging.info("Saving results...")
+    user_signature.to_csv(output_fns[0])
+    d_self_df.to_csv(output_fns[1], index=False)
+    d_ref_df.to_csv(output_fns[2])
 
-            logging.info("Calculating self-distances...")
-            d_self_df = d_self(signature_df, splits=target, method=dist_func)
-
-            logging.info("Calculating reference distances...")
-            d_ref_df = d_ref(signature_df, splits=target, method=dist_func)
-
-            # Create key
-            dselfs[keys[i]] = d_self_df
-            drefs[keys[i]] = d_ref_df
-            signatures[keys[i]] = signature_df
-
-        # Combine all dselfs and drefs into DataFrames
-        combined_dself = (
-            pd.concat(dselfs, names=["wave"], keys=dselfs.keys())
-            .reset_index(level=0)
-            .rename(columns={"level_0": "wave"})
-        )
-        combined_dref = (
-            pd.concat(drefs, names=["wave"], keys=drefs.keys())
-            .reset_index(level=0)
-            .rename(columns={"level_0": "wave"})
-        )
-        combined_signatures = (
-            pd.concat(signatures, names=["wave"], keys=signatures.keys())
-            .reset_index(level=0)
-            .rename(columns={"level_0": "wave"})
-        )
-
-        # Save to output files
-        combined_signatures.to_csv(output_fns[0])
-        combined_dself.to_csv(output_fns[1], index=False)
-        combined_dref.to_csv(output_fns[2])
-    else:
-        logging.info("Filtering data by threshold...")
-        data = filter_by_threshold(data, threshold_days)
-
-        logging.info("Splitting data into chunks...")
-
-        # Define window size based on number of splits (2 or 3)
-        window_size = len(params.splits)
-        window = int(threshold_days / window_size)
-
-        # Split data by assigning a 'split' column to each day
-        data = split_chunk(data, window=window, id_col="user")
-
-        logging.info("Calculating user signatures...")
-        user_signature = signature(data, ranked)
-
-        logging.info("Calculating self-distances...")
-        d_self_df = d_self(user_signature, splits=params.splits, method=dist_func)
-
-        logging.info("Calculating reference distances...")
-        d_ref_df = d_ref(user_signature, splits=params.splits, method=dist_func)
-
-        logging.info("Saving results...")
-        user_signature.to_csv(output_fns[0])
-        d_self_df.to_csv(output_fns[1], index=False)
-        d_ref_df.to_csv(output_fns[2])
-
-        logging.info("Processing complete.")
+    logging.info("Processing complete.")
 
 
 if __name__ == "__main__":
