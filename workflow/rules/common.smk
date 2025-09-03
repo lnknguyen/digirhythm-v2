@@ -4,7 +4,7 @@ ALGOS           = config.get("ALGOS",           ['gmm'])
 RANKS           = config.get("RANKS",           ['ranked', 'unranked'])
 DIST_METHOD     = config.get("DIST_METHOD",     ['jsd', 'cosine'])
 OPTIMAL_CLUSTER = config.get("OPTIMAL_CLUSTER", [6, 7, 8, 9, 10, 11])
-WINDOW          = config.get("WINDOW",          [30, 60, 90, 180, 270])
+WINDOW          = config.get("WINDOW",          [90, 180, 270])
 
 def model_selection_targets():
     # keep your original implementation
@@ -50,10 +50,6 @@ def all_outputs():
     outs.extend(model_selection_targets())
     # de-duplicate in case any lists overlap
     return sorted(set(outs))
-
-rule all:
-    input:
-        all_outputs()
 
 rule clean_signature:
     message:

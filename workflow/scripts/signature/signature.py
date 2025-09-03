@@ -35,28 +35,58 @@ def filter_by_threshold(df: pd.DataFrame, threshold_days: int) -> pd.DataFrame:
 
     return df[df["user"].isin(valid_users)]
 
+def split_chunk(
+    df: pd.DataFrame,
+    window: int,
+    splits: Optional[List[str]] = None,
+    id_col: str = "user",
+    date_col: str = "date",
+) -> pd.DataFrame:
+    """
+    Split each individual's timeline into fixed-size windows and label them.
 
-def split_chunk(df: pd.DataFrame, window: int, id_col: str = "user") -> pd.DataFrame:
+    Parameters
+    ----------
+    df : pd.DataFrame
+        Must include columns [id_col, date_col].
+    window : int
+        Number of days per split window.
+    splits : list[str]
+        Labels for the windows (e.g., ["split_1", "split_2", "split_3"]).
+        Rows beyond the last full window are labeled 'rest' and removed.
+    id_col : str
+        ID column name.
+    date_col : str
+        Date/timestamp column name.
+
+    Returns
+    -------
+    pd.DataFrame
+        Input rows with an added 'split' column, excluding 'rest'.
+    """
+    if splits is None:
+        raise ValueError("Provide explicit split labels, e.g., ['split_1','split_2','split_3'].")
+    if window <= 0:
+        raise ValueError("`window` must be a positive integer.")
+    if len(splits) < 1:
+        raise ValueError("`splits` must contain at least one label.")
 
     df = df.copy()
-    df["date"] = pd.to_datetime(df["date"], errors="coerce")
-    df = df.sort_values(by=[id_col, "date"])
-    df["day_number"] = df.groupby(id_col).cumcount()
+    df[date_col] = pd.to_datetime(df[date_col], errors="coerce")
+    df = df.sort_values(by=[id_col, date_col])
+    df["day_number"] = df.groupby(id_col).cumcount()  # 0-based within each id
 
-    # Make 3 splits.
-    split_labels = ["split_1", "split_2", "split_3"]
+    k = len(splits)
+    # Build bin edges: [-1, w-1, 2w-1, ..., kw-1, inf]
+    bin_edges = [-1] + [i * window - 1 for i in range(1, k + 1)] + [float("inf")]
+    labels = splits + ["rest"]
 
-    # Create a split column to annotate split
-    df["split"] = pd.cut(
-        df["day_number"],
-        bins=[-1, window - 1, 2 * window - 1, 3 * window - 1, float("inf")],
-        labels=split_labels + ["rest"],
-    )
+    # Assign split labels per id (vectorized; day_number already per-id)
+    df["split"] = pd.cut(df["day_number"], bins=bin_edges, labels=labels, right=True)
 
-    df = df[df["split"] != "rest"]
-    df = df.drop(columns=["day_number"])
-
-    return df
+    # Keep only the requested k splits; drop the trailing remainder
+    out = df[df["split"].isin(splits)].drop(columns=["day_number"]).reset_index(drop=True)
+    return out
 
 
 def signature(df: pd.DataFrame, ranked: bool) -> pd.DataFrame:
@@ -285,7 +315,12 @@ def main(input_fns, output_fns, params):
         data = filter_by_threshold(data, threshold_days)
 
         logging.info("Splitting data into chunks...")
-        window = int(threshold_days / 3)
+
+        # Define window size based on number of splits (2 or 3)
+        window_size = len(params.splits)
+        window = int(threshold_days / window_size)
+
+        # Split data by assigning a 'split' column to each day
         data = split_chunk(data, window=window, id_col="user")
 
         logging.info("Calculating user signatures...")

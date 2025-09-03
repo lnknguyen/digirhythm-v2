@@ -71,7 +71,7 @@ cluster_settings:
 
   globem:
     algorithm: gmm
-    split: False
+    split: True
     strategy: group
     group_col: wave
     min_threshold: 30
@@ -105,21 +105,21 @@ signature:
 
     tesserae:
         split: True # whether to split the data by study
-        splits: ['split_1', 'split_2', 'split_3']   
+        splits: ['split_1', 'split_2']   
         split_col: null # if None, will use the default split from cluster_settings
         threshold_days: 270 # days to consider a user active
     momo:
       split: False # whether to split the data by study
-      splits: ['split_1', 'split_2', 'split_3']   
+      splits: ['split_1', 'split_2']   
       split_col: null # if None, will use the default split from cluster_settings
       threshold_days: 270 # days to consider a user active
     globem:
       split: False # whether to split the data by study
-      splits: ['split_1', 'split_2', 'split_3']   
+      splits: ['split_1', 'split_2']   
       split_col: null # if None, will use the default split from cluster_settings
       threshold_days: 14 # days to consider a user active
     dtu:
       split: False # whether to split the data by study
-      splits: ['split_1', 'split_2', 'split_3']   
+      splits: ['split_1', 'split_2']   
       split_col: null # if None, will use the default split from cluster_settings
       threshold_days: 270 # days to consider a user active  
