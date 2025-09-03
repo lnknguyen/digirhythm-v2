@@ -35,6 +35,7 @@ def filter_by_threshold(df: pd.DataFrame, threshold_days: int) -> pd.DataFrame:
 
     return df[df["user"].isin(valid_users)]
 
+
 def split_chunk(
     df: pd.DataFrame,
     window: int,
@@ -65,7 +66,9 @@ def split_chunk(
         Input rows with an added 'split' column, excluding 'rest'.
     """
     if splits is None:
-        raise ValueError("Provide explicit split labels, e.g., ['split_1','split_2','split_3'].")
+        raise ValueError(
+            "Provide explicit split labels, e.g., ['split_1','split_2','split_3']."
+        )
     if window <= 0:
         raise ValueError("`window` must be a positive integer.")
     if len(splits) < 1:
@@ -85,7 +88,9 @@ def split_chunk(
     df["split"] = pd.cut(df["day_number"], bins=bin_edges, labels=labels, right=True)
 
     # Keep only the requested k splits; drop the trailing remainder
-    out = df[df["split"].isin(splits)].drop(columns=["day_number"]).reset_index(drop=True)
+    out = (
+        df[df["split"].isin(splits)].drop(columns=["day_number"]).reset_index(drop=True)
+    )
     return out
 
 
@@ -229,47 +234,48 @@ def d_ref(
     mask = np.triu(np.ones(d_ref_df.shape, dtype=bool), k=1)
     return d_ref_df.where(mask)
 
+####### MAIN #######
+def process_signature(df, threshold_days, splits, ranked, dist_func):
+    df = filter_by_threshold(df, threshold_days)
+    window = threshold_days // len(splits)
+    df = split_chunk(df, window=window, splits=splits, id_col="user")
+    us = signature(df, ranked)
+    ds = d_self(us, splits=splits, method=dist_func)
+    dr = d_ref(us, splits=splits, method=dist_func)
+    return us, ds, dr
+
+def run_pipeline(data, study, threshold_days, splits, ranked, dist_func, output_fns):
+    one = lambda df: process_signature(df, threshold_days, splits, ranked, dist_func)
+
+    if study == "GLOBEM" and "wave" in data.columns:
+        sig_parts, dself_parts, dref_parts = [], [], []
+        for wave, sample in data.groupby("wave", sort=True):
+            us, ds, dr = one(sample)
+            us["wave"] = wave; ds["wave"] = wave; dr["wave"] = wave
+            sig_parts.append(us); dself_parts.append(ds); dref_parts.append(dr)
+        user_signature = pd.concat(sig_parts, ignore_index=True)
+        d_self_df = pd.concat(dself_parts, ignore_index=True)
+        d_ref_df = pd.concat(dref_parts, ignore_index=True)
+    else:
+        user_signature, d_self_df, d_ref_df = one(data)
+
+    user_signature.to_csv(output_fns[0], index=False)
+    d_self_df.to_csv(output_fns[1], index=False)
+    d_ref_df.to_csv(output_fns[2], index=False)
 
 def main(input_fns, output_fns, params):
     logging.info("Loading data...")
     data = pd.read_csv(input_fns[0])
 
-    ranked = True if params.ranked == "ranked" else False
+    ranked = (params.ranked == "ranked")
     dist_func = params.dist_method
     study = snakemake.wildcards.study
     threshold_days = int(snakemake.wildcards.window)
-    
-    print(
-        f"Ranked: {ranked}, Distance Method: {dist_func}, study: {snakemake.wildcards.study}"
-    )
+    splits = params.splits  # e.g., ["split_1","split_2"] or ["split_1","split_2","split_3"]
 
-    logging.info("Filtering data by threshold...")
-    data = filter_by_threshold(data, threshold_days)
+    print(f"Ranked: {ranked}, Distance Method: {dist_func}, study: {study}")
+    run_pipeline(data, study, threshold_days, splits, ranked, dist_func, output_fns)
 
-    logging.info("Splitting data into chunks...")
-
-    # Define window size based on number of splits (2 or 3)
-    window_size = len(params.splits)
-    window = int(threshold_days / window_size)
-
-    # Split data by assigning a 'split' column to each day
-    data = split_chunk(data, window=window, id_col="user")
-
-    logging.info("Calculating user signatures...")
-    user_signature = signature(data, ranked)
-
-    logging.info("Calculating self-distances...")
-    d_self_df = d_self(user_signature, splits=params.splits, method=dist_func)
-
-    logging.info("Calculating reference distances...")
-    d_ref_df = d_ref(user_signature, splits=params.splits, method=dist_func)
-
-    logging.info("Saving results...")
-    user_signature.to_csv(output_fns[0])
-    d_self_df.to_csv(output_fns[1], index=False)
-    d_ref_df.to_csv(output_fns[2])
-
-    logging.info("Processing complete.")
 
 
 if __name__ == "__main__":

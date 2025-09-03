@@ -37,7 +37,7 @@ def _flat(arr_like):
 # ------- Data Filtering and Splitting -------
 
 
-def filter_by_threshold(df: pd.DataFrame, threshold_days: int ) -> pd.DataFrame:
+def filter_by_threshold(df: pd.DataFrame, threshold_days: int) -> pd.DataFrame:
     df = df.copy()
     df["date"] = pd.to_datetime(df["date"], errors="coerce")
 
@@ -54,22 +54,22 @@ def split_chunk(
     df["date"] = pd.to_datetime(df["date"], errors="coerce")
     df = df.sort_values(by=[id_col, "date"])
     df["day_number"] = df.groupby(id_col).cumcount() + 1
-    
+
     split_labels = ["split_1", "split_2", "split_3"]
-    bins = [0, window, 2*window, 3*window, float("inf")]
-    
+    bins = [0, window, 2 * window, 3 * window, float("inf")]
+
     if split_col == None:
         # Make 3 splits
         split_labels = ["split_1", "split_2", "split_3"]
-        
+
         df["split"] = pd.cut(
             df["day_number"],
             bins=bins,
             labels=split_labels + ["rest"],
-            right=True,             # include the right edge
-            include_lowest=True     # ensures smallest valid day (1) is included
+            right=True,  # include the right edge
+            include_lowest=True,  # ensures smallest valid day (1) is included
         )
-    
+
     else:
         df["split"] = df[split_col]
 
@@ -196,12 +196,16 @@ def d_ref_transition(
 
                 # ensure s exists for both ui and uj (message focuses on uj as requested)
                 if s not in all_mats.get(ui, {}):
-                    
-                    raise KeyError(f"Segment '{s}' not found for ui={ui}. Available: {list(all_mats.get(ui, {}).keys())}")
+
+                    raise KeyError(
+                        f"Segment '{s}' not found for ui={ui}. Available: {list(all_mats.get(ui, {}).keys())}"
+                    )
                 if s not in all_mats.get(uj, {}):
 
                     print(all_mats[uj])
-                    raise KeyError(f"Segment '{s}' not found for uj={uj}. Available: {list(all_mats.get(uj, {}).keys())}")
+                    raise KeyError(
+                        f"Segment '{s}' not found for uj={uj}. Available: {list(all_mats.get(uj, {}).keys())}"
+                    )
 
                 dists.append(row_wise_dist(all_mats[ui][s], all_mats[uj][s], method))
 
@@ -222,7 +226,7 @@ def main(input_fns, output_fns, params):
     dist_func = params.dist_method
     study = snakemake.wildcards.study
     threshold_days = int(snakemake.wildcards.window)
-    
+
     print(f"Distance Method: {dist_func}, study: {study}, threshold: {threshold_days}")
 
     all_mats = defaultdict(dict)
@@ -317,7 +321,7 @@ def main(input_fns, output_fns, params):
         logging.info("Splitting data into chunks...")
         window = int(threshold_days / 3)
         data = split_chunk(data, window=window, id_col="user")
-        
+
         logging.info("Calculating transition matrix...")
         for (user, split), g in data.groupby(["user", "split"], sort=False):
             mat, _ = transition_matrix(
