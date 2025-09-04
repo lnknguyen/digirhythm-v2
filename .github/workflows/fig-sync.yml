@@ -18,8 +18,8 @@ jobs:
     env:
       P1_SSH_URL: git@github.com:lnknguyen/digirhythm.git
       P1_BRANCH: main
-      SRC_DIR: figures
-      DST_DIR: publication-figs
+      SRC_DIR: publication-figs 
+      DST_DIR: figures
 
     steps:
       - name: Checkout P2
