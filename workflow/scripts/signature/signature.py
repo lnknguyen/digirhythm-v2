@@ -78,7 +78,7 @@ def split_chunk(
     df = df.copy()
     df[date_col] = pd.to_datetime(df[date_col], errors="coerce")
     df = df.sort_values(by=[id_col, date_col])
-    df["day_number"] = df.groupby(id_col).cumcount()  # 0-based within each id
+    df["day_number"] = df.groupby(id_col, observed=True).cumcount()  # 0-based within each id
 
     k = len(splits)
     # Build bin edges: [-1, w-1, 2w-1, ..., kw-1, inf]
@@ -101,10 +101,10 @@ def signature(df: pd.DataFrame, ranked: bool) -> pd.DataFrame:
     assert "split" in df.columns, "Expected column 'split' in `df`."
 
     user_signature = (
-        df.groupby(["user", "split", "Cluster"]).size().reset_index(name="count")
+        df.groupby(["user", "split", "Cluster"], observed=True).size().reset_index(name="count")
     )
 
-    user_signature["percentage"] = user_signature.groupby(["user", "split"])[
+    user_signature["percentage"] = user_signature.groupby(["user", "split"], observed=True)[
         "count"
     ].transform(lambda x: 100 * x / x.sum())
 
@@ -123,11 +123,11 @@ def signature(df: pd.DataFrame, ranked: bool) -> pd.DataFrame:
         )
 
         user_signature["rank"] = (
-            user_signature.groupby(["user", "split"]).cumcount() + 1
+            user_signature.groupby(["user", "split"], observed=True).cumcount() + 1
         )
 
         user_signature = user_signature.pivot_table(
-            index=["user", "split"], columns="rank", values="percentage", fill_value=0
+            index=["user", "split"], columns="rank", values="percentage", fill_value=0,observed=True
         )
     else:
         user_signature = user_signature.pivot_table(
@@ -135,6 +135,7 @@ def signature(df: pd.DataFrame, ranked: bool) -> pd.DataFrame:
             columns="Cluster",
             values="percentage",
             fill_value=0,
+            observed=True
         )
 
     return user_signature

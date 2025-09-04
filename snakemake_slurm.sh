@@ -1,8 +1,8 @@
 #!/bin/bash
 #SBATCH --job-name=snakemake_slurm
 #SBATCH --time=01:30:00            # Runtime needs to be longer than the time it takes to complete the workflow. Modify accordingly!
-#SBATCH --cpus-per-task=8          
-#SBATCH --mem=10G                  
+#SBATCH --cpus-per-task=64          
+#SBATCH --mem=40G                  
 #SBATCH --output=slurm-logs/snakemake_slurm.out
 #SBATCH --error=slurm-logs/snakemake_slurm.err
 

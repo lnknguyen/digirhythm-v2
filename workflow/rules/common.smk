@@ -4,7 +4,8 @@ ALGOS           = config.get("ALGOS",           ['gmm'])
 RANKS           = config.get("RANKS",           ['ranked', 'unranked'])
 DIST_METHOD     = config.get("DIST_METHOD",     ['jsd', 'cosine'])
 OPTIMAL_CLUSTER = config.get("OPTIMAL_CLUSTER", [6, 7, 8, 9, 10, 11])
-WINDOW          = config.get("WINDOW",          [60, 90, 180, 270])
+#WINDOW          = config.get("WINDOW",          [60, 90, 180, 270])
+WINDOW          = config.get("WINDOW",          [60])
 
 def model_selection_targets():
     # keep your original implementation

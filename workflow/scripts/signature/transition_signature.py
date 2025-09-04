@@ -4,10 +4,8 @@ from scipy.spatial.distance import jensenshannon, cosine
 from collections import defaultdict
 from itertools import combinations
 import os
-import seaborn as sns
-import matplotlib.pyplot as plt
-from collections import defaultdict
 import logging
+from typing import Callable, List, Optional, Tuple
 
 # ------- Distance Functions -------
 
@@ -29,11 +27,6 @@ def dist_func(p, q, method="jsd", eps=1e-12):
         raise ValueError(f"Unknown distance method: {method}")
 
 
-def _flat(arr_like):
-    # fillna(0) works for DataFrame/Series; np.asarray handles ndarray
-    return np.asarray(arr_like.fillna(0).values, dtype=float).ravel()
-
-
 # ------- Data Filtering and Splitting -------
 
 
@@ -41,42 +34,71 @@ def filter_by_threshold(df: pd.DataFrame, threshold_days: int) -> pd.DataFrame:
     df = df.copy()
     df["date"] = pd.to_datetime(df["date"], errors="coerce")
 
-    user_day_counts = df.groupby("user")["date"].nunique()
+    user_day_counts = df.groupby("user", observed=True)["date"].nunique()
     valid_users = user_day_counts[user_day_counts >= threshold_days].index
 
     return df[df["user"].isin(valid_users)]
 
 
 def split_chunk(
-    df: pd.DataFrame, window: int, id_col: str = "user", split_col=None
+    df: pd.DataFrame,
+    window: int,
+    splits: Optional[List[str]] = None,
+    id_col: str = "user",
+    date_col: str = "date",
 ) -> pd.DataFrame:
-    df = df.copy()
-    df["date"] = pd.to_datetime(df["date"], errors="coerce")
-    df = df.sort_values(by=[id_col, "date"])
-    df["day_number"] = df.groupby(id_col).cumcount() + 1
+    """
+    Split each individual's timeline into fixed-size windows and label them.
 
-    split_labels = ["split_1", "split_2", "split_3"]
-    bins = [0, window, 2 * window, 3 * window, float("inf")]
+    Parameters
+    ----------
+    df : pd.DataFrame
+        Must include columns [id_col, date_col].
+    window : int
+        Number of days per split window.
+    splits : list[str]
+        Labels for the windows (e.g., ["split_1", "split_2", "split_3"]).
+        Rows beyond the last full window are labeled 'rest' and removed.
+    id_col : str
+        ID column name.
+    date_col : str
+        Date/timestamp column name.
 
-    if split_col == None:
-        # Make 3 splits
-        split_labels = ["split_1", "split_2", "split_3"]
-
-        df["split"] = pd.cut(
-            df["day_number"],
-            bins=bins,
-            labels=split_labels + ["rest"],
-            right=True,  # include the right edge
-            include_lowest=True,  # ensures smallest valid day (1) is included
+    Returns
+    -------
+    pd.DataFrame
+        Input rows with an added 'split' column, excluding 'rest'.
+    """
+    if splits is None:
+        raise ValueError(
+            "Provide explicit split labels, e.g., ['split_1','split_2','split_3']."
         )
+    if window <= 0:
+        raise ValueError("`window` must be a positive integer.")
+    if len(splits) < 1:
+        raise ValueError("`splits` must contain at least one label.")
 
-    else:
-        df["split"] = df[split_col]
+    df = df.copy()
+    df[date_col] = pd.to_datetime(df[date_col], errors="coerce")
+    df = df.sort_values(by=[id_col, date_col])
+    df["day_number"] = df.groupby(id_col).cumcount()  # 0-based within each id
 
-    df = df[df["split"] != "rest"]
-    df = df.drop(columns=["day_number"])
+    k = len(splits)
+    # Build bin edges: [-1, w-1, 2w-1, ..., kw-1, inf]
+    bin_edges = [-1] + [i * window - 1 for i in range(1, k + 1)] + [float("inf")]
+    labels = splits + ["rest"]
 
-    return df
+    # Assign split labels per id (vectorized; day_number already per-id)
+    df["split"] = pd.cut(df["day_number"], bins=bin_edges, labels=labels, right=True)
+
+    # Keep only the requested k splits; drop the trailing remainder
+    out = (
+        df[df["split"].isin(splits)].drop(columns=["day_number"]).reset_index(drop=True)
+    )
+    return out
+
+
+# ------- Compute transition matrix -------
 
 
 def transition_matrix(
@@ -93,7 +115,7 @@ def transition_matrix(
     df = df.sort_values([user_col, date_col])
 
     df["from_cluster"] = df[cluster_col]
-    df["to_cluster"] = df.groupby(user_col, sort=False)[cluster_col].shift(-1)
+    df["to_cluster"] = df.groupby(user_col, sort=False, observed=True)[cluster_col].shift(-1)
     pairs = df.dropna(subset=["to_cluster"])
 
     if states is None:
@@ -143,6 +165,7 @@ def row_wise_dist(mat_1, mat_2, method="jsd"):
     return float(np.mean(dists))
 
 
+# ------- Transition signature -------
 def d_self_transition(
     all_mats, splits=["split_1", "split_2", "split_3"], method="jsd"
 ) -> pd.DataFrame:
@@ -216,30 +239,57 @@ def d_ref_transition(
     return pd.DataFrame(results)
 
 
-# ------- Main Workflow -------
+####### MAIN #######
+def process_signature(df, threshold_days, splits, dist_func):
 
-
-def process_signature(df, threshold_days, splits, ranked, dist_func):
+    all_mats = defaultdict(dict)
     df = filter_by_threshold(df, threshold_days)
 
-    counts = df.groupby("user").size()
+    # Collect all possible states/clusters to form transition matrix 
+    states = df.Cluster.unique()
+    
+    counts = df.groupby("user", observed=True).size()
     print(
         f"min obs/user = {counts.min()}, max obs/user = {counts.max()} (n_users={counts.size})"
     )
     window = threshold_days // len(splits)
     df = split_chunk(df, window=window, splits=splits, id_col="user")
-    us = signature(df, ranked)
-    ds = d_self(us, splits=splits, method=dist_func)
-    dr = d_ref(us, splits=splits, method=dist_func)
-    return us, ds, dr
+    
+    logging.info("Calculating transition matrix...")
+    for (user, split), g in df.groupby(["user", "split"], sort=False):
+        mat, _ = transition_matrix(
+            g,
+            user_col="user",
+            date_col="date",
+            cluster_col="Cluster",
+            states=states,
+        )
+        all_mats[user][split] = mat
+
+    ds = d_self_transition(all_mats, splits=splits, method=dist_func)
+    dr = d_ref_transition(all_mats, splits=splits, method=dist_func)
+
+    all_mats_df = (
+        pd.concat(
+            {
+                pid: pd.concat(splits, names=["split"])
+                for pid, splits in all_mats.items()
+            },
+            names=["id"],
+        )
+        .stack()
+        .reset_index(name="value")
+    )
+
+    return all_mats_df, ds, dr
 
 
-def run_pipeline(data, study, threshold_days, splits, ranked, dist_func, output_fns):
-    one = lambda df: process_signature(df, threshold_days, splits, ranked, dist_func)
+def run_pipeline(data, study, threshold_days, splits, dist_func, output_fns):
+    one = lambda df: process_signature(df, threshold_days, splits, dist_func)
 
     if study == "globem" and "wave" in data.columns:
         sig_parts, dself_parts, dref_parts = [], [], []
-        for wave, sample in data.groupby("wave", sort=True):
+        for wave, sample in data.groupby("wave", sort=True, observed=True):
 
             us, ds, dr = one(sample)
             us["wave"] = wave
@@ -264,7 +314,6 @@ def main(input_fns, output_fns, params):
     logging.info("Loading data...")
     data = pd.read_csv(input_fns[0])
 
-    ranked = params.ranked == "ranked"
     dist_func = params.dist_method
     study = snakemake.wildcards.study
     threshold_days = int(snakemake.wildcards.window)
@@ -272,152 +321,8 @@ def main(input_fns, output_fns, params):
         params.splits
     )  # e.g., ["split_1","split_2"] or ["split_1","split_2","split_3"]
 
-    print(f"Ranked: {ranked}, Distance Method: {dist_func}, study: {study}")
-    run_pipeline(data, study, threshold_days, splits, ranked, dist_func, output_fns)
-
-
-if __name__ == "__main__":
-    main(snakemake.input, snakemake.output, snakemake.params)
-
-
-def main(input_fns, output_fns, params):
-    logging.info("Loading data...")
-    data = pd.read_csv(input_fns[0])
-
-    dist_func = params.dist_method
-    study = snakemake.wildcards.study
-    threshold_days = int(snakemake.wildcards.window)
-
-    print(f"Distance Method: {dist_func}, study: {study}, threshold: {threshold_days}")
-
-    all_mats = defaultdict(dict)
-
-    # Collect all possible states/clusters to form transition matrix
-    states = data.Cluster.unique()
-
-    if study == "globem":
-        target_waves = [
-            ["INS-W_1", "INS-W_2"],
-            ["INS-W_2", "INS-W_3"],
-            ["INS-W_3", "INS-W_4"],
-        ]
-
-        signatures, dselfs, drefs = {}, {}, {}
-        # Create dictionary keys
-        keys = ["_".join(t) for t in target_waves]
-
-        for i, target in enumerate(target_waves):
-
-            # users present in all target waves
-            users_in_waves = (
-                data[data["wave"].isin(target)]
-                .drop_duplicates(["user", "wave"])
-                .groupby("user")["wave"]
-                .nunique()
-                .pipe(lambda s: s[s == len(target)].index)
-            )
-
-            filtered_clusters_df = data[
-                (data.user.isin(users_in_waves)) & (data.wave.isin(target))
-            ]
-            for (user, wave), g in filtered_clusters_df.groupby(["user", "wave"]):
-                mat, _ = transition_matrix(
-                    g,
-                    user_col="user",
-                    date_col="date",
-                    cluster_col="Cluster",
-                    states=states,
-                )
-
-                all_mats[user][wave] = mat
-
-            # Get transition mat for current users
-            current_mat = {k: all_mats[k] for k in users_in_waves}
-
-            logging.info(f"Processing waves: {target} with {len(users_in_waves)} users")
-
-            logging.info("Calculating self-distances...")
-            d_self_df = d_self_transition(current_mat, splits=target, method=dist_func)
-
-            logging.info("Calculating reference distances...")
-            d_ref_df = d_ref_transition(current_mat, splits=target, method=dist_func)
-
-            # Create key
-            dselfs[keys[i]] = d_self_df
-            drefs[keys[i]] = d_ref_df
-
-        # Combine all dselfs and drefs into DataFrames
-
-        all_mats_df = (
-            pd.concat(
-                {
-                    pid: pd.concat(splits, names=["wave"])
-                    for pid, splits in all_mats.items()
-                },
-                names=["id"],
-            )
-            .stack()
-            .reset_index(name="value")
-        )
-        combined_dself = (
-            pd.concat(dselfs, names=["wave"], keys=dselfs.keys())
-            .reset_index(level=0)
-            .rename(columns={"level_0": "wave"})
-        )
-        combined_dref = (
-            pd.concat(drefs, names=["wave"], keys=drefs.keys())
-            .reset_index(level=0)
-            .rename(columns={"level_0": "wave"})
-        )
-
-        # Save to output files
-        all_mats_df.to_csv(output_fns[0], index=False)
-        combined_dself.to_csv(output_fns[1], index=False)
-        combined_dref.to_csv(output_fns[2])
-    else:
-
-        logging.info("Filtering data by threshold...")
-        data = filter_by_threshold(data, threshold_days)
-
-        logging.info("Splitting data into chunks...")
-        window = int(threshold_days / 3)
-        data = split_chunk(data, window=window, id_col="user")
-
-        logging.info("Calculating transition matrix...")
-        for (user, split), g in data.groupby(["user", "split"], sort=False):
-            mat, _ = transition_matrix(
-                g,
-                user_col="user",
-                date_col="date",
-                cluster_col="Cluster",
-                states=states,
-            )
-            all_mats[user][split] = mat
-
-        logging.info("Calculating self-distances...")
-        d_self_df = d_self_transition(all_mats, splits=params.splits, method=dist_func)
-
-        logging.info("Calculating reference distances...")
-        d_ref_df = d_ref_transition(all_mats, splits=params.splits, method=dist_func)
-
-        logging.info("Saving results...")
-
-        all_mats_df = (
-            pd.concat(
-                {
-                    pid: pd.concat(splits, names=["split"])
-                    for pid, splits in all_mats.items()
-                },
-                names=["id"],
-            )
-            .stack()
-            .reset_index(name="value")
-        )
-        all_mats_df.to_csv(output_fns[0], index=False)
-        d_self_df.to_csv(output_fns[1], index=False)
-        d_ref_df.to_csv(output_fns[2])
-
-        logging.info("Processing complete.")
+    print(f"Distance Method: {dist_func}, study: {study}")
+    run_pipeline(data, study, threshold_days, splits, dist_func, output_fns)
 
 
 if __name__ == "__main__":
