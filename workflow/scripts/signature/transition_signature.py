@@ -115,7 +115,9 @@ def transition_matrix(
     df = df.sort_values([user_col, date_col])
 
     df["from_cluster"] = df[cluster_col]
-    df["to_cluster"] = df.groupby(user_col, sort=False, observed=True)[cluster_col].shift(-1)
+    df["to_cluster"] = df.groupby(user_col, sort=False, observed=True)[
+        cluster_col
+    ].shift(-1)
     pairs = df.dropna(subset=["to_cluster"])
 
     if states is None:
@@ -245,16 +247,16 @@ def process_signature(df, threshold_days, splits, dist_func):
     all_mats = defaultdict(dict)
     df = filter_by_threshold(df, threshold_days)
 
-    # Collect all possible states/clusters to form transition matrix 
+    # Collect all possible states/clusters to form transition matrix
     states = df.Cluster.unique()
-    
+
     counts = df.groupby("user", observed=True).size()
     print(
         f"min obs/user = {counts.min()}, max obs/user = {counts.max()} (n_users={counts.size})"
     )
     window = threshold_days // len(splits)
     df = split_chunk(df, window=window, splits=splits, id_col="user")
-    
+
     logging.info("Calculating transition matrix...")
     for (user, split), g in df.groupby(["user", "split"], sort=False):
         mat, _ = transition_matrix(
