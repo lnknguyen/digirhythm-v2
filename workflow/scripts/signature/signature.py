@@ -241,13 +241,16 @@ def process_signature(df, threshold_days, splits, ranked, dist_func):
     df = filter_by_threshold(df, threshold_days)
 
     counts = df.groupby("user").size()
-    print(f"min obs/user = {counts.min()}, max obs/user = {counts.max()} (n_users={counts.size})")
+    print(
+        f"min obs/user = {counts.min()}, max obs/user = {counts.max()} (n_users={counts.size})"
+    )
     window = threshold_days // len(splits)
     df = split_chunk(df, window=window, splits=splits, id_col="user")
     us = signature(df, ranked)
     ds = d_self(us, splits=splits, method=dist_func)
     dr = d_ref(us, splits=splits, method=dist_func)
     return us, ds, dr
+
 
 def run_pipeline(data, study, threshold_days, splits, ranked, dist_func, output_fns):
     one = lambda df: process_signature(df, threshold_days, splits, ranked, dist_func)
@@ -256,7 +259,6 @@ def run_pipeline(data, study, threshold_days, splits, ranked, dist_func, output_
         sig_parts, dself_parts, dref_parts = [], [], []
         for wave, sample in data.groupby("wave", sort=True):
 
-
             us, ds, dr = one(sample)
             us["wave"] = wave
             ds["wave"] = wave
@@ -264,7 +266,7 @@ def run_pipeline(data, study, threshold_days, splits, ranked, dist_func, output_
             sig_parts.append(us)
             dself_parts.append(ds)
             dref_parts.append(dr)
-            
+
         user_signature = pd.concat(sig_parts)
         d_self_df = pd.concat(dself_parts)
         d_ref_df = pd.concat(dref_parts)
