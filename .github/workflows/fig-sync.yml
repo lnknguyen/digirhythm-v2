@@ -1,53 +1,66 @@
-name: Sync fig/ from P1 into P2
+name: Sync P2 fig/ → P1 fig/ (SSH)
 
 on:
   push:
     branches: [main, master]
 
 permissions:
-  contents: write
+  contents: read   # only for this repo (P2)
 
 concurrency:
-  group: sync-fig
+  group: sync-fig-to-p1
   cancel-in-progress: true
 
 jobs:
   sync:
-    # avoid loops from the bot's own push
-    if: github.actor != 'github-actions[bot]'
+    # This job runs when you push to P2; it pushes to P1 over SSH.
     runs-on: ubuntu-latest
     env:
-      P1_URL: https://github.com/lnknguyen/digirhythm
-      P1_BRANCH: main          # change if P1 uses a different default branch
-      SRC_DIR: fig
-      DST_DIR: fig
+      P1_SSH_URL: git@github.com:lnknguyen/digirhythm.git
+      P1_BRANCH: main
+      SRC_DIR: figures
+      DST_DIR: publication-figs
 
     steps:
-      - name: Checkout P2 (this repo)
+      - name: Checkout P2
         uses: actions/checkout@v4
         with:
-          persist-credentials: true  # uses GITHUB_TOKEN to push back
+          fetch-depth: 0
+          persist-credentials: false  # we push to P1 with SSH, not to P2
 
-      - name: Clone P1 (public via HTTPS)
+      - name: Start ssh-agent and add deploy key
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: |
+            ${{ secrets.P1_DEPLOY_KEY }}
+
+      - name: Trust github.com host key
         run: |
-          git clone --depth 1 "$P1_URL" p1
+          mkdir -p ~/.ssh
+          ssh-keyscan -t rsa,ecdsa,ed25519 github.com >> ~/.ssh/known_hosts
+
+      - name: Clone P1 via SSH (will use the deploy key)
+        run: |
+          git clone --depth 1 "$P1_SSH_URL" p1
           cd p1
           git checkout "$P1_BRANCH" || true
 
-      - name: Mirror fig/ from P1 to P2 (including deletions)
+      - name: Mirror P2/fig → P1/fig (including deletions)
         run: |
-          mkdir -p "${DST_DIR}"
-          rsync -av --delete "p1/${SRC_DIR}/" "${DST_DIR}/"
+          mkdir -p "p1/${DST_DIR}"
+          rsync -av --delete "${SRC_DIR}/" "p1/${DST_DIR}/"
 
-      - name: Commit & push if there are changes
+      - name: Commit & push to P1 if changed
         run: |
+          cd p1
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          git pull --rebase origin "$P1_BRANCH" || true
           if [ -n "$(git status --porcelain -- ${DST_DIR})" ]; then
             git add "${DST_DIR}"
-            git commit -m "chore(fig): sync ${DST_DIR} from P1 (${P1_BRANCH})"
-            git push origin HEAD
+            git commit -m "chore(fig): mirror from lnknguyen/digirhythm-v2 @ $GITHUB_SHA"
+            git push origin HEAD:"$P1_BRANCH"
           else
-            echo "No fig/ changes to commit."
+            echo "No changes to push to P1."
           fi
 
