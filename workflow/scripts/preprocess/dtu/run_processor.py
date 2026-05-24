@@ -15,7 +15,6 @@ def main(cfg: DictConfig):
     sensor = cfg.processor.sensor
     frequency = cfg.processor.frequency
 
-
     if sensor == "screen":
         processor = ScreenProcessor(
             sensor_name="screen",

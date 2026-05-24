@@ -3,7 +3,6 @@ from dataclasses import dataclass
 import pandas as pd
 
 
-
 @dataclass
 class StepGarminProcessor(BaseProcessor):
 
@@ -81,7 +80,6 @@ class StepGarminProcessor(BaseProcessor):
 
 
 def main():
-
 
     input_fn = snakemake.input[0]
     output_fn = snakemake.output[0]

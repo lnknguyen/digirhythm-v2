@@ -3,7 +3,6 @@ from dataclasses import dataclass
 import pandas as pd
 
 
-
 @dataclass
 class SleepGarminProcessor(BaseProcessor):
     def __post_init__(self, *args, **kwargs):

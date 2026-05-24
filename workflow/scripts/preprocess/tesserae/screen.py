@@ -4,7 +4,6 @@ import pandas as pd
 import niimpy.preprocessing.screen as screen
 
 
-
 @dataclass
 class ScreenProcessor(BaseProcessor):
 

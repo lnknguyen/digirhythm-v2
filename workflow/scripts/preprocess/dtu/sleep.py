@@ -94,7 +94,6 @@ class SleepProcessor(BaseProcessor):
 
         pd.DataFrame()
 
-
         def resample_data(df, rule="5min") -> pd.DataFrame:
 
             df_resampled = df.resample(rule)["screen_status"].sum().ffill()
