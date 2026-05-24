@@ -75,7 +75,7 @@ def re_id_returning_users(df, pid_mappings):
     return df
 
 
-ROOT = "/m/cs/work/luongn1"
+ROOT = "/m/cs/work/luongn1/2021-2025"
 # Load demographics
 demo = []
 for i in [2018, 2019, 2020, 2021]:

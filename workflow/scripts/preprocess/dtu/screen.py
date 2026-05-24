@@ -1,14 +1,16 @@
 from base import BaseProcessor
 from dataclasses import dataclass
 import niimpy
-import pandas as pd
 import niimpy.preprocessing.screen as screen
-
-
+import pandas as pd
 import os
 
 path = os.path.abspath(niimpy.__file__)
 print(path)
+
+SCREEN_PREFIX = "screen:screen_on_durationtotal"
+SCREEN_COL = "screen_on_durationtotal"
+RESAMPLE_RULE = "6H"
 
 
 @dataclass
@@ -19,21 +21,14 @@ class ScreenProcessor(BaseProcessor):
         self.frequency = "4epochs"
 
     def extract_features(self) -> pd.DataFrame:
-        prefixes = ["screen:screen_on_durationtotal"]
-
-        # Agg daily events into 6H bins
-        rule = "6H"
-
-        empty_batt_data = pd.DataFrame()
-
         wrapper_features = {
             screen.screen_duration: {
                 "screen_column_name": "screen_status",
-                "resample_args": {"rule": rule},
+                "resample_args": {"rule": RESAMPLE_RULE},
             }
         }
 
-        df = (
+        return (
             self.data.pipe(self.convert_copenhagen_time)
             .pipe(self.set_datetime_index)
             .pipe(self.drop_duplicates_and_sort)
@@ -41,72 +36,51 @@ class ScreenProcessor(BaseProcessor):
             .pipe(self.remove_timezone_info)
             .pipe(
                 screen.extract_features_screen,
-                empty_batt_data,
+                pd.DataFrame(),
                 features=wrapper_features,
-            )  # call niimpy to extract features with pre-defined time bin
+            )
             .sort_index()
-            .pipe(self.filter_outliers, cols=["screen_on_durationtotal"])
+            .pipe(self.filter_outliers, cols=[SCREEN_COL])
             .reset_index()
-            .pipe(self.pivot)
+            .pipe(self._pivot)
             .pipe(self.flatten_columns)
             .pipe(self.rename_segment_columns)
-            .pipe(self.sum_segment, prefixes=prefixes)
+            .pipe(self.sum_segment, prefixes=[SCREEN_PREFIX])
             .reset_index()
             .pipe(self.roll)
-            .pipe(
-                self.normalize_within_user, prefixes=prefixes
-            )  # normalize within-user features
-            .pipe(
-                self.normalize_between_user, prefixes=prefixes
-            )  # normalize between-user features
-            .pipe(self.normalize_segments, cols=prefixes)
+            .pipe(self.normalize_within_user, prefixes=[SCREEN_PREFIX])
+            .pipe(self.normalize_between_user, prefixes=[SCREEN_PREFIX])
+            .pipe(self.normalize_segments, cols=[SCREEN_PREFIX])
         )
 
-        return df
-
-    def pivot(self, df):
-        """
-        Pivot dataframe so that features are spread across columns
-        Example: screen_use_00, screen_use_01, ..., screen_use_23
-        """
-
-        print(df.head())
-        df.rename(
-            columns={"level_1": "user", "level_0": "device", "level_2": "datetime"},
-            inplace=True,
+    def _pivot(self, df: pd.DataFrame) -> pd.DataFrame:
+        df = df.rename(
+            columns={"level_1": "user", "level_0": "device", "level_2": "datetime"}
         )
-
         df["hour"] = pd.to_datetime(df["datetime"]).dt.strftime("%H")
         df["date"] = pd.to_datetime(df["datetime"]).dt.strftime("%Y-%m-%d")
-
-        # Pivot the table
-        pivoted_df = df.pivot_table(
+        return df.pivot_table(
             index=["user", "date"],
             columns="hour",
-            values=["screen_on_durationtotal"],
+            values=[SCREEN_COL],
             fill_value=0,
         )
 
-        return pivoted_df
-
 
 def main():
-    input_fn = snakemake.input[0]
-    output_fn = snakemake.output[0]
+    processor = ScreenProcessor(input_fn=snakemake.input[0])
 
-    processor = ScreenProcessor(input_fn=input_fn)
-
-    res = processor.extract_features().reset_index()
-
-    # Rename
-    res.rename(
-        columns=res.columns.to_series().replace(
-            r"screen_on_durationtotal", "screen_use_durationtotal", regex=True
-        ),
-        inplace=True,
+    res = (
+        processor.extract_features()
+        .reset_index()
+        .rename(
+            columns=lambda c: c.replace(
+                "screen_on_durationtotal", "screen_use_durationtotal"
+            )
+        )
     )
 
-    res.to_csv(output_fn, index=False)
+    res.to_csv(snakemake.output[0], index=False)
 
 
 if __name__ == "__main__":

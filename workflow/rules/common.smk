@@ -1,9 +1,10 @@
 # ---- Config defaults with clean overrides from `config` ----
-STUDIES         = config.get("STUDIES",         ['tesserae', 'momo', 'globem'])
+#STUDIES         = config.get("STUDIES",         ['tesserae', 'momo', 'globem'])
+STUDIES         = config.get("STUDIES",         ['tesserae'])
 ALGOS           = config.get("ALGOS",           ['gmm'])
 RANKS           = config.get("RANKS",           ['ranked', 'unranked'])
 DIST_METHOD     = config.get("DIST_METHOD",     ['jsd', 'cosine'])
-OPTIMAL_CLUSTER = config.get("OPTIMAL_CLUSTER", [6, 7, 8, 9, 10, 11])
+OPTIMAL_CLUSTER = config.get("OPTIMAL_CLUSTER", [8])
 #WINDOW          = config.get("WINDOW",          [60, 90, 180, 270])
 WINDOW          = config.get("WINDOW",          [60])
 

@@ -24,7 +24,7 @@ Per-rule environments (scikit-learn, R, etc.) live under `workflow/envs/` and ar
 ### Local
 
 ```bash
-snakemake --snakefile workflow/Snakefile --use-conda --cores 8
+snakemake --snakefile workflow/Snakefile --profile default --cores 8
 ```
 
 ### SLURM / Triton

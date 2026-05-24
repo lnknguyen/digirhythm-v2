@@ -1,3 +1,4 @@
+
 import pandas as pd
 from gmm import GMMClustering
 import logging
@@ -11,12 +12,17 @@ logging.basicConfig(
 def main(input_fns, output_fns, params):
     # Load data
     data = pd.read_csv(input_fns[0])
+    print(data.head())
     features = params.features
 
     run_selection = params.run_selection
-    algo = snakemake.wildcards.algo
-    optimal_cluster = int(snakemake.wildcards.cluster_num)
 
+    algo = snakemake.wildcards.algo
+
+    optimal_cluster = int(snakemake.wildcards.cluster_num)
+    print(
+        f"Running {algo} with {features} features, optimal cluster: {optimal_cluster}, run_selection: {run_selection}"
+    )
     cluster_settings = params.cluster_settings
 
     if algo == "gmm":

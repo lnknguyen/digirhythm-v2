@@ -75,7 +75,7 @@ def adapter(input_fns):
 
     dfs = []
     for fn in input_fns:
-        df = pd.read_csv(fn, index_col=0)
+        df = pd.read_csv(fn)
 
         # Get rid of index column, if exists
         if "index" in df.columns:
@@ -125,6 +125,7 @@ def _log_transform(df, features, suffix="_log1p", inplace=False):
 def main(input_fns, output_fn, params, wildcards):
     groupby = params["groupby"][wildcards.study]
 
+    print(f"Combining features for {wildcards.study}...")
     dfs = adapter(input_fns)
     df = concatenate_features(dfs, groupby)
 

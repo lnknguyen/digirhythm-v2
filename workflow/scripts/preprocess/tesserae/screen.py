@@ -1,7 +1,13 @@
 from base import BaseProcessor
 from dataclasses import dataclass
-import pandas as pd
 import niimpy.preprocessing.screen as screen
+import pandas as pd
+
+SCREEN_PREFIXES = [
+    "screen:screen_use_durationtotal",
+    "screen:screen_use_count",
+]
+RESAMPLE_RULE = "6H"
 
 
 @dataclass
@@ -11,96 +17,64 @@ class ScreenProcessor(BaseProcessor):
         self.sensor_name = "screen"
         self.frequency = "4epochs"
 
-    def aware_adapter(self) -> pd.DataFrame:
+    def _setup_index(self) -> None:
         self.data["timestamp_index"] = self.data["datetime"]
         self.data.set_index("timestamp_index", inplace=True)
         self.data.index.name = None
 
     def extract_features(self) -> pd.DataFrame:
-        prefixes = [
-            "screen:screen_use_durationtotal",
-            "screen:screen_use_count",
-        ]
-
-        # Agg daily events into 6H bins
-        rule = "6H"
-
         wrapper_features = {
             screen.screen_duration: {
                 "screen_column_name": "screen_status",
-                "resample_args": {"rule": rule},
+                "resample_args": {"rule": RESAMPLE_RULE},
             },
             screen.screen_count: {
                 "screen_column_name": "screen_status",
-                "resample_args": {"rule": rule},
+                "resample_args": {"rule": RESAMPLE_RULE},
             },
         }
 
-        empty_batt_data = pd.DataFrame()
-        df = (
+        return (
             self.data.pipe(self.drop_duplicates_and_sort)
             .pipe(self.remove_first_last_day)
             .pipe(
                 screen.extract_features_screen,
-                empty_batt_data,
+                pd.DataFrame(),
                 features=wrapper_features,
-            )  # call niimpy to extract features with pre-defined time bin
+            )
             .reset_index()
             .pipe(self.filter_outliers, cols=["screen_use_durationtotal"])
-            .pipe(self.pivot)
+            .pipe(self._pivot)
             .pipe(self.flatten_columns)
             .pipe(self.rename_segment_columns)
-            .pipe(self.sum_segment, prefixes=prefixes)
+            .pipe(self.sum_segment, prefixes=SCREEN_PREFIXES)
             .reset_index()
             .pipe(self.roll)
-            .pipe(
-                self.normalize_within_user, prefixes=prefixes
-            )  # normalize within-user features
-            .pipe(
-                self.normalize_between_user, prefixes=prefixes
-            )  # normalize between-user features
-            .pipe(self.normalize_segments, cols=prefixes)
+            .pipe(self.normalize_within_user, prefixes=SCREEN_PREFIXES)
+            .pipe(self.normalize_between_user, prefixes=SCREEN_PREFIXES)
+            .pipe(self.normalize_segments, cols=SCREEN_PREFIXES)
         )
 
-        return df
-
-    def pivot(self, df):
-        """
-        Pivot dataframe so that features are spread across columns
-        Example: screen_use_00, screen_use_01, ..., screen_use_23
-        """
-
-        df["user"] = df["level_0"]
-        df["device"] = df["level_1"]
-        df["datetime"] = df["level_2"]
-
-        df["hour"] = pd.to_datetime(df["datetime"]).dt.strftime("%H")
-        df["date"] = pd.to_datetime(df["datetime"]).dt.strftime("%Y-%m-%d")
-
-        # Pivot the table
-        pivoted_df = df.pivot_table(
+    def _pivot(self, df: pd.DataFrame) -> pd.DataFrame:
+        df = df.assign(
+            user=df["level_0"],
+            device=df["level_1"],
+            datetime=df["level_2"],
+            hour=pd.to_datetime(df["level_2"]).dt.strftime("%H"),
+            date=pd.to_datetime(df["level_2"]).dt.strftime("%Y-%m-%d"),
+        )
+        return df.pivot_table(
             index=["user", "date"],
             columns="hour",
-            values=[
-                "screen_use_durationtotal",
-                "screen_use_count",
-            ],
+            values=["screen_use_durationtotal", "screen_use_count"],
             fill_value=0,
         )
 
-        return pivoted_df
-
 
 def main():
-    input_fn = snakemake.input[0]
-    output_fn = snakemake.output[0]
-
-    processor = ScreenProcessor(input_fn=input_fn)
-
-    processor.aware_adapter()
-
-    res = processor.extract_features().reset_index()
-    res.to_csv(output_fn, index=False)
+    processor = ScreenProcessor(input_fn=snakemake.input[0])
+    processor._setup_index()
+    processor.extract_features().reset_index().to_csv(snakemake.output[0], index=False)
 
 
 if __name__ == "__main__":
