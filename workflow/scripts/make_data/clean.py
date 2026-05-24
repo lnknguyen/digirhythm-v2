@@ -1,6 +1,5 @@
 import pandas as pd
 import logging
-from functools import reduce
 
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"

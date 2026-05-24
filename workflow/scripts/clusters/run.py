@@ -1,6 +1,5 @@
 import pandas as pd
 from gmm import GMMClustering
-from sklearn.metrics import silhouette_score
 import logging
 
 # Set up logging
@@ -30,7 +29,7 @@ def main(input_fns, output_fns, params):
 
     labels, centroids, covariances, model_selection_scores = model.run_pipeline()
 
-    if run_selection == True:
+    if run_selection:
         model_selection_scores.to_csv(output_fns.scores, index=False)
     else:
         labels.to_csv(output_fns.clusters, index=False)

@@ -1,10 +1,8 @@
 from base import BaseProcessor
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 import niimpy
 import pandas as pd
-import niimpy.preprocessing.screen as screen
 import numpy as np
-import polars as pl
 
 import os
 
@@ -33,12 +31,10 @@ class SleepProcessor(BaseProcessor):
                - max_end_idx (int): The ending index of the longest sequence of 0s.
         """
         # Initialize variables to track the longest sequence
-        max_len = 0
         seq_len = []
         current_len = 0
         start_idx = []
         end_idx = []
-        in_seq = True
 
         for i, value in enumerate(series):
             if value == 0:
@@ -96,15 +92,8 @@ class SleepProcessor(BaseProcessor):
 
     def extract_features(self) -> pd.DataFrame:
 
-        empty_batt_data = pd.DataFrame()
+        pd.DataFrame()
 
-        rule = "5min"
-        wrapper_features = {
-            screen.screen_count: {
-                "screen_column_name": "screen_status",
-                "resample_args": {"rule": rule},
-            }
-        }
 
         def resample_data(df, rule="5min") -> pd.DataFrame:
 

@@ -1,10 +1,7 @@
 from base import BaseProcessor
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 import pandas as pd
-import numpy as np
-import polars as pl
 
-import os
 
 
 @dataclass
@@ -85,12 +82,10 @@ class StepGarminProcessor(BaseProcessor):
 
 def main():
 
-    frequency = "4epochs"
 
     input_fn = snakemake.input[0]
     output_fn = snakemake.output[0]
 
-    dfs = []
     processor = StepGarminProcessor(input_fn=input_fn)
 
     res = processor.extract_features().reset_index()

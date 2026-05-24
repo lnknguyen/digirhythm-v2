@@ -2,14 +2,9 @@ import numpy as np
 import pandas as pd
 from base import BaseClustering
 from sklearn.mixture import GaussianMixture
-import matplotlib.pyplot as plt
-import seaborn as sns
-from scipy.linalg import det, inv
 
 from sklearn.model_selection import GridSearchCV
-from sklearn.metrics import silhouette_score
 import logging
-from scipy.spatial import distance
 import random
 
 # Set up logging

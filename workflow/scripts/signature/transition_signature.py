@@ -2,10 +2,8 @@ import pandas as pd
 import numpy as np
 from scipy.spatial.distance import jensenshannon, cosine
 from collections import defaultdict
-from itertools import combinations
-import os
 import logging
-from typing import Callable, List, Optional, Tuple
+from typing import List, Optional
 
 # ------- Distance Functions -------
 
@@ -287,7 +285,8 @@ def process_signature(df, threshold_days, splits, dist_func):
 
 
 def run_pipeline(data, study, threshold_days, splits, dist_func, output_fns):
-    one = lambda df: process_signature(df, threshold_days, splits, dist_func)
+    def one(df):
+        return process_signature(df, threshold_days, splits, dist_func)
 
     if study == "globem" and "wave" in data.columns:
         sig_parts, dself_parts, dref_parts = [], [], []

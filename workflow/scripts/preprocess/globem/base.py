@@ -1,9 +1,7 @@
 import sys
-import os
 
 sys.path.append("../../")
 
-import niimpy
 import pandas as pd
 from dataclasses import dataclass, field
 import numpy as np

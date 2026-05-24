@@ -3,7 +3,7 @@ import pandas as pd
 import logging
 from scipy.spatial.distance import jensenshannon, cosine
 from itertools import combinations
-from typing import Callable, List, Optional, Tuple
+from typing import List, Optional
 
 # Set up logging
 logging.basicConfig(
@@ -262,7 +262,8 @@ def process_signature(df, threshold_days, splits, ranked, dist_func):
 
 
 def run_pipeline(data, study, threshold_days, splits, ranked, dist_func, output_fns):
-    one = lambda df: process_signature(df, threshold_days, splits, ranked, dist_func)
+    def one(df):
+        return process_signature(df, threshold_days, splits, ranked, dist_func)
 
     if study == "globem" and "wave" in data.columns:
         sig_parts, dself_parts, dref_parts = [], [], []

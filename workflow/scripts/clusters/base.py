@@ -1,6 +1,5 @@
 import pandas as pd
 import numpy as np
-from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score
 from abc import ABC, abstractmethod
 from scipy.stats import zscore
@@ -340,7 +339,7 @@ class BaseClustering(ABC):
             norm_part = self.z_score_normalize_per_user(df_part)
             X = norm_part[self.features].copy()
             # rows per user, ascending
-            row_counts = df_part.groupby("user").size().sort_values()
+            df_part.groupby("user").size().sort_values()
 
             #  3.  choose or initialise model
             if self.run_model_selection:

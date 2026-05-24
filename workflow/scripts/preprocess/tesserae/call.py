@@ -1,6 +1,5 @@
 from base import BaseProcessor
 from dataclasses import dataclass
-import niimpy
 import pandas as pd
 import niimpy.preprocessing.communication as comm
 

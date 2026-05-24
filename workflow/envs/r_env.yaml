@@ -1,6 +1,5 @@
 channels:
   - conda-forge
-  - anaconda
   - nodefaults
 dependencies:
   - r-tidyverse =2.0
