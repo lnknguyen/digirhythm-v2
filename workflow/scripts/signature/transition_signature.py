@@ -107,7 +107,6 @@ def transition_matrix(
     states=None,
     normalize=True,
 ):
-
     df = df[[user_col, date_col, cluster_col]].copy()
     df[date_col] = pd.to_datetime(df[date_col])
     df = df.sort_values([user_col, date_col])
@@ -180,7 +179,6 @@ def d_self_transition(
 
     for user, trans_mat in all_mats.items():
         try:
-
             mats = [trans_mat[s] for s in splits]
             if len(mats) == 3:
                 d12 = row_wise_dist(mats[0], mats[1], method)
@@ -216,15 +214,12 @@ def d_ref_transition(
         for uj in users[i + 1 :]:
             dists = []
             for s in splits:
-
                 # ensure s exists for both ui and uj (message focuses on uj as requested)
                 if s not in all_mats.get(ui, {}):
-
                     raise KeyError(
                         f"Segment '{s}' not found for ui={ui}. Available: {list(all_mats.get(ui, {}).keys())}"
                     )
                 if s not in all_mats.get(uj, {}):
-
                     print(all_mats[uj])
                     raise KeyError(
                         f"Segment '{s}' not found for uj={uj}. Available: {list(all_mats.get(uj, {}).keys())}"
@@ -241,7 +236,6 @@ def d_ref_transition(
 
 ####### MAIN #######
 def process_signature(df, threshold_days, splits, dist_func):
-
     all_mats = defaultdict(dict)
     df = filter_by_threshold(df, threshold_days)
 
@@ -291,7 +285,6 @@ def run_pipeline(data, study, threshold_days, splits, dist_func, output_fns):
     if study == "globem" and "wave" in data.columns:
         sig_parts, dself_parts, dref_parts = [], [], []
         for wave, sample in data.groupby("wave", sort=True, observed=True):
-
             us, ds, dr = one(sample)
             us["wave"] = wave
             ds["wave"] = wave

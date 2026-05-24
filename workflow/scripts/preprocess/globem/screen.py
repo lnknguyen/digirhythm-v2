@@ -37,12 +37,10 @@ class ScreenProcessor(BaseProcessor):
         return df
 
     def fill_nan_with_zeros(self, df, columns):
-
         df[columns] = df[columns].fillna(0)
         return df
 
     def extract_features(self) -> pd.DataFrame:
-
         df = (
             self.data.pipe(self.process_screen_data)
             .pipe(
@@ -58,7 +56,6 @@ class ScreenProcessor(BaseProcessor):
 
 
 def main(input_fns, output_fn):
-
     processor = ScreenProcessor(input_fns=input_fns)
 
     res = processor.extract_features().reset_index()
@@ -67,5 +64,4 @@ def main(input_fns, output_fn):
 
 
 if __name__ == "__main__":
-
     main(snakemake.input, snakemake.output[0])

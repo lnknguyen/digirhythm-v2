@@ -5,19 +5,16 @@ import pandas as pd
 
 @dataclass
 class StepGarminProcessor(BaseProcessor):
-
     def __post_init__(self, *args, **kwargs):
         super().__post_init__(*args, **kwargs)
         self.sensor_name = "step"
 
     def clean(self, df) -> pd.DataFrame():
-
         # Replace negative values in column 'steps' with 0
         df.loc[df["steps"] < 0, "steps"] = 0
         return df
 
     def rename(self, df) -> pd.DataFrame():
-
         df.rename(
             columns={
                 "ParticipantID": "user",
@@ -29,12 +26,10 @@ class StepGarminProcessor(BaseProcessor):
         return df
 
     def resample(self, df, rule="6H") -> pd.DataFrame():
-
         df = df.groupby("user")["steps"].resample(rule).sum().reset_index()
         return df
 
     def extract_features(self) -> pd.DataFrame:
-
         df = (
             self.data.pipe(self.rename)
             .pipe(self.drop_duplicates_and_sort)
@@ -80,7 +75,6 @@ class StepGarminProcessor(BaseProcessor):
 
 
 def main():
-
     input_fn = snakemake.input[0]
     output_fn = snakemake.output[0]
 

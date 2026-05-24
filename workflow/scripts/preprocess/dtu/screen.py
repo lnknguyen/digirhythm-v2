@@ -19,7 +19,6 @@ class ScreenProcessor(BaseProcessor):
         self.frequency = "4epochs"
 
     def extract_features(self) -> pd.DataFrame:
-
         prefixes = ["screen:screen_on_durationtotal"]
 
         # Agg daily events into 6H bins
@@ -92,7 +91,6 @@ class ScreenProcessor(BaseProcessor):
 
 
 def main():
-
     input_fn = snakemake.input[0]
     output_fn = snakemake.output[0]
 

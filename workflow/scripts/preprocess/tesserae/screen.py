@@ -6,14 +6,12 @@ import niimpy.preprocessing.screen as screen
 
 @dataclass
 class ScreenProcessor(BaseProcessor):
-
     def __post_init__(self, *args, **kwargs):
         super().__post_init__(*args, **kwargs)
         self.sensor_name = "screen"
         self.frequency = "4epochs"
 
     def aware_adapter(self) -> pd.DataFrame:
-
         self.data["timestamp_index"] = self.data["datetime"]
         self.data.set_index("timestamp_index", inplace=True)
         self.data.index.name = None
@@ -94,7 +92,6 @@ class ScreenProcessor(BaseProcessor):
 
 
 def main():
-
     input_fn = snakemake.input[0]
     output_fn = snakemake.output[0]
 

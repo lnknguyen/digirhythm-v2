@@ -2,7 +2,6 @@ import pandas as pd
 
 
 def main(input_fns, output_fns, params):
-
     res = []
 
     for fn in input_fns:
@@ -23,7 +22,6 @@ def main(input_fns, output_fns, params):
 
 
 if __name__ == "__main__":
-
     input_fns = snakemake.input
     output_fns = snakemake.output
     params = snakemake.params

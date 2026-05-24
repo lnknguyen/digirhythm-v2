@@ -98,7 +98,6 @@ def split_chunk(
 
 
 def signature(df: pd.DataFrame, ranked: bool) -> pd.DataFrame:
-
     # Assert: dataset must contain a 'split' column
     assert "split" in df.columns, "Expected column 'split' in `df`."
 
@@ -159,7 +158,6 @@ def d_self(
 
     for user, group in signature_df.groupby(level="user"):
         try:
-
             if len(splits) == 3:
                 dist1 = group.loc[(user, splits[0])].values
                 dist2 = group.loc[(user, splits[1])].values
@@ -268,7 +266,6 @@ def run_pipeline(data, study, threshold_days, splits, ranked, dist_func, output_
     if study == "globem" and "wave" in data.columns:
         sig_parts, dself_parts, dref_parts = [], [], []
         for wave, sample in data.groupby("wave", sort=True):
-
             us, ds, dr = one(sample)
             us["wave"] = wave
             ds["wave"] = wave

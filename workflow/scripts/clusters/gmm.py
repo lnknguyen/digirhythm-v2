@@ -16,7 +16,6 @@ SEED = 2508
 
 
 class GMMClustering(BaseClustering):
-
     def init_model(self, n_components):
         self.model = GaussianMixture(n_components=n_components, covariance_type="full")
 
@@ -34,7 +33,6 @@ class GMMClustering(BaseClustering):
         return float(term1 + term2)
 
     def model_selection(self, X, mode="manual"):
-
         if mode == "manual":
             best_model, score = self.manual_model_selection(X)
         elif mode == "grid":
@@ -45,7 +43,6 @@ class GMMClustering(BaseClustering):
         return best_model, score
 
     def manual_model_selection(self, X):
-
         logging.info("🔍 Starting Manual selection for Gaussian Mixture Model (GMM)...")
 
         # Define hyperparameter grid
@@ -65,7 +62,6 @@ class GMMClustering(BaseClustering):
         # Run 5 iterations
         for n_component in param_grid["n_components"]:
             for cov_type in param_grid["covariance_type"]:
-
                 scores[cov_type][n_component] = {"aic": [], "bic": [], "bhatt": []}
 
                 for i in range(5):
@@ -143,7 +139,6 @@ class GMMClustering(BaseClustering):
         return (best_model, scores_df)
 
     def grid_model_selection(self, X, scorer="bic"):
-
         logging.info("🔍 Starting GridSearchCV for Gaussian Mixture Model (GMM)...")
 
         param_grid = {

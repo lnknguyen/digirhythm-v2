@@ -38,7 +38,6 @@ class SleepProcessor(BaseProcessor):
         return df
 
     def extract_features(self) -> pd.DataFrame:
-
         df = (
             self.data.pipe(self._process_sleep_data)
             .pipe(self._filter_artifacts)
@@ -65,7 +64,6 @@ class SleepProcessor(BaseProcessor):
 
 
 def main(input_fns, output_fn):
-
     processor = SleepProcessor(input_fns=input_fns)
 
     res = processor.extract_features().reset_index()
@@ -74,5 +72,4 @@ def main(input_fns, output_fn):
 
 
 if __name__ == "__main__":
-
     main(snakemake.input, snakemake.output[0])

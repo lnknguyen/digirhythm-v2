@@ -8,7 +8,6 @@ groups = ["mmm-control", "mmm-bd", "mmm-bpd", "mmm-mdd"]
 
 # Utility
 def score_neo(df, id_col="user"):
-
     # domains
     N = [1, 3, 11, 14, 25, 33, 42, 43, 47, 56, 60, 67]
     E = [2, 4, 7, 8, 12, 17, 18, 19, 22, 23, 24, 26, 29, 41, 50, 52, 53, 54, 59]
@@ -71,12 +70,10 @@ def score_neo(df, id_col="user"):
 demos, neos = [], []
 
 for group in groups:
-
     # Basic demographics
     db_path = f"{ROOT}/{group}/MMMBackgroundAnswers.sqlite3"
 
     with sqlite3.connect(db_path) as conn:
-
         demo = pd.read_sql("SELECT * FROM MMMBackgroundAnswers;", conn)
         demo = demo.pivot_table(
             index=["user"], columns="id", values="answer", aggfunc="first"

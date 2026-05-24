@@ -5,9 +5,7 @@ import pandas as pd
 
 @dataclass
 class CallProcessor(BaseProcessor):
-
     def compute_total_call(self, df) -> pd.DataFrame:
-
         time_segments = ["morning", "afternoon", "evening", "night", "allday"]
 
         for segment in time_segments:
@@ -24,7 +22,6 @@ class CallProcessor(BaseProcessor):
         return df
 
     def extract_features(self) -> pd.DataFrame:
-
         df = self.data.copy()
 
         column_mapper = {
@@ -80,7 +77,6 @@ class CallProcessor(BaseProcessor):
 
 
 def main(input_fns, output_fn):
-
     processor = CallProcessor(input_fns=input_fns)
 
     res = processor.extract_features().reset_index()
@@ -91,5 +87,4 @@ def main(input_fns, output_fn):
 
 
 if __name__ == "__main__":
-
     main(snakemake.input, snakemake.output[0])

@@ -52,7 +52,6 @@ class SleepProcessor(BaseProcessor):
         for i in range(arr_len):
             gap = start_idx[i + 1] - end_idx[i]
             if gap == 1:
-
                 # Combine sequence
                 seq_len[i : i + 1] = seq_len[i] + seq_len[i + 1]
 
@@ -67,7 +66,6 @@ class SleepProcessor(BaseProcessor):
             return (None, None, None)
 
     def compute_sleep_properties(self, df):
-
         # Compute midsleep
         df["midsleep"] = df["sleep_start"] + (df["sleep_end"] - df["sleep_start"]) / 2
 
@@ -91,11 +89,9 @@ class SleepProcessor(BaseProcessor):
         return df
 
     def extract_features(self) -> pd.DataFrame:
-
         pd.DataFrame()
 
         def resample_data(df, rule="5min") -> pd.DataFrame:
-
             df_resampled = df.resample(rule)["screen_status"].sum().ffill()
             return df_resampled
 
@@ -123,7 +119,6 @@ class SleepProcessor(BaseProcessor):
         results = []
 
         for (user, day), group in grouped:
-
             # Calculate longest sequence of 0s
             longest_inactive_sequence, start_idx, end_idx = (
                 self.longest_inactive_sequence(group["screen_status"].values)
@@ -168,7 +163,6 @@ class SleepProcessor(BaseProcessor):
 
 
 def main():
-
     input_fn = snakemake.input[0]
     output_fn = snakemake.output[0]
 

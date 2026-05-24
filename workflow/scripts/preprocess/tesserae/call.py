@@ -6,14 +6,12 @@ import niimpy.preprocessing.communication as comm
 
 @dataclass
 class CallProcessor(BaseProcessor):
-
     def __post_init__(self, *args, **kwargs):
         super().__post_init__(*args, **kwargs)
         self.sensor_name = "call"
         self.frequency = "4epochs"
 
     def rename(self, df) -> pd.DataFrame():
-
         df.rename(
             columns={
                 "ParticipantID": "user",
@@ -92,7 +90,6 @@ class CallProcessor(BaseProcessor):
         return df
 
     def pivot(self, df):
-
         df["hour"] = pd.to_datetime(df["datetime"]).dt.strftime("%H")
         df["date"] = pd.to_datetime(df["datetime"]).dt.strftime("%Y-%m-%d")
 
@@ -115,7 +112,6 @@ class CallProcessor(BaseProcessor):
 
 
 def main():
-
     input_fn = snakemake.input[0]
     output_fn = snakemake.output[0]
 

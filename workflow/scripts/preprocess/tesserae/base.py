@@ -40,13 +40,11 @@ class BaseProcessor:
     groupby_cols = ["user"]
 
     def __post_init__(self) -> None:
-
         self.data = pd.read_parquet(self.input_fn)
         print(self.data.head())
 
     @progress_decorator
     def set_datetime_index(self, df) -> pd.DataFrame:
-
         # Set datatime
         df["datetime"] = pd.to_datetime(df["datetime"], format="mixed")
         df = df.set_index("datetime")
@@ -72,7 +70,6 @@ class BaseProcessor:
 
     @progress_decorator
     def remove_first_last_day(self, df):
-
         # Assert datetime index
         pd.api.types.is_datetime64_any_dtype(df.index)
 

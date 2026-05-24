@@ -3,7 +3,6 @@ import numpy as np
 
 
 def re_id_returning_users(df, pid_mappings):
-
     id_mappings = pid_mappings.copy()
     wave_cols = ["PID I", "PID II", "PID III", "PID IV"]
     new_wave_cols = ["INS-W_1", "INS-W_2", "INS-W_3", "INS-W_4"]

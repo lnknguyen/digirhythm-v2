@@ -7,7 +7,6 @@ logging.basicConfig(
 
 
 def _filter(df, features):
-
     logging.info(f"Initial data shape before filtering: {df.shape}")
 
     # Report amount of NaN observations for each feature
@@ -42,7 +41,6 @@ def _filter(df, features):
 
 
 def _fill(df, features):
-
     call_features = [feature for feature in features if "call" in feature]
     logging.info(f"Features identified for filling missing call data: {call_features}")
 
@@ -55,7 +53,6 @@ def _fill(df, features):
 
 
 def main(input_fns, output_fn):
-
     features = snakemake.params.features
     data = pd.read_csv(input_fns[0])
 

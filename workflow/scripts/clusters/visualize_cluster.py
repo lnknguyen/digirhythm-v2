@@ -10,7 +10,6 @@ logging.basicConfig(
 
 
 def centroids_heatmap(centroids_df):
-
     # Get unique split
     # Identify unique splits
     splits = df["split"].unique()
@@ -45,13 +44,11 @@ def centroids_heatmap(centroids_df):
 
 
 def dist_centroids_heatmap(centroids_df):
-
     # Compute distance centroids
     return
 
 
 def main(input_fns, output_fns, params):
-
     # Load data
     data = pd.read_csv(input_fns[0])
 

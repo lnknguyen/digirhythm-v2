@@ -9,7 +9,6 @@ class SleepGarminProcessor(BaseProcessor):
         super().__post_init__(*args, **kwargs)
 
     def rename(self, df) -> pd.DataFrame():
-
         df.rename(
             columns={
                 "ParticipantID": "user",
@@ -22,14 +21,12 @@ class SleepGarminProcessor(BaseProcessor):
         return df
 
     def extract_features(self) -> pd.DataFrame:
-
         df = self.data.pipe(self.rename)
 
         return df
 
 
 def main():
-
     input_fn = snakemake.input[0]
     output_fn = snakemake.output[0]
 

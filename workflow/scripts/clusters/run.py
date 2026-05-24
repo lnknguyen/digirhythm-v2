@@ -9,7 +9,6 @@ logging.basicConfig(
 
 
 def main(input_fns, output_fns, params):
-
     # Load data
     data = pd.read_csv(input_fns[0])
     features = params.features

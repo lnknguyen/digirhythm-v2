@@ -83,7 +83,6 @@ class BaseClustering(ABC):
             return [("split_1", df1), ("split_2", df2)]
 
         elif strategy == "group":
-
             if group_col is None:
                 raise ValueError(
                     "For 'group' strategy, a 'group_col' must be specified."
@@ -105,7 +104,6 @@ class BaseClustering(ABC):
             raise ValueError("Invalid strategy. Use 'random' or 'group'.")
 
     def filter_by_duration(self, df, min_threshold: int, max_threshold: int):
-
         # Sort by date per user
         df = df.sort_values(["user", "date"])
 
@@ -334,7 +332,6 @@ class BaseClustering(ABC):
         # 2‒4.   iterate over each split
         # ----------------------------------------------------------------------
         for tag, df_part in splits:
-
             #  2.  within‑person z‑score
             norm_part = self.z_score_normalize_per_user(df_part)
             X = norm_part[self.features].copy()
@@ -343,7 +340,6 @@ class BaseClustering(ABC):
 
             #  3.  choose or initialise model
             if self.run_model_selection:
-
                 self.model, score = self.model_selection(X)
                 score_frames.append(score.assign(split=tag))
             else:

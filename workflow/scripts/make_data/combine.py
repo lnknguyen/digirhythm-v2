@@ -75,7 +75,6 @@ def adapter(input_fns):
 
     dfs = []
     for fn in input_fns:
-
         df = pd.read_csv(fn, index_col=0)
 
         # Get rid of index column, if exists
@@ -98,14 +97,12 @@ def concatenate_features(dfs, groupby):
     merged_df = dfs[0]
 
     for df in dfs[1:]:
-
         merged_df = pd.merge(merged_df, df, on=groupby, how="outer")
 
     return merged_df
 
 
 def _log_transform(df, features, suffix="_log1p", inplace=False):
-
     transformed = {}
     for col in features:
         if (df[col] < 0).any():
@@ -126,7 +123,6 @@ def _log_transform(df, features, suffix="_log1p", inplace=False):
 
 
 def main(input_fns, output_fn, params, wildcards):
-
     groupby = params["groupby"][wildcards.study]
 
     dfs = adapter(input_fns)
@@ -155,5 +151,4 @@ def main(input_fns, output_fn, params, wildcards):
 
 
 if __name__ == "__main__":
-
     main(snakemake.input, snakemake.output[0], snakemake.params, snakemake.wildcards)
