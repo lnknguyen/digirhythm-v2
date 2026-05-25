@@ -21,7 +21,15 @@ class GMMClustering(BaseClustering):
 
     def fit_predict(self, model, X):
         model.fit(X)
-        return model.predict_proba(X)  # (n_samples, n_components), soft assignments
+        labels = model.predict(X)
+        return labels
+
+    def fit_predict_proba(self, model, X):
+        print("Fitting GMM model and predicting soft cluster assignments...")
+        model.fit(X)
+        gamma = model.predict_proba(X)  # (n_samples, n_components), soft assignments
+        print(gamma[:5])  # Print first 5 rows of gamma for debugging
+        return gamma
 
     def _gaussian_bhattacharyya_distance(self, mu1, cov1, mu2, cov2):
         mu1, mu2 = np.atleast_1d(mu1), np.atleast_1d(mu2)

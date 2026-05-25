@@ -1,0 +1,46 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "digirhythm"
+version = "0.1.0"
+description = "Digital biomarker rhythm analysis via soft-clustering and signature extraction"
+requires-python = ">=3.12"
+
+[tool.setuptools]
+packages = ["workflow"]
+
+dependencies = [
+    "numpy",
+    "pandas",
+    "scipy",
+    "scikit-learn",
+]
+
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = [
+  "."
+]
+
+
+[tool.ruff.lint]
+select = [
+    # pycodestyle
+    "E",
+    # Pyflakes
+    "F",
+    # flake8-bugbear
+    "B",
+    ]
+
+ignore = [
+    "B023", # Function uses loop variable, discuss to include
+    "E501", # Line too long
+    "E741", # Ambiguous variable name
+    "D100", # Missing docstring in public module
+    "D103", # Missing docstring in public function
+    "D104"  # Missing docstring in public package"
+  ]

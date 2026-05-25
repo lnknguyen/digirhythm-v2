@@ -16,7 +16,7 @@ jobs:
     # This job runs when you push to P2; it pushes to P1 over SSH.
     runs-on: ubuntu-latest
     env:
-      P1_SSH_URL: git@github.com:lnknguyen/digirhythm.git
+      P1_SSH_URL: git@github.com:lnknguyen/digirhythm-latex.git
       P1_BRANCH: main
       SRC_DIR: publication-figs 
       DST_DIR: figures

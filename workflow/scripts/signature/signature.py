@@ -98,54 +98,35 @@ def split_chunk(
 
 
 def signature(df: pd.DataFrame, ranked: bool) -> pd.DataFrame:
-    # Assert: dataset must contain a 'split' column
     assert "split" in df.columns, "Expected column 'split' in `df`."
 
-    user_signature = (
-        df.groupby(["user", "split", "Cluster"], observed=True)
-        .size()
-        .reset_index(name="count")
-    )
+    gamma_cols = sorted([c for c in df.columns if c.startswith("gamma_")])
+    assert gamma_cols, "Expected gamma_* columns from soft clustering in `df`."
 
-    user_signature["percentage"] = user_signature.groupby(
-        ["user", "split"], observed=True
-    )["count"].transform(lambda x: 100 * x / x.sum())
-
-    user_signature = user_signature.sort_values(
-        ["user", "split", "Cluster"]
-    ).reset_index(drop=True)
+    # average per-day responsibilities into one signature vector per user+split
+    sig = df.groupby(["user", "split"], observed=True)[gamma_cols].mean()
+    sig.columns = [c.replace("gamma_", "sig_") for c in sig.columns]
 
     if ranked:
-        user_signature = (
-            user_signature.sort_values(
-                ["user", "split", "percentage"], ascending=[True, True, False]
-            )
-            # .groupby(["user", "split"])
-            # .head(5)
-            # .reset_index(drop=True)
+        # melt → sort descending by value → assign rank → pivot back
+        sig_reset = sig.reset_index().melt(
+            id_vars=["user", "split"], var_name="component", value_name="weight"
         )
-
-        user_signature["rank"] = (
-            user_signature.groupby(["user", "split"], observed=True).cumcount() + 1
+        sig_reset = sig_reset.sort_values(
+            ["user", "split", "weight"], ascending=[True, True, False]
         )
-
-        user_signature = user_signature.pivot_table(
+        sig_reset["rank"] = (
+            sig_reset.groupby(["user", "split"], observed=True).cumcount() + 1
+        )
+        sig = sig_reset.pivot_table(
             index=["user", "split"],
             columns="rank",
-            values="percentage",
-            fill_value=0,
-            observed=True,
-        )
-    else:
-        user_signature = user_signature.pivot_table(
-            index=["user", "split"],
-            columns="Cluster",
-            values="percentage",
+            values="weight",
             fill_value=0,
             observed=True,
         )
 
-    return user_signature
+    return sig.reset_index()
 
 
 def d_self(
@@ -156,21 +137,21 @@ def d_self(
     users = []
     distances = []
 
-    for user, group in signature_df.groupby(level="user"):
-        try:
-            if len(splits) == 3:
-                dist1 = group.loc[(user, splits[0])].values
-                dist2 = group.loc[(user, splits[1])].values
-                dist3 = group.loc[(user, splits[2])].values
+    sig_cols = [c for c in signature_df.columns if c not in ("user", "split")]
 
+    for user, group in signature_df.groupby("user"):
+        try:
+
+            def _vec(split):
+                return group.loc[group["split"] == split, sig_cols].values[0]
+
+            if len(splits) == 3:
                 d_s = 0.5 * (
-                    dist_func(dist1, dist2, method) + dist_func(dist2, dist3, method)
+                    dist_func(_vec(splits[0]), _vec(splits[1]), method)
+                    + dist_func(_vec(splits[1]), _vec(splits[2]), method)
                 )
             elif len(splits) == 2:
-                dist1 = group.loc[(user, splits[0])].values
-                dist2 = group.loc[(user, splits[1])].values
-
-                d_s = dist_func(dist1, dist2, method)
+                d_s = dist_func(_vec(splits[0]), _vec(splits[1]), method)
             else:
                 raise ValueError(
                     f"d_self only supports exactly 2 or 3 splits, got {len(splits)}"
@@ -178,7 +159,7 @@ def d_self(
 
             users.append(user)
             distances.append(d_s)
-        except KeyError:
+        except (KeyError, IndexError):
             continue
 
     return pd.DataFrame({"user": users, "d_self": distances})
@@ -208,17 +189,22 @@ def d_ref(
         - "full": full symmetric DataFrame.
 
     """
-    users = signature_df.index.get_level_values("user").unique()
+    sig_cols = [c for c in signature_df.columns if c not in ("user", "split")]
+    users = signature_df["user"].unique()
     d_ref_df = pd.DataFrame(index=users, columns=users, dtype=float)
 
     for i, j in combinations(users, 2):
         dists = []
         for s in splits:
             try:
-                di = signature_df.loc[(i, s)].values
-                dj = signature_df.loc[(j, s)].values
-            except KeyError:
-                dists = []  # missing split for this pair -> skip
+                di = signature_df.loc[
+                    (signature_df["user"] == i) & (signature_df["split"] == s), sig_cols
+                ].values[0]
+                dj = signature_df.loc[
+                    (signature_df["user"] == j) & (signature_df["split"] == s), sig_cols
+                ].values[0]
+            except IndexError:
+                dists = []
                 break
             dists.append(dist_func(di, dj, method))
 

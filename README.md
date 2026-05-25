@@ -144,6 +144,26 @@ To add a new study, add entries under `groupby`, `sensors`, `features`, `cluster
 
 ---
 
+## Tests
+
+Unit tests cover the signature and transition-signature modules.
+They use only `numpy`, `pandas`, `scipy`, and `pytest` — no data files required.
+
+```bash
+# from the repo root
+pytest workflow/scripts/signature/test_signature.py workflow/scripts/signature/test_transition_signature.py -v
+```
+
+Or run all tests in the signature directory:
+
+```bash
+pytest workflow/scripts/signature/ -v
+```
+
+Each test file adds its own directory to `sys.path`, so no installation step is needed.
+
+---
+
 ## Code quality
 
 A git pre-commit hook (`.git/hooks/pre-commit`) runs on every `git commit`:

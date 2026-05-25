@@ -71,26 +71,36 @@ class BaseProcessor:
 
     @progress_decorator
     def remove_first_last_day(self, df):
-        assert pd.api.types.is_datetime64_any_dtype(df.index), \
-            "DataFrame index must be datetime"
+        assert pd.api.types.is_datetime64_any_dtype(
+            df.index
+        ), "DataFrame index must be datetime"
 
         def filter_days(group):
-            first_day = group.index.get_level_values(-1).min().floor("D") \
-                if group.index.nlevels > 1 else group.index.min().floor("D")
-            last_day = group.index.get_level_values(-1).max().floor("D") \
-                if group.index.nlevels > 1 else group.index.max().floor("D")
-            idx = group.index.get_level_values(-1) if group.index.nlevels > 1 else group.index
+            first_day = (
+                group.index.get_level_values(-1).min().floor("D")
+                if group.index.nlevels > 1
+                else group.index.min().floor("D")
+            )
+            last_day = (
+                group.index.get_level_values(-1).max().floor("D")
+                if group.index.nlevels > 1
+                else group.index.max().floor("D")
+            )
+            idx = (
+                group.index.get_level_values(-1)
+                if group.index.nlevels > 1
+                else group.index
+            )
             return group[(idx.floor("D") > first_day) & (idx.floor("D") < last_day)]
 
-        res = (
-            df.groupby(self.groupby_cols, group_keys=True)  # keep keys
-            .apply(filter_days)
+        res = df.groupby(self.groupby_cols, group_keys=True).apply(  # keep keys
+            filter_days
         )
         # Promote group keys back to columns; keep the datetime index intact
         levels_to_reset = [n for n in self.groupby_cols if n in res.index.names]
         if levels_to_reset:
             res = res.reset_index(level=levels_to_reset)
-        
+
         return res
 
     @progress_decorator

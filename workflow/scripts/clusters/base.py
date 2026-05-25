@@ -188,18 +188,39 @@ class BaseClustering(ABC):
         """
         pass
 
+    @abstractmethod
     def fit_predict(self, model, X):
         """
         Fit the best model and predict cluster labels.
         """
-        labels = model.fit_predict(X)
-        return labels
+        pass
+
+    @abstractmethod
+    def fit_predict_proba(self, model, X):
+        """
+        Fit the best model and predict cluster labels.
+        """
+        pass
+
+    @staticmethod
+    def soft_signature(gamma_participant):
+        """
+        gamma_participant: (M_i, K) responsibilities for one person's days
+        returns: (K,) routine signature, ranked descending
+        """
+        weights = gamma_participant.sum(axis=0)
+        sig = weights / weights.sum()
+        return np.sort(sig)[::-1]
 
     def evaluate_clusters(self, X, labels):
         """
         Evaluate cluster quality using Silhouette Score.
         """
-        hard = labels.argmax(axis=1) if hasattr(labels, "ndim") and labels.ndim == 2 else labels
+        hard = (
+            labels.argmax(axis=1)
+            if hasattr(labels, "ndim") and labels.ndim == 2
+            else labels
+        )
         score = silhouette_score(X, hard)
         print(f"Silhouette Score: {score:.4f}")
         return score
@@ -347,29 +368,36 @@ class BaseClustering(ABC):
                 self.init_model(n_components=self.optimal_n_components)
 
             #  4.  fit + predict labels
-            labels = self.fit_predict(self.model, X)
 
+            gamma = self.fit_predict_proba(self.model, X)
+
+            print(f"Gamma shape: {gamma.shape}, type: {type(gamma)}")
             # annotate original (un‑normalised) rows
-            if hasattr(labels, "ndim") and labels.ndim == 2:
-                # soft clustering: store per-cluster probabilities + hard argmax
-                prob_cols = {f"p_cluster_{k}": labels[:, k] for k in range(labels.shape[1])}
-                hard_labels = labels.argmax(axis=1)
-                labelled_df = df_part.assign(**prob_cols, Cluster=hard_labels, split=tag)
+            if hasattr(gamma, "ndim") and gamma.ndim == 2:
+                # attach per-day responsibilities as columns
+                n_components = gamma.shape[1]
+                gamma_cols = {f"gamma_{k}": gamma[:, k] for k in range(n_components)}
+                labelled_df = df_part.assign(**gamma_cols, split=tag)
+
                 # weighted centroids: centroid_k = sum(p_ik * x_i) / sum(p_ik)
                 X_arr = norm_part[self.features].values
                 centroids_list = []
-                for k in range(labels.shape[1]):
-                    w = labels[:, k]
+                for k in range(n_components):
+                    w = gamma[:, k]
                     weighted_mean = (w[:, None] * X_arr).sum(axis=0) / w.sum()
                     centroids_list.append(
-                        pd.Series(weighted_mean, index=self.features).to_frame().T.assign(Cluster=k, split=tag)
+                        pd.Series(weighted_mean, index=self.features)
+                        .to_frame()
+                        .T.assign(Cluster=k, split=tag)
                     )
                 centroids = pd.concat(centroids_list, ignore_index=True)
+
             else:
                 # hard clustering: single integer label per row
-                hard_labels = labels
-                labelled_df = df_part.assign(Cluster=labels, split=tag)
-                centroids = self.get_centroids(norm_part.assign(Cluster=labels)).assign(split=tag)
+                labelled_df = df_part.assign(Cluster=gamma, split=tag)
+                centroids = self.get_centroids(norm_part.assign(Cluster=gamma)).assign(
+                    split=tag
+                )
             label_frames.append(labelled_df)
             centroid_frames.append(centroids)
 
