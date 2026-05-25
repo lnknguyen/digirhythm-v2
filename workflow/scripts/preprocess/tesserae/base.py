@@ -40,7 +40,7 @@ class BaseProcessor:
     groupby_cols = ["user"]
 
     def __post_init__(self) -> None:
-        self.data = pd.read_parquet(self.input_fn)
+        self.data = pd.read_parquet(self.input_fn, engine="pyarrow")
         print(self.data.head())
 
     @progress_decorator
@@ -66,27 +66,32 @@ class BaseProcessor:
     def drop_duplicates_and_sort(self, data: pd.DataFrame) -> pd.DataFrame:
         data.sort_values(by=["user", "datetime"], inplace=True)
         data = data.drop_duplicates(["user", "datetime"])
+        print(data.head())
         return data
 
     @progress_decorator
     def remove_first_last_day(self, df):
-        # Assert datetime index
-        pd.api.types.is_datetime64_any_dtype(df.index)
+        assert pd.api.types.is_datetime64_any_dtype(df.index), \
+            "DataFrame index must be datetime"
 
-        # Function to filter out the first and last day for each group
         def filter_days(group):
-            # Determine the first and last day
-            first_day = group.index.min().floor("D")
-            last_day = group.index.max().floor("D")
+            first_day = group.index.get_level_values(-1).min().floor("D") \
+                if group.index.nlevels > 1 else group.index.min().floor("D")
+            last_day = group.index.get_level_values(-1).max().floor("D") \
+                if group.index.nlevels > 1 else group.index.max().floor("D")
+            idx = group.index.get_level_values(-1) if group.index.nlevels > 1 else group.index
+            return group[(idx.floor("D") > first_day) & (idx.floor("D") < last_day)]
 
-            # Exclude rows from the first and last day
-            return group[
-                (group.index.floor("D") > first_day)
-                & (group.index.floor("D") < last_day)
-            ]
-
-        # Group by 'user' and 'device' and apply the filter_days function
-        return df.groupby(self.groupby_cols, group_keys=False).apply(filter_days)
+        res = (
+            df.groupby(self.groupby_cols, group_keys=True)  # keep keys
+            .apply(filter_days)
+        )
+        # Promote group keys back to columns; keep the datetime index intact
+        levels_to_reset = [n for n in self.groupby_cols if n in res.index.names]
+        if levels_to_reset:
+            res = res.reset_index(level=levels_to_reset)
+        
+        return res
 
     @progress_decorator
     # Roll over past n days and return summary of aggregated values

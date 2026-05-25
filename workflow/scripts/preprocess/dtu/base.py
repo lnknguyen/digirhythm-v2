@@ -98,7 +98,7 @@ class BaseProcessor:
     @progress_decorator
     def drop_duplicates_and_sort(self, data: pd.DataFrame) -> pd.DataFrame:
         data.sort_values(by=["user", "datetime"], inplace=True)
-        # data = data.drop_duplicates(["user", "datetime"])
+        data = data.drop_duplicates(["user", "datetime"])
 
         return data
 

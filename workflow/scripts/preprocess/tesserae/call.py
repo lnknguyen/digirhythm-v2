@@ -50,7 +50,7 @@ class CallProcessor(BaseProcessor):
         ]
 
         # Agg daily events into 6H bins
-        rule = "6H"
+        rule = "6h"
 
         wrapper_features = {
             comm.call_count: {

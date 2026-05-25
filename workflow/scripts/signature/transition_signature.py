@@ -123,8 +123,8 @@ def transition_matrix(
     mat = (
         pairs.groupby(["from_cluster", "to_cluster"])
         .size()
-        .unstack(fill_value=0.0)
-        .reindex(index=states, columns=states, fill_value=0.0)
+        .unstack(fill_value=0)
+        .reindex(index=states, columns=states, fill_value=0)
         .astype(float)
     )
 

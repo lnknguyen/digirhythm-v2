@@ -1,6 +1,6 @@
 # ---- Config defaults with clean overrides from `config` ----
-#STUDIES         = config.get("STUDIES",         ['tesserae', 'momo', 'globem'])
-STUDIES         = config.get("STUDIES",         ['tesserae'])
+STUDIES         = config.get("STUDIES",         ['tesserae', 'momo', 'globem'])
+#STUDIES         = config.get("STUDIES",         ['tesserae'])
 ALGOS           = config.get("ALGOS",           ['gmm'])
 RANKS           = config.get("RANKS",           ['ranked', 'unranked'])
 DIST_METHOD     = config.get("DIST_METHOD",     ['jsd', 'cosine'])

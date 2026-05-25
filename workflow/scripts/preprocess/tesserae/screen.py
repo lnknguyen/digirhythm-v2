@@ -7,7 +7,7 @@ SCREEN_PREFIXES = [
     "screen:screen_use_durationtotal",
     "screen:screen_use_count",
 ]
-RESAMPLE_RULE = "6H"
+RESAMPLE_RULE = "6h"
 
 
 @dataclass
@@ -36,6 +36,7 @@ class ScreenProcessor(BaseProcessor):
 
         return (
             self.data.pipe(self.drop_duplicates_and_sort)
+            .pipe(self.set_datetime_index)
             .pipe(self.remove_first_last_day)
             .pipe(
                 screen.extract_features_screen,

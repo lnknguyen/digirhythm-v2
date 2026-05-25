@@ -25,7 +25,7 @@ class StepGarminProcessor(BaseProcessor):
         )
         return df
 
-    def resample(self, df, rule="6H") -> pd.DataFrame():
+    def resample(self, df, rule="6h") -> pd.DataFrame():
         df = df.groupby("user")["steps"].resample(rule).sum().reset_index()
         return df
 

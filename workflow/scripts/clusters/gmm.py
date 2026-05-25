@@ -19,6 +19,10 @@ class GMMClustering(BaseClustering):
     def init_model(self, n_components):
         self.model = GaussianMixture(n_components=n_components, covariance_type="full")
 
+    def fit_predict(self, model, X):
+        model.fit(X)
+        return model.predict_proba(X)  # (n_samples, n_components), soft assignments
+
     def _gaussian_bhattacharyya_distance(self, mu1, cov1, mu2, cov2):
         mu1, mu2 = np.atleast_1d(mu1), np.atleast_1d(mu2)
         cov1, cov2 = np.atleast_2d(cov1), np.atleast_2d(cov2)

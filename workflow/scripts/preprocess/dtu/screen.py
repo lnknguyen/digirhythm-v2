@@ -10,7 +10,7 @@ print(path)
 
 SCREEN_PREFIX = "screen:screen_on_durationtotal"
 SCREEN_COL = "screen_on_durationtotal"
-RESAMPLE_RULE = "6H"
+RESAMPLE_RULE = "6h"
 
 
 @dataclass

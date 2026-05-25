@@ -199,7 +199,8 @@ class BaseClustering(ABC):
         """
         Evaluate cluster quality using Silhouette Score.
         """
-        score = silhouette_score(X, labels)
+        hard = labels.argmax(axis=1) if hasattr(labels, "ndim") and labels.ndim == 2 else labels
+        score = silhouette_score(X, hard)
         print(f"Silhouette Score: {score:.4f}")
         return score
 
@@ -349,13 +350,27 @@ class BaseClustering(ABC):
             labels = self.fit_predict(self.model, X)
 
             # annotate original (un‑normalised) rows
-            labelled_df = df_part.assign(Cluster=labels, split=tag)
+            if hasattr(labels, "ndim") and labels.ndim == 2:
+                # soft clustering: store per-cluster probabilities + hard argmax
+                prob_cols = {f"p_cluster_{k}": labels[:, k] for k in range(labels.shape[1])}
+                hard_labels = labels.argmax(axis=1)
+                labelled_df = df_part.assign(**prob_cols, Cluster=hard_labels, split=tag)
+                # weighted centroids: centroid_k = sum(p_ik * x_i) / sum(p_ik)
+                X_arr = norm_part[self.features].values
+                centroids_list = []
+                for k in range(labels.shape[1]):
+                    w = labels[:, k]
+                    weighted_mean = (w[:, None] * X_arr).sum(axis=0) / w.sum()
+                    centroids_list.append(
+                        pd.Series(weighted_mean, index=self.features).to_frame().T.assign(Cluster=k, split=tag)
+                    )
+                centroids = pd.concat(centroids_list, ignore_index=True)
+            else:
+                # hard clustering: single integer label per row
+                hard_labels = labels
+                labelled_df = df_part.assign(Cluster=labels, split=tag)
+                centroids = self.get_centroids(norm_part.assign(Cluster=labels)).assign(split=tag)
             label_frames.append(labelled_df)
-
-            # compute centroids on the normalised features
-            centroids = self.get_centroids(norm_part.assign(Cluster=labels)).assign(
-                split=tag
-            )
             centroid_frames.append(centroids)
 
             # get cov matrix
