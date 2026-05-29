@@ -2,10 +2,17 @@ channels:
   - conda-forge
   - nodefaults
 dependencies:
-  - r-tidyverse =2.0
-  - r-sjPlot 
+  - r-base
+  - r-tidyverse
+  - r-lme4
+  - r-lmertest
+  - r-fixest
+  - r-sjplot
+  - r-sjmisc
+  - r-sjlabelled
+  - r-parameters
+  - r-performance
+  - r-matrix
   - r-stargazer
   - r-remotes
-  - r-Matrix >= 1.6-2
-  - r-lme4=1.1-30
-  
+  - r-irkernel
